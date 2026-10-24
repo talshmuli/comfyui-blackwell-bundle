@@ -143,6 +143,15 @@ Tensor multiply OK: torch.Size([10, 10])
 
 ---
 
-## 7. License
+## 7. Acknowledgements & Upstream Projects
 
-This repository contains build configurations and scripts under the MIT License. ComfyUI and its dependencies are subject to their respective upstream licenses.
+This project builds upon exceptional open-source software:
+* **[ComfyUI](https://github.com/comfyanonymous/ComfyUI)** by comfyanonymous — Powerful node-based diffusion architecture.
+* **[ai-dock/comfyui](https://github.com/ai-dock/comfyui)** by Rob Ballantyne — Robust multi-environment container runtime and process supervision.
+* **[PyTorch](https://github.com/pytorch/pytorch)** — Official nightly CUDA 12.8 builds with native Blackwell `sm_120` compute kernels.
+
+---
+
+## 8. License
+
+This project is licensed under the [MIT License](LICENSE). ComfyUI, PyTorch, and upstream base image components are licensed under their respective open-source licenses.

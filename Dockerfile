@@ -8,9 +8,13 @@ FROM ghcr.io/ai-dock/comfyui:latest-cuda
 LABEL maintainer="Tal Shmuli" \
       org.opencontainers.image.title="ComfyUI Blackwell (RTX 5090 / 5080)" \
       org.opencontainers.image.description="ComfyUI Docker Container for NVIDIA Blackwell RTX 5090 / 5080 (sm_120, CUDA 12.8)" \
-      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-docker" \
+      org.opencontainers.image.authors="Tal Shmuli <70902336+talshmuli@users.noreply.github.com>" \
       org.opencontainers.image.url="https://github.com/talshmuli/comfyui-blackwell-docker" \
-      org.opencontainers.image.licenses="MIT"
+      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-docker" \
+      org.opencontainers.image.documentation="https://github.com/talshmuli/comfyui-blackwell-docker/blob/master/README.md" \
+      org.opencontainers.image.vendor="Tal Shmuli" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.base.name="ghcr.io/ai-dock/comfyui:latest-cuda"
 
 USER root
 
