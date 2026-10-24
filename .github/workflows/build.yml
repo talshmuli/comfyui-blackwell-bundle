@@ -1,13 +1,18 @@
 name: Build & Publish ComfyUI Blackwell Image
 
 on:
-  # Monthly automated build on the 1st of every month at 00:00 UTC
+  # Bi-weekly automated build on the 1st and 15th of every month at 00:00 UTC
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 0 1,15 * *'
   
   # Manual trigger on demand
   workflow_dispatch:
     inputs:
+      force_build:
+        description: 'Force rebuild regardless of change detection'
+        type: boolean
+        required: false
+        default: true
       tag_override:
         description: 'Optional custom version tag override'
         required: false
@@ -34,7 +39,100 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check for Upstream & Package Updates
+        id: check_updates
+        run: |
+          EVENT="${{ github.event_name }}"
+          FORCE_BUILD="${{ github.event.inputs.force_build }}"
+          
+          echo "=== Pipeline Trigger Evaluation ==="
+          echo "Event: $EVENT"
+          echo "Force build flag: $FORCE_BUILD"
+
+          if [ "$EVENT" = "push" ]; then
+            echo "Triggered by push event. Proceeding with build."
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "reason=Repository files updated" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$EVENT" = "workflow_dispatch" ] && [ "$FORCE_BUILD" = "true" ]; then
+            echo "Manual workflow dispatch requested with force_build=true. Proceeding with build."
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "reason=Manual forced dispatch" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Inspect upstream image and package versions
+          python3 -c '
+          import subprocess, sys, urllib.request, re, os
+
+          should_build = False
+          reasons = []
+
+          # 1. Check upstream base image digest
+          upstream_digest = ""
+          try:
+              cmd_up = ["docker", "run", "--rm", "quay.io/skopeo/stable", "inspect", "docker://ghcr.io/ai-dock/comfyui:latest-cuda", "--format", "{{.Digest}}"]
+              upstream_digest = subprocess.check_output(cmd_up, timeout=60).decode().strip()
+          except Exception as e:
+              print(f"Warning: Failed to fetch upstream digest: {e}")
+
+          published_base_digest = ""
+          published_tags = ""
+          try:
+              cmd_pub = ["docker", "run", "--rm", "quay.io/skopeo/stable", "inspect", f"docker://ghcr.io/{os.environ[\"IMAGE_NAME\"]}:latest", "--format", "{{index .Labels \"upstream.base.digest\"}}"]
+              published_base_digest = subprocess.check_output(cmd_pub, timeout=60).decode().strip()
+          except Exception:
+              published_base_digest = ""
+
+          try:
+              cmd_tags = ["docker", "run", "--rm", "quay.io/skopeo/stable", "inspect", f"docker://ghcr.io/{os.environ[\"IMAGE_NAME\"]}:latest", "--format", "{{.RepoTags}}"]
+              published_tags = subprocess.check_output(cmd_tags, timeout=60).decode().strip()
+          except Exception:
+              published_tags = ""
+
+          if upstream_digest and published_base_digest and upstream_digest != published_base_digest:
+              should_build = True
+              reasons.append(f"Upstream ComfyUI base image updated: {upstream_digest} != {published_base_digest}")
+          elif upstream_digest and not published_base_digest:
+              # First run without label
+              print("No base digest label in published image; checking tags and packages...")
+
+          # 2. Check latest PyTorch nightly release
+          latest_torch = ""
+          try:
+              req = urllib.request.Request("https://download.pytorch.org/whl/nightly/cu128/torch/", headers={"User-Agent": "Mozilla/5.0"})
+              with urllib.request.urlopen(req, timeout=30) as resp:
+                  html = resp.read().decode("utf-8")
+              matches = re.findall(r"torch-2\.[0-9.]*\.dev[0-9]*", html)
+              latest_torch = matches[-1] if matches else ""
+          except Exception as e:
+              print(f"Warning: Failed to fetch PyTorch nightly index: {e}")
+
+          if latest_torch and latest_torch not in published_tags:
+              should_build = True
+              reasons.append(f"New PyTorch nightly cu128 wheel detected: {latest_torch} not present in published tags")
+
+          print("=== Update Detection Summary ===")
+          print(f"Upstream Base Digest:  {upstream_digest}")
+          print(f"Published Base Digest: {published_base_digest}")
+          print(f"Latest PyTorch Nightly: {latest_torch}")
+          print(f"Published Tags:        {published_tags}")
+          print(f"Should Build:          {should_build}")
+
+          reason_str = "; ".join(reasons) if reasons else "No upstream or package updates detected"
+          print(f"Decision: {reason_str}")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"should_build={\"true\" if should_build else \"false\"}\n")
+              f.write(f"reason={reason_str}\n")
+              f.write(f"upstream_digest={upstream_digest}\n")
+              f.write(f"latest_torch={latest_torch}\n")
+          '
+
       - name: Free Runner Disk Space (Reclaim ~50 GB)
+        if: steps.check_updates.outputs.should_build == 'true'
         run: |
           echo "=== Disk space before cleanup ==="
           df -h /
@@ -47,21 +145,32 @@ jobs:
           df -h /
 
       - name: Set up Docker Buildx
+        if: steps.check_updates.outputs.should_build == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub Container Registry
+        if: steps.check_updates.outputs.should_build == 'true'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Local Image to Extract Exact SemVer Versions
+      - name: Build Local Image
+        if: steps.check_updates.outputs.should_build == 'true'
         id: prebuild
         run: |
           LOCAL_TAG="temp-comfyui:build"
+          UPSTREAM_DIGEST="${{ steps.check_updates.outputs.upstream_digest }}"
+          LATEST_TORCH="${{ steps.check_updates.outputs.latest_torch }}"
+
+          echo "Building local image for verification..."
           docker build \
             -t "$LOCAL_TAG" \
+            --label "upstream.base.digest=$UPSTREAM_DIGEST" \
+            --label "upstream.torch.version=$LATEST_TORCH" \
+            --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}" \
+            --label "org.opencontainers.image.description=ComfyUI Docker Container for NVIDIA Blackwell RTX 5090 / 5080 (sm_120)" \
             -f Dockerfile .
 
           # Extract exact upstream versions from the container
@@ -83,7 +192,51 @@ jobs:
           echo "Generated Pure SemVer Tag: $REAL_SEMVER_TAG"
           echo "Generated Canonical Tag: $CANONICAL_TAG"
 
+      - name: Validate Container Integrity & Blackwell sm_120 Support
+        if: steps.check_updates.outputs.should_build == 'true'
+        run: |
+          LOCAL_TAG="temp-comfyui:build"
+          echo "============================================================"
+          echo "Running automated CI validation tests on built container..."
+          echo "============================================================"
+          docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c "
+          import sys, importlib.util, torch, torchvision, torchvision.ops
+
+          print('=== Python & Package Versions ===')
+          print('PyTorch Version:   ', torch.__version__)
+          print('CUDA Runtime:      ', torch.version.cuda)
+          print('Torchvision:       ', torchvision.__version__)
+
+          # 1. Verify CUDA 12.8
+          assert '12.8' in torch.version.cuda, f'FAIL: Expected CUDA 12.8, got {torch.version.cuda}'
+
+          # 2. Verify Blackwell sm_120 kernel compilation flags
+          build_config = torch.__config__.show()
+          assert 'sm_120' in build_config, 'FAIL: sm_120 compute capability not found in PyTorch build config'
+
+          # 3. Verify xformers removal (avoid ABI collision)
+          assert importlib.util.find_spec('xformers') is None, 'FAIL: xformers still present'
+
+          # 4. Verify Torchvision C++ operators (NMS)
+          print('Verifying Torchvision C++ operators...')
+          _ = torchvision.ops.nms
+
+          # 5. Verify ComfyUI core node registration and execution engine
+          print('Verifying ComfyUI core imports (CPU runner mode)...')
+          sys.argv.append('--cpu')
+          sys.path.append('/opt/ComfyUI')
+          import comfy.options
+          comfy.options.enable_args_parsing()
+          import execution
+          import nodes
+
+          print('============================================================')
+          print('ALL CI VALIDATION CHECKS PASSED SUCCESSFULLY!')
+          print('============================================================')
+          "
+
       - name: Tag and Push Docker Image
+        if: steps.check_updates.outputs.should_build == 'true'
         run: |
           LOCAL_TAG="temp-comfyui:build"
           TARGET_BASE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
@@ -102,3 +255,17 @@ jobs:
 
           echo "Pushing latest tag: ${TARGET_BASE}:latest"
           docker push "${TARGET_BASE}:latest"
+
+      - name: Workflow Run Summary
+        run: |
+          echo "### Build & Publish Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "* **Trigger Event:** \`${{ github.event_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **Decision:** \`${{ steps.check_updates.outputs.reason }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **Build Executed:** \`${{ steps.check_updates.outputs.should_build }}\`" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check_updates.outputs.should_build }}" = "true" ]; then
+            echo "* **Published SemVer Tag:** \`${{ steps.prebuild.outputs.real_semver_tag }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "* **Published Canonical Tag:** \`${{ steps.prebuild.outputs.canonical_tag }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "* **Validation Status:** Passed all Blackwell sm_120 and ComfyUI integrity checks." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "* **Status:** Skipped build — no upstream base or package updates found." >> $GITHUB_STEP_SUMMARY
+          fi

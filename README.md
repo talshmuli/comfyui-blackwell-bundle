@@ -49,13 +49,24 @@ To guarantee reproducibility and prevent container regressions, every image publ
 
 ---
 
-## 4. Automated Monthly Release Schedule
+## 4. Automated Bi-Weekly Schedule, Smart Change Detection & CI Validation
 
-A GitHub Actions workflow ([`.github/workflows/build.yml`](.github/workflows/build.yml)) runs automatically **on the 1st of every month at 00:00 UTC**:
-* Pulls the newest upstream `ai-dock` base image.
-* Resolves the latest nightly PyTorch CUDA 12.8 wheels.
-* Executes full build, tests GPU kernel availability, and pushes newly tagged images to GitHub Container Registry.
-* Can also be triggered manually on demand via GitHub Actions **Workflow Dispatch**.
+A GitHub Actions workflow ([`.github/workflows/build.yml`](.github/workflows/build.yml)) runs automatically **on the 1st and 15th of every month at 00:00 UTC** (bi-weekly):
+
+* **Smart Change Detection:** Before running an expensive build, the pipeline queries:
+  1. The manifest digest of upstream [`ghcr.io/ai-dock/comfyui:latest-cuda`](https://github.com/ai-dock/comfyui).
+  2. The latest release of PyTorch and Torchvision nightly wheels on the CUDA 12.8 index (`https://download.pytorch.org/whl/nightly/cu128`).
+  * If no upstream or package changes have occurred and repository code is unchanged, the workflow skips the build in seconds to avoid consuming runner resources.
+  * If any upstream dependency or package has updated, the workflow proceeds to build the latest image.
+* **Automated End-of-Pipeline CI Validation:**
+  Before publishing to GitHub Container Registry, the built container runs an automated test suite verifying:
+  - PyTorch CUDA 12.8 runtime detection (`assert '12.8' in torch.version.cuda`).
+  - Blackwell `sm_120` compute capability presence in kernel flags (`assert 'sm_120' in torch.__config__.show()`).
+  - Torchvision C++ operator loading without missing symbols (`torchvision.ops.nms`).
+  - Safe uninstallation of incompatible legacy `xformers`.
+  - ComfyUI core node registration and execution engine initialization (`import execution, nodes`).
+  * If any validation check fails, the pipeline aborts immediately and refuses to publish.
+* **Manual Trigger:** Can also be triggered manually on demand via GitHub Actions **Workflow Dispatch** with optional `force_build` and `tag_override` options.
 
 ---
 

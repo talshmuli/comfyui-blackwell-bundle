@@ -10,11 +10,9 @@ USER root
 # Install official PyTorch and torchvision nightly builds compiled with native
 # CUDA 12.8 and Blackwell sm_120 compute capability kernels.
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
-        --force-reinstall --no-deps \
-        "https://download-r2.pytorch.org/whl/nightly/cu128/torch-2.12.0.dev20260408%2Bcu128-cp310-cp310-manylinux_2_28_x86_64.whl" && \
-    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
-        --force-reinstall --no-deps \
-        "https://download-r2.pytorch.org/whl/nightly/cu128/torchvision-0.27.0.dev20260407%2Bcu128-cp310-cp310-manylinux_2_28_x86_64.whl" && \
+        --force-reinstall --no-deps --pre \
+        torch torchvision \
+        --index-url https://download.pytorch.org/whl/nightly/cu128 && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         nvidia-cufile-cu12 \
         nvidia-cusparselt-cu12 \
