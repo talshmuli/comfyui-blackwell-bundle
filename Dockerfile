@@ -5,6 +5,13 @@
 
 FROM ghcr.io/ai-dock/comfyui:latest-cuda
 
+LABEL maintainer="Tal Shmuli" \
+      org.opencontainers.image.title="ComfyUI Blackwell (RTX 5090 / 5080)" \
+      org.opencontainers.image.description="ComfyUI Docker Container for NVIDIA Blackwell RTX 5090 / 5080 (sm_120, CUDA 12.8)" \
+      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-docker" \
+      org.opencontainers.image.url="https://github.com/talshmuli/comfyui-blackwell-docker" \
+      org.opencontainers.image.licenses="MIT"
+
 USER root
 
 # Install official PyTorch and torchvision nightly builds compiled with native
