@@ -1,0 +1,104 @@
+name: Build & Publish ComfyUI Blackwell Image
+
+on:
+  # Monthly automated build on the 1st of every month at 00:00 UTC
+  schedule:
+    - cron: '0 0 1 * *'
+  
+  # Manual trigger on demand
+  workflow_dispatch:
+    inputs:
+      tag_override:
+        description: 'Optional custom version tag override'
+        required: false
+        default: ''
+
+  # Trigger on updates to master
+  push:
+    branches:
+      - master
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Free Runner Disk Space (Reclaim ~50 GB)
+        run: |
+          echo "=== Disk space before cleanup ==="
+          df -h /
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache
+          sudo docker image prune --all --force || true
+          echo "=== Disk space after cleanup ==="
+          df -h /
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Local Image to Extract Exact SemVer Versions
+        id: prebuild
+        run: |
+          LOCAL_TAG="temp-comfyui:build"
+          docker build \
+            -t "$LOCAL_TAG" \
+            -f Dockerfile .
+
+          # Extract exact upstream versions from the container
+          COMFY_VER=$(docker run --rm "$LOCAL_TAG" git -C /opt/ComfyUI describe --tags --always 2>/dev/null || echo "v0.2.2")
+          TORCH_VER=$(docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c 'import torch; print(torch.__version__.split("+")[0])')
+          CUDA_VER=$(docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c 'import torch; print("cu" + torch.version.cuda.replace(".", ""))')
+          DATE_TAG=$(date +'%Y%m%d')
+
+          # Construct pure immutable semantic version tag
+          REAL_SEMVER_TAG="${COMFY_VER}-torch${TORCH_VER}-${CUDA_VER}-${DATE_TAG}"
+          CANONICAL_TAG="${COMFY_VER}-cuda128-sm120"
+          
+          if [ -n "${{ github.event.inputs.tag_override }}" ]; then
+            REAL_SEMVER_TAG="${{ github.event.inputs.tag_override }}"
+          fi
+
+          echo "real_semver_tag=$REAL_SEMVER_TAG" >> $GITHUB_OUTPUT
+          echo "canonical_tag=$CANONICAL_TAG" >> $GITHUB_OUTPUT
+          echo "Generated Pure SemVer Tag: $REAL_SEMVER_TAG"
+          echo "Generated Canonical Tag: $CANONICAL_TAG"
+
+      - name: Tag and Push Docker Image
+        run: |
+          LOCAL_TAG="temp-comfyui:build"
+          TARGET_BASE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          REAL_TAG="${{ steps.prebuild.outputs.real_semver_tag }}"
+          CANONICAL_TAG="${{ steps.prebuild.outputs.canonical_tag }}"
+
+          docker tag "$LOCAL_TAG" "${TARGET_BASE}:${REAL_TAG}"
+          docker tag "$LOCAL_TAG" "${TARGET_BASE}:${CANONICAL_TAG}"
+          docker tag "$LOCAL_TAG" "${TARGET_BASE}:latest"
+
+          echo "Pushing immutable real-version tag: ${TARGET_BASE}:${REAL_TAG}"
+          docker push "${TARGET_BASE}:${REAL_TAG}"
+
+          echo "Pushing canonical series tag: ${TARGET_BASE}:${CANONICAL_TAG}"
+          docker push "${TARGET_BASE}:${CANONICAL_TAG}"
+
+          echo "Pushing latest tag: ${TARGET_BASE}:latest"
+          docker push "${TARGET_BASE}:latest"

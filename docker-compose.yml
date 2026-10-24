@@ -1,0 +1,23 @@
+services:
+  comfyui:
+    image: ghcr.io/talshmuli/comfyui-blackwell-docker:v0.2.2-cuda128-sm120
+    container_name: comfyui
+    restart: unless-stopped
+    ports:
+      - "8188:8188"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - COMFYUI_FLAGS=--preview-method auto --normalvram
+      - WEB_ENABLE_AUTH=false
+      - CF_QUICK_TUNNELS=false
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./data/models:/opt/ComfyUI/models
+      - ./data/output:/opt/ComfyUI/output
