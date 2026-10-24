@@ -36,3 +36,41 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "nvidia-cuda-nvrtc-cu12>=12.8" \
         "nvidia-nccl-cu12>=2.29" && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
+
+# ==============================================================================
+# Human Video Animation, Dialogue & Lip-Sync Baseline Custom Nodes & Packages
+# ==============================================================================
+
+# Pre-install baseline custom nodes:
+# 1. VideoHelperSuite: Essential video ingestion, extraction, and mastering pipeline
+# 2. LivePortraitKJ: Real-time expressive facial animation, micro-expressions, eye contact
+# 3. EchoMimic: Audio-driven natural human speech with head tilts and upper-body dynamics
+# 4. LatentSyncWrapper: High-fidelity audio-conditioned latent phoneme lip-sync
+RUN cd /opt/ComfyUI/custom_nodes && \
+    git clone --depth=1 https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
+    git clone --depth=1 https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
+    git clone --depth=1 https://github.com/smthemex/ComfyUI_EchoMimic.git && \
+    git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git
+
+# Install Python dependencies for video generation and portrait animation,
+# strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
+RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+        pykalman \
+        mediapipe \
+        moviepy \
+        ffmpeg-python \
+        av \
+        omegaconf \
+        lpips \
+        torchmetrics \
+        einops \
+        diffusers \
+        accelerate \
+        onnxruntime-gpu && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
+        onnx2torch \
+        facenet-pytorch && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+        --force-reinstall --no-deps --pre \
+        torch torchvision torchaudio \
+        --index-url https://download.pytorch.org/whl/nightly/cu128

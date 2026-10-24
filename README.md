@@ -25,6 +25,7 @@ This repository bridges that gap by providing an automated, continuously updated
 * **PyTorch Runtime:** Official PyTorch nightly wheels (`torch>=2.12.0.dev+cu128`, `torchvision>=0.27.0.dev+cu128`) compiled with native `sm_120` compute capability.
 * **Driver Libraries:** Synchronized with host NVIDIA 570+ drivers via CUDA 12.8 runtime libraries (`cudnn>=9.20`, `cublas>=12.8`, `nccl>=2.29`, `libcufile`, `libcusparseLt`, `nvshmem`).
 * **Optimized Attention:** Removes incompatible `xformers` builds. PyTorch 2.x SDPA (Scaled Dot Product Attention) is natively built-in and significantly faster on Blackwell hardware.
+* **Pre-Baked Human Video & Lip-Sync Stack:** Out-of-the-box support for living human animation and talking portraits via pre-installed custom nodes: `ComfyUI-VideoHelperSuite`, `ComfyUI-LivePortraitKJ`, `ComfyUI_EchoMimic`, and `ComfyUI-LatentSyncWrapper`.
 
 ---
 
