@@ -55,6 +55,7 @@ RUN cd /opt/ComfyUI/custom_nodes && \
 # Install Python dependencies for video generation and portrait animation,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+        "huggingface-hub<1.0" \
         pykalman \
         mediapipe \
         moviepy \
