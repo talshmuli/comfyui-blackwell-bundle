@@ -18,11 +18,18 @@ on:
         required: false
         default: ''
 
-  # Trigger on updates to master
+  # Trigger on updates to master (excluding pure documentation edits)
   push:
     branches:
       - master
       - main
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - 'SECURITY.md'
+      - 'CONTRIBUTING.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.gitignore'
 
 permissions:
   contents: read
@@ -179,8 +186,8 @@ jobs:
           CUDA_VER=$(docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c 'import torch; print("cu" + torch.version.cuda.replace(".", ""))')
           DATE_TAG=$(date +'%Y%m%d')
 
-          # Construct pure immutable semantic version tag
-          REAL_SEMVER_TAG="${COMFY_VER}-torch${TORCH_VER}-${CUDA_VER}-${DATE_TAG}"
+          # Construct pure immutable semantic version tag with run number
+          REAL_SEMVER_TAG="${COMFY_VER}-torch${TORCH_VER}-${CUDA_VER}-${DATE_TAG}-r${{ github.run_number }}"
           CANONICAL_TAG="${COMFY_VER}-cuda128-sm120"
           
           if [ -n "${{ github.event.inputs.tag_override }}" ]; then
@@ -200,12 +207,13 @@ jobs:
           echo "Running automated CI validation tests on built container..."
           echo "============================================================"
           docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c "
-          import sys, importlib.util, torch, torchvision, torchvision.ops
+          import sys, importlib.util, torch, torchvision, torchvision.ops, torchaudio
 
           print('=== Python & Package Versions ===')
           print('PyTorch Version:   ', torch.__version__)
           print('CUDA Runtime:      ', torch.version.cuda)
           print('Torchvision:       ', torchvision.__version__)
+          print('Torchaudio:        ', torchaudio.__version__)
 
           # 1. Verify CUDA 12.8
           assert '12.8' in torch.version.cuda, f'FAIL: Expected CUDA 12.8, got {torch.version.cuda}'

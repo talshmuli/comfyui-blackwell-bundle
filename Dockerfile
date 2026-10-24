@@ -18,11 +18,11 @@ LABEL maintainer="Tal Shmuli" \
 
 USER root
 
-# Install official PyTorch and torchvision nightly builds compiled with native
-# CUDA 12.8 and Blackwell sm_120 compute capability kernels.
+# Install official PyTorch, torchvision, and torchaudio nightly builds compiled
+# with native CUDA 12.8 and Blackwell sm_120 compute capability kernels.
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         --force-reinstall --no-deps --pre \
-        torch torchvision \
+        torch torchvision torchaudio \
         --index-url https://download.pytorch.org/whl/nightly/cu128 && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         nvidia-cufile-cu12 \
