@@ -44,18 +44,18 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
 # Pre-install baseline custom nodes:
 # 1. VideoHelperSuite: Essential video ingestion, extraction, and mastering pipeline
 # 2. LivePortraitKJ: Real-time expressive facial animation, micro-expressions, eye contact
-# 3. EchoMimic: Audio-driven natural human speech with head tilts and upper-body dynamics
-# 4. LatentSyncWrapper: High-fidelity audio-conditioned latent phoneme lip-sync
+# 3. LatentSyncWrapper: High-fidelity audio-conditioned latent phoneme lip-sync
 RUN cd /opt/ComfyUI/custom_nodes && \
-    git clone --depth=1 https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
+    git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
+    (cd ComfyUI-VideoHelperSuite && git checkout 593fcb07) && \
     git clone --depth=1 https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
-    git clone --depth=1 https://github.com/smthemex/ComfyUI_EchoMimic.git && \
     git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git
 
 # Install Python dependencies for video generation and portrait animation,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "huggingface-hub<1.0" \
+        "transformers<4.50,>=4.47" \
         pykalman \
         mediapipe \
         moviepy \
