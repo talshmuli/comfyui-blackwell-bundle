@@ -54,17 +54,13 @@ WORKDIR /opt/ComfyUI/custom_nodes
 # 2. LivePortraitKJ: Real-time expressive facial animation, micro-expressions, eye contact
 # 3. LatentSyncWrapper: High-fidelity audio-conditioned latent phoneme lip-sync
 # 4. AnimateDiff-Evolved: Industry standard for temporally coherent neural animation
-# 5. BlenderAI-node: High-speed bridge between Blender 3D passes and ComfyUI
-# 6. ComfyUI-Blender: Native headless communication loop with Blender
-# 7. ComfyUI-3D-Pack: 3D mesh rendering, UV processing, and neural reconstruction
+# 5. ComfyUI-3D-Pack: 3D mesh rendering, UV processing, and neural reconstruction
 RUN git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
     git -C ComfyUI-VideoHelperSuite checkout 593fcb07 && \
     git clone --depth=1 https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
     git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git && \
     git clone https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git && \
     git -C ComfyUI-AnimateDiff-Evolved checkout b3e508a && \
-    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git && \
-    git clone --depth=1 https://github.com/alexisrolland/ComfyUI-Blender.git && \
     git clone --depth=1 https://github.com/MrForExample/ComfyUI-3D-Pack.git
 
 # Install Python dependencies for video generation and portrait animation,
@@ -84,9 +80,11 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         omegaconf \
         einops \
         onnxruntime-gpu \
-        pyhocon && \
+        pyhocon \
+        plyfile \
+        trimesh && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
-        diffusers \
+        "diffusers>=0.30.0,<0.31.0" \
         accelerate \
         lpips \
         torchmetrics \
@@ -100,6 +98,8 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
 WORKDIR /opt/blender
 RUN curl -sL "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" | \
     tar -xJ -C /opt/blender --strip-components=1 && \
-    ln -s /opt/blender/blender /usr/local/bin/blender
+    ln -s /opt/blender/blender /usr/local/bin/blender && \
+    mkdir -p /opt/blender/4.4/scripts/addons && \
+    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node
 
 WORKDIR /workspace
