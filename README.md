@@ -23,9 +23,10 @@ This repository bridges that gap by providing an automated, continuously updated
 
 * **Upstream Base Image:** Strictly sourced from GitHub Container Registry: [`ghcr.io/ai-dock/comfyui:latest-cuda`](https://github.com/ai-dock/comfyui).
 * **PyTorch Runtime:** Official PyTorch nightly wheels (`torch>=2.12.0.dev+cu128`, `torchvision>=0.27.0.dev+cu128`) compiled with native `sm_120` compute capability.
-* **Driver Libraries:** Synchronized with host NVIDIA 570+ drivers via CUDA 12.8 runtime libraries (`cudnn>=9.20`, `cublas>=12.8`, `nccl>=2.29`, `libcufile`, `libcusparseLt`, `nvshmem`).
+* **Driver Libraries:** Synchronized with host NVIDIA 570+ drivers via CUDA 12.8 runtime libraries (`cudnn>=9.20`, `cublas>=12.8`, `cusolver>=11.7`, `nccl>=2.29`, `libcufile`, `libcusparseLt`, `nvshmem`).
 * **Optimized Attention:** Removes incompatible `xformers` builds. PyTorch 2.x SDPA (Scaled Dot Product Attention) is natively built-in and significantly faster on Blackwell hardware.
-* **Pre-Baked Human Video & Lip-Sync Stack:** Out-of-the-box support for living human animation and talking portraits via pre-installed custom nodes: `ComfyUI-VideoHelperSuite`, `ComfyUI-LivePortraitKJ`, `ComfyUI_EchoMimic`, and `ComfyUI-LatentSyncWrapper`.
+* **Pre-Baked Video & Animation Stack:** Out-of-the-box support for video mastering, facial animation, and speech-driven lip-sync via pre-installed custom nodes: [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) (pinned to stable release `593fcb07`), [ComfyUI-LivePortraitKJ](https://github.com/kijai/ComfyUI-LivePortraitKJ), and [ComfyUI-LatentSyncWrapper](https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper).
+* **Dependency Conflict Hardening:** Version pins (`numpy<2.0.0,>=1.24.0`, `protobuf<5,>=4.25.3`, `onnx<1.16`, `insightface`) preserve NumPy 1.x ABI stability for `colour-science`, `numba`, and face analysis. Video libraries are installed with `--no-deps` to strictly protect the Blackwell nightly PyTorch wheel from PyPI package overwrites.
 
 ---
 
@@ -65,7 +66,8 @@ A GitHub Actions workflow ([`.github/workflows/build.yml`](.github/workflows/bui
   - Blackwell `sm_120` compute capability presence in kernel flags (`assert 'sm_120' in torch.__config__.show()`).
   - Torchvision C++ operator loading without missing symbols (`torchvision.ops.nms`).
   - Safe uninstallation of incompatible legacy `xformers`.
-  - ComfyUI core node registration and execution engine initialization (`import execution, nodes`).
+  - Package dependency compatibility (`numpy<2`, `numba`, `colour-science`, `insightface`, `onnx`, `mediapipe`).
+  - ComfyUI core and pre-baked custom nodes registration (`VHS_VideoCombine`, `DownloadAndLoadLivePortraitModels`, `LatentSyncNode`).
   * If any validation check fails, the pipeline aborts immediately and refuses to publish.
 * **Manual Trigger:** Can also be triggered manually on demand via GitHub Actions **Workflow Dispatch** with optional `force_build` and `tag_override` options.
 
@@ -126,7 +128,7 @@ docker run -d \
 
 ---
 
-## 6. Verifying Blackwell GPU Acceleration
+## 6. Verifying Blackwell GPU Acceleration & Custom Nodes
 
 To verify that your RTX 5090 is recognized and executing `sm_120` GPU kernels inside the container:
 
@@ -142,6 +144,13 @@ Supported Archs: ['sm_75', 'sm_80', 'sm_86', 'sm_90', 'sm_100', 'sm_120']
 Tensor multiply OK: torch.Size([10, 10])
 ```
 
+To verify that ComfyUI and the pre-installed custom nodes are fully registered and accessible:
+
+```bash
+docker exec comfyui /opt/environments/python/comfyui/bin/python -c \
+  "import execution, nodes; nodes.init_extra_nodes(); print('Total registered nodes:', len(nodes.NODE_CLASS_MAPPINGS))"
+```
+
 ---
 
 ## 7. Acknowledgements & Upstream Projects
@@ -150,6 +159,9 @@ This project builds upon exceptional open-source software:
 * **[ComfyUI](https://github.com/comfyanonymous/ComfyUI)** by comfyanonymous — Powerful node-based diffusion architecture.
 * **[ai-dock/comfyui](https://github.com/ai-dock/comfyui)** by Rob Ballantyne — Robust multi-environment container runtime and process supervision.
 * **[PyTorch](https://github.com/pytorch/pytorch)** — Official nightly CUDA 12.8 builds with native Blackwell `sm_120` compute kernels.
+* **[ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite)** by Kosinkadink — Video ingestion, playback, and export nodes.
+* **[ComfyUI-LivePortraitKJ](https://github.com/kijai/ComfyUI-LivePortraitKJ)** by Kijai — Real-time portrait animation and facial dynamics.
+* **[ComfyUI-LatentSyncWrapper](https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper)** by Shmuel Ronen — Audio-conditioned latent lip-syncing.
 
 ---
 

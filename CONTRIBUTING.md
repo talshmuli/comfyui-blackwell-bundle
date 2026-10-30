@@ -19,16 +19,22 @@ This repository provides automated build pipelines and Docker configurations tai
 4. Run the CI validation command locally:
    ```bash
    docker run --rm test-comfyui:build /opt/environments/python/comfyui/bin/python -c "
-   import sys, importlib.util, torch, torchvision, torchvision.ops
+   import sys, importlib.util, torch, torchvision, torchvision.ops, asyncio
    assert '12.8' in torch.version.cuda
    assert 'sm_120' in torch.__config__.show()
    assert importlib.util.find_spec('xformers') is None
    _ = torchvision.ops.nms
+   import numpy, numba, colour, insightface, onnx, mediapipe
+   assert numpy.__version__.startswith('1.')
    sys.argv.append('--cpu')
    sys.path.append('/opt/ComfyUI')
    import comfy.options; comfy.options.enable_args_parsing()
-   import execution, nodes
-   print('Validation OK')
+   import server; loop = asyncio.new_event_loop(); asyncio.set_event_loop(loop); s = server.PromptServer(loop)
+   import execution, nodes; nodes.init_extra_nodes()
+   assert 'VHS_VideoCombine' in nodes.NODE_CLASS_MAPPINGS
+   assert 'DownloadAndLoadLivePortraitModels' in nodes.NODE_CLASS_MAPPINGS
+   assert 'LatentSyncNode' in nodes.NODE_CLASS_MAPPINGS
+   print('ALL LOCAL CI VALIDATION CHECKS PASSED!')
    "
    ```
 5. Submit your PR with a clear description of the motivation and testing performed.
