@@ -61,7 +61,8 @@ RUN git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
     git -C ComfyUI-VideoHelperSuite checkout 593fcb07 && \
     git clone --depth=1 https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
     git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git && \
-    git clone --depth=1 https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git && \
+    git clone https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git && \
+    git -C ComfyUI-AnimateDiff-Evolved checkout b3e508a && \
     git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git && \
     git clone --depth=1 https://github.com/alexisrolland/ComfyUI-Blender.git && \
     git clone --depth=1 https://github.com/MrForExample/ComfyUI-3D-Pack.git
@@ -82,7 +83,8 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         av \
         omegaconf \
         einops \
-        onnxruntime-gpu && \
+        onnxruntime-gpu \
+        pyhocon && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
         diffusers \
         accelerate \
