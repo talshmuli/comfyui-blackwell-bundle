@@ -207,9 +207,9 @@ jobs:
           echo "Running automated CI validation tests on built container..."
           echo "============================================================"
           docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c "
-          import sys, importlib.util, torch, torchvision, torchvision.ops, torchaudio
+          import sys, importlib.util, torch, torchvision, torchvision.ops, torchaudio, asyncio
 
-          print('=== Python & Package Versions ===')
+          print('=== 1. PyTorch & CUDA Blackwell Validation ===')
           print('PyTorch Version:   ', torch.__version__)
           print('CUDA Runtime:      ', torch.version.cuda)
           print('Torchvision:       ', torchvision.__version__)
@@ -229,14 +229,36 @@ jobs:
           print('Verifying Torchvision C++ operators...')
           _ = torchvision.ops.nms
 
-          # 5. Verify ComfyUI core node registration and execution engine
-          print('Verifying ComfyUI core imports (CPU runner mode)...')
+          print('=== 2. Package Dependency Conflict Resolution ===')
+          import numpy, numba, colour, insightface, onnx, mediapipe
+          print('NumPy:             ', numpy.__version__)
+          print('Numba:             ', numba.__version__)
+          print('Colour-science:    ', colour.__version__)
+          print('InsightFace:       ', insightface.__version__)
+          print('ONNX:              ', onnx.__version__)
+          print('MediaPipe:         ', mediapipe.__version__)
+          assert numpy.__version__.startswith('1.'), f'FAIL: Expected NumPy 1.x, got {numpy.__version__}'
+
+          # 5. Verify ComfyUI core & custom node lifecycle
+          print('Verifying ComfyUI core and custom nodes registration...')
           sys.argv.append('--cpu')
           sys.path.append('/opt/ComfyUI')
           import comfy.options
           comfy.options.enable_args_parsing()
+          import server
+          loop = asyncio.new_event_loop()
+          asyncio.set_event_loop(loop)
+          s = server.PromptServer(loop)
+
           import execution
           import nodes
+          nodes.init_extra_nodes()
+
+          print('Total registered nodes in ComfyUI:', len(nodes.NODE_CLASS_MAPPINGS))
+          assert 'VHS_VideoCombine' in nodes.NODE_CLASS_MAPPINGS, 'FAIL: VHS_VideoCombine missing'
+          assert 'VHS_LoadVideo' in nodes.NODE_CLASS_MAPPINGS, 'FAIL: VHS_LoadVideo missing'
+          assert 'DownloadAndLoadLivePortraitModels' in nodes.NODE_CLASS_MAPPINGS, 'FAIL: LivePortrait missing'
+          assert 'LatentSyncNode' in nodes.NODE_CLASS_MAPPINGS, 'FAIL: LatentSync missing'
 
           print('============================================================')
           print('ALL CI VALIDATION CHECKS PASSED SUCCESSFULLY!')

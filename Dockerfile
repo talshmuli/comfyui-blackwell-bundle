@@ -32,6 +32,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "nvidia-cuda-cupti-cu12>=12.8" \
         "nvidia-cudnn-cu12>=9.20" \
         "nvidia-cublas-cu12>=12.8" \
+        "nvidia-cusolver-cu12>=11.7" \
         "nvidia-cuda-runtime-cu12>=12.8" \
         "nvidia-cuda-nvrtc-cu12>=12.8" \
         "nvidia-nccl-cu12>=2.29" && \
@@ -54,24 +55,24 @@ RUN cd /opt/ComfyUI/custom_nodes && \
 # Install Python dependencies for video generation and portrait animation,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+        "numpy<2.0.0,>=1.24.0" \
+        "protobuf<5,>=4.25.3" \
+        "onnx<1.16" \
+        insightface \
         "huggingface-hub<1.0" \
         "transformers<4.50,>=4.47" \
         pykalman \
-        mediapipe \
+        "mediapipe<0.10.15" \
         moviepy \
         ffmpeg-python \
         av \
         omegaconf \
-        lpips \
-        torchmetrics \
         einops \
-        diffusers \
-        accelerate \
         onnxruntime-gpu && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
+        diffusers \
+        accelerate \
+        lpips \
+        torchmetrics \
         onnx2torch \
-        facenet-pytorch && \
-    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
-        --force-reinstall --no-deps --pre \
-        torch torchvision torchaudio \
-        --index-url https://download.pytorch.org/whl/nightly/cu128
+        facenet-pytorch
