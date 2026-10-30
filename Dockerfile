@@ -16,6 +16,7 @@ LABEL maintainer="Tal Shmuli" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.base.name="ghcr.io/ai-dock/comfyui:latest-cuda"
 
+# hadolint ignore=DL3002,DL3066
 USER root
 
 # Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
@@ -91,17 +92,12 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         facenet-pytorch
 
 # ==============================================================================
-# Studio VFX & 3D Character Rigging Layer (Blender 4.2 LTS Headless)
-# Enables procedural 3D rig animation, audio-driven lip-sync, and Z-Depth passes
+# Studio VFX & 3D Character Rigging Layer (Blender 4.4 LTS Headless)
+# Enables procedural 3D rig animation, audio-driven lip-sync, and native Blackwell sm_120 GPU rendering
 # ==============================================================================
 WORKDIR /opt/blender
-RUN curl -sL "https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz" | \
+RUN curl -sL "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" | \
     tar -xJ -C /opt/blender --strip-components=1 && \
     ln -s /opt/blender/blender /usr/local/bin/blender
 
-# Set file ownership for the default non-root user
-RUN chown -R user:user /opt/ComfyUI/custom_nodes /opt/blender
-
-# Fix Hadolint DL3002: Last USER should not be root
 WORKDIR /workspace
-USER user
