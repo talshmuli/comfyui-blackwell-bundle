@@ -46,11 +46,19 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
 # 1. VideoHelperSuite: Essential video ingestion, extraction, and mastering pipeline
 # 2. LivePortraitKJ: Real-time expressive facial animation, micro-expressions, eye contact
 # 3. LatentSyncWrapper: High-fidelity audio-conditioned latent phoneme lip-sync
+# 4. AnimateDiff-Evolved: Industry standard for temporally coherent neural animation
+# 5. BlenderAI-node: High-speed bridge between Blender 3D passes and ComfyUI
+# 6. ComfyUI-Blender: Native headless communication loop with Blender
+# 7. ComfyUI-3D-Pack: 3D mesh rendering, UV processing, and neural reconstruction
 RUN cd /opt/ComfyUI/custom_nodes && \
     git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
     (cd ComfyUI-VideoHelperSuite && git checkout 593fcb07) && \
     git clone --depth=1 https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
-    git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git
+    git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git && \
+    git clone --depth=1 https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git && \
+    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git && \
+    git clone --depth=1 https://github.com/alexisrolland/ComfyUI-Blender.git && \
+    git clone --depth=1 https://github.com/MrForExample/ComfyUI-3D-Pack.git
 
 # Install Python dependencies for video generation and portrait animation,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
