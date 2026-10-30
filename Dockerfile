@@ -18,6 +18,9 @@ LABEL maintainer="Tal Shmuli" \
 
 USER root
 
+# Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install official PyTorch, torchvision, and torchaudio nightly builds compiled
 # with native CUDA 12.8 and Blackwell sm_120 compute capability kernels.
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
@@ -42,15 +45,25 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
 # Human Video Animation, Dialogue & Lip-Sync Baseline Custom Nodes & Packages
 # ==============================================================================
 
+# Fix Hadolint DL3003: Use WORKDIR to switch directories instead of cd
+WORKDIR /opt/ComfyUI/custom_nodes
+
 # Pre-install baseline custom nodes:
 # 1. VideoHelperSuite: Essential video ingestion, extraction, and mastering pipeline
 # 2. LivePortraitKJ: Real-time expressive facial animation, micro-expressions, eye contact
 # 3. LatentSyncWrapper: High-fidelity audio-conditioned latent phoneme lip-sync
-RUN cd /opt/ComfyUI/custom_nodes && \
-    git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
-    (cd ComfyUI-VideoHelperSuite && git checkout 593fcb07) && \
+# 4. AnimateDiff-Evolved: Industry standard for temporally coherent neural animation
+# 5. BlenderAI-node: High-speed bridge between Blender 3D passes and ComfyUI
+# 6. ComfyUI-Blender: Native headless communication loop with Blender
+# 7. ComfyUI-3D-Pack: 3D mesh rendering, UV processing, and neural reconstruction
+RUN git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
+    git -C ComfyUI-VideoHelperSuite checkout 593fcb07 && \
     git clone --depth=1 https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
-    git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git
+    git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git && \
+    git clone --depth=1 https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git && \
+    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git && \
+    git clone --depth=1 https://github.com/alexisrolland/ComfyUI-Blender.git && \
+    git clone --depth=1 https://github.com/MrForExample/ComfyUI-3D-Pack.git
 
 # Install Python dependencies for video generation and portrait animation,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
@@ -76,3 +89,19 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         torchmetrics \
         onnx2torch \
         facenet-pytorch
+
+# ==============================================================================
+# Studio VFX & 3D Character Rigging Layer (Blender 4.2 LTS Headless)
+# Enables procedural 3D rig animation, audio-driven lip-sync, and Z-Depth passes
+# ==============================================================================
+WORKDIR /opt/blender
+RUN curl -sL "https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz" | \
+    tar -xJ -C /opt/blender --strip-components=1 && \
+    ln -s /opt/blender/blender /usr/local/bin/blender
+
+# Set file ownership for the default non-root user
+RUN chown -R user:user /opt/ComfyUI/custom_nodes /opt/blender
+
+# Fix Hadolint DL3002: Last USER should not be root
+WORKDIR /workspace
+USER user
