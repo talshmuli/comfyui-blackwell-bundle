@@ -29,6 +29,16 @@ USER root
 # Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Apply official Ubuntu security updates and eliminate dormant daemons (Caddy, Syncthing, Cloudflared)
+# hadolint ignore=DL3008,DL3015
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /opt/caddy /opt/syncthing /usr/bin/cloudflared \
+           /opt/environments/python/jupyter \
+           /opt/environments/python/serviceportal \
+           /opt/environments/python/api 2>/dev/null || true
+
 # Install official PyTorch, torchvision, and torchaudio nightly builds compiled
 # with native CUDA 12.8 and Blackwell sm_120 compute capability kernels.
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
@@ -47,6 +57,13 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "nvidia-cuda-runtime-cu12>=12.8" \
         "nvidia-cuda-nvrtc-cu12>=12.8" \
         "nvidia-nccl-cu12>=2.29" && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
+        "pillow>=10.4.0" \
+        "gitpython>=3.1.44" \
+        "pyjwt>=2.9.0" \
+        "certifi>=2024.8.30" \
+        "h11>=0.14.0" \
+        "anyio>=4.6.0" && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
 
 WORKDIR /workspace
