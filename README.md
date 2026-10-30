@@ -162,6 +162,7 @@ This project builds upon exceptional open-source software:
 * **[ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite)** by Kosinkadink — Video ingestion, playback, and export nodes.
 * **[ComfyUI-LivePortraitKJ](https://github.com/kijai/ComfyUI-LivePortraitKJ)** by Kijai — Real-time portrait animation and facial dynamics.
 * **[ComfyUI-LatentSyncWrapper](https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper)** by Shmuel Ronen — Audio-conditioned latent lip-syncing.
+* **[Blender](https://www.blender.org/)** — Headless 3D rigging, procedural animation, audio-to-F-Curve lip-syncing, and Z-Depth pass rendering for ControlNet.
 
 ---
 
