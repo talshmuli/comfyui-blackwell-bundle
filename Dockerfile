@@ -76,3 +76,13 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         torchmetrics \
         onnx2torch \
         facenet-pytorch
+
+# ==============================================================================
+# Studio VFX & 3D Character Rigging Layer (Blender 4.2 LTS Headless)
+# Enables procedural 3D rig animation, audio-driven lip-sync, and Z-Depth passes
+# ==============================================================================
+RUN mkdir -p /opt/blender && \
+    curl -sL "https://download.blender.org/release/Blender4.2/blender-4.2.3-linux-x64.tar.xz" | \
+    tar -xJ -C /opt/blender --strip-components=1 && \
+    ln -s /opt/blender/blender /usr/local/bin/blender
+
