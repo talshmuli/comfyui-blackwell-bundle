@@ -37,7 +37,7 @@ RUN apt-get update && apt-get upgrade -y && \
     rm -rf /opt/caddy /opt/syncthing /usr/bin/cloudflared \
            /opt/environments/python/jupyter \
            /opt/environments/python/serviceportal \
-           /opt/environments/python/api 2>/dev/null || true
+           /opt/environments/python/api
 
 # Install official PyTorch, torchvision, and torchaudio nightly builds compiled
 # with native CUDA 12.8 and Blackwell sm_120 compute capability kernels.
