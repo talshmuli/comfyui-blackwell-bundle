@@ -253,6 +253,7 @@ jobs:
           print('Verifying ComfyUI core and custom nodes registration...')
           sys.argv.append('--cpu')
           sys.path.append('/opt/ComfyUI')
+          sys.path.append('/opt/ComfyUI/custom_nodes/ComfyUI-Manager/glob')
           import comfy.options
           comfy.options.enable_args_parsing()
           import server
@@ -320,10 +321,18 @@ jobs:
 
       - name: Upload Trivy Scan Results to GitHub Security Tab
         if: steps.check_updates.outputs.should_build == 'true'
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: 'trivy-results.sarif'
         continue-on-error: true
+
+      - name: Upload Trivy Security Scan Artifact to Actions Run
+        if: steps.check_updates.outputs.should_build == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-security-scan-results
+          path: trivy-results.sarif
+          retention-days: 30
 
       - name: Tag and Push Docker Image
         if: steps.check_updates.outputs.should_build == 'true'
