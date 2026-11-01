@@ -1,0 +1,369 @@
+diff --git a/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py b/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py
+index bd72c38..31d1b7d 100644
+--- a/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py
++++ b/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py
+@@ -7,7 +7,7 @@ import importlib
+ # Global variables
+ BACKEND = 'spconv'  # Default sparse backend
+ DEBUG = False       # Debug mode flag
+-ATTN = 'xformers' # Default attention backend
++ATTN = 'sdpa' # Default attention backend (sdpa always available in PyTorch 2.x)
+ SPCONV_ALGO = 'implicit_gemm'  # Default algorithm
+ 
+ def get_spconv_algo() -> str:
+@@ -88,7 +88,10 @@ def get_available_sparse_backends() -> Dict[str, bool]:
+ def get_attention_backend() -> str:
+     """Get current attention backend"""
+     global ATTN
+-    return ATTN
++    avail = get_available_backends()
++    if ATTN in avail and avail[ATTN]:
++        return ATTN
++    return 'sdpa'
+ 
+ def get_sparse_backend() -> str:
+     """Get current sparse backend"""
+diff --git a/Gen_3D_Modules/Stable3DGen/trellis/modules/sparse/__init__.py b/Gen_3D_Modules/Stable3DGen/trellis/modules/sparse/__init__.py
+index f2602fc..b486252 100644
+--- a/Gen_3D_Modules/Stable3DGen/trellis/modules/sparse/__init__.py
++++ b/Gen_3D_Modules/Stable3DGen/trellis/modules/sparse/__init__.py
+@@ -1,3 +1,5 @@
++import logging
++logger = logging.getLogger(__name__)
+ from typing import *
+ import importlib
+ from trellis.backend_config import get_sparse_backend, get_attention_backend, get_debug_mode
+diff --git a/__init__.py b/__init__.py
+index cc8c101..1823208 100644
+--- a/__init__.py
++++ b/__init__.py
+@@ -66,7 +66,10 @@ WEB_DIRECTORY = "./web"
+ __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS', 'WEB_DIRECTORY']
+ 
+ # # Cleanup old extension folder
+-folder_web = os.path.join(os.path.dirname(os.path.realpath(__main__.__file__)), "web")
++if hasattr(__main__, "__file__"):
++    folder_web = os.path.join(os.path.dirname(os.path.realpath(__main__.__file__)), "web")
++else:
++    folder_web = "/opt/ComfyUI/web"
+ extensions_folder = os.path.join(folder_web, 'extensions', 'ComfyUI-3D-Pack')
+ 
+ def cleanup():
+diff --git a/nodes.py b/nodes.py
+index e4b01fc..b0fecf8 100644
+--- a/nodes.py
++++ b/nodes.py
+@@ -57,75 +57,177 @@ from GaussianSplatting.main_3DGS import GaussianSplatting3D, GaussianSplattingCa
+ from GaussianSplatting.main_3DGS_renderer import GaussianSplattingRenderer
+ from NeRF.Instant_NGP import InstantNGP
+ 
+-from TriplaneGaussian.triplane_gaussian_transformers import TGS
+-from TriplaneGaussian.utils.config import ExperimentConfig as ExperimentConfigTGS, load_config as load_config_tgs
+-from TriplaneGaussian.data import CustomImageOrbitDataset
+-from TriplaneGaussian.utils.misc import todevice, get_device
+-from LGM.core.options import config_defaults
+-from LGM.mvdream.pipeline_mvdream import MVDreamPipeline
+-from LGM.large_multiview_gaussian_model import LargeMultiviewGaussianModel
+-from LGM.nerf_marching_cubes_converter import GSConverterNeRFMarchingCubes
+-from TripoSR.system import TSR
+-from StableFast3D.sf3d import utils as sf3d_utils
+-from StableFast3D.sf3d.system import SF3D
+-from InstantMesh.utils.camera_util import oribt_camera_poses_to_input_cameras
+-from CRM.model.crm.model import ConvolutionalReconstructionModel
+-from CRM.model.crm.sampler import CRMSampler
+-from Wonder3D.pipelines.pipeline_mvdiffusion_image import MVDiffusionImagePipeline
+-from Wonder3D.data.single_image_dataset import SingleImageDataset as MVSingleImageDataset
+-from Wonder3D.utils.misc import load_config as load_config_wonder3d
+-from Zero123Plus.pipeline import Zero123PlusPipeline
+-from Era3D.mvdiffusion.pipelines.pipeline_mvdiffusion_unclip import StableUnCLIPImg2ImgPipeline
+-from Era3D.mvdiffusion.data.single_image_dataset import SingleImageDataset as Era3DSingleImageDataset
+-from Era3D.utils.misc import load_config as load_config_era3d
+-from Unique3D.custum_3d_diffusion.custum_pipeline.unifield_pipeline_img2mvimg import StableDiffusionImage2MVCustomPipeline
+-from Unique3D.custum_3d_diffusion.custum_pipeline.unifield_pipeline_img2img import StableDiffusionImageCustomPipeline
+-from Unique3D.scripts.mesh_init import fast_geo
+-from Unique3D.scripts.utils import from_py3d_mesh, to_py3d_mesh, to_pyml_mesh, simple_clean_mesh
+-from Unique3D.scripts.project_mesh import multiview_color_projection, multiview_color_projection_texture, get_cameras_list, get_orbit_cameras_list
+-from Unique3D.mesh_reconstruction.recon import reconstruct_stage1
+-from Unique3D.mesh_reconstruction.refine import run_mesh_refine
+-from CharacterGen.character_inference import Inference2D_API, Inference3D_API
+-from CharacterGen.Stage_3D.lrm.utils.config import load_config as load_config_cg3d
+-import craftsman
+-from craftsman.systems.base import BaseSystem
+-from craftsman.utils.config import ExperimentConfig as ExperimentConfigCraftsman, load_config as load_config_craftsman
+-from CRM_T2I_V2.model.crm.sampler import CRMSamplerV2
+-from CRM_T2I_V2.model.t2i_adapter_v2 import T2IAdapterV2
+-from CRM_T2I_V3.model.crm.sampler import CRMSamplerV3
+-from Hunyuan3D_V1.mvd.hunyuan3d_mvd_std_pipeline import HunYuan3D_MVD_Std_Pipeline
+-from Hunyuan3D_V1.mvd.hunyuan3d_mvd_lite_pipeline import Hunyuan3D_MVD_Lite_Pipeline
+-from Hunyuan3D_V1.infer import Views2Mesh
+-from Hunyuan3D_V2.hy3dgen.shapegen import FaceReducer, FloaterRemover, DegenerateFaceRemover, Hunyuan3DDiTFlowMatchingPipeline
+-from Hunyuan3D_V2.hy3dgen.texgen import Hunyuan3DPaintPipeline
+-from Hunyuan3D_V2.hy3dgen.rembg import BackgroundRemover
+-from TRELLIS.trellis.pipelines import TrellisImageTo3DPipeline
+-from TRELLIS.trellis.utils import postprocessing_utils
+-from TripoSG.pipelines.pipeline_triposg import TripoSGPipeline
+-from TripoSG.pipelines.pipeline_triposg_scribble import TripoSGScribblePipeline
+-from Stable3DGen.pipeline_builders import StableGenPipelineBuilder
+-from MV_Adapter.mvadapter_node_utils import (
+-        prepare_pipeline as mvadapter_prepare_pipeline,
+-        run_pipeline as mvadapter_run_pipeline, 
+-        prepare_tg2mv_pipeline as mvadapter_prepare_tg2mv_pipeline,
+-        run_tg2mv_pipeline as mvadapter_run_tg2mv_pipeline,
+-        prepare_texture_pipeline as mvadapter_prepare_texture_pipeline,
+-        download_texture_checkpoints,
+-    )
+-from mmgp import offload, profile_type
+-from Gen_3D_Modules.Hunyuan3D_2_1 import (
+-    FaceReducer_2_1, 
+-    Hunyuan3DDiTFlowMatchingPipeline_2_1,
+-    export_to_trimesh_2_1,
+-    BackgroundRemover_2_1,
+-    Hunyuan3DPaintPipeline_2_1,
+-    Hunyuan3DPaintConfig_2_1,
+-    create_glb_with_pbr_materials_2_1,
+-)
+-from Gen_3D_Modules.Hunyuan3D_2_1.hy3dpaint.utils.torchvision_fix import apply_fix
+-apply_fix()
+-from Gen_3D_Modules.PartCrafter.partcrafter_src.pipelines.pipeline_partcrafter import PartCrafterPipeline
+-from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.data_utils import get_colored_mesh_composition
++try:
++    from TriplaneGaussian.triplane_gaussian_transformers import TGS
++    from TriplaneGaussian.utils.config import ExperimentConfig as ExperimentConfigTGS, load_config as load_config_tgs
++    from TriplaneGaussian.data import CustomImageOrbitDataset
++    from TriplaneGaussian.utils.misc import todevice, get_device
++except Exception as e:
++    TGS = None
++
++try:
++    from LGM.core.options import config_defaults
++    from LGM.mvdream.pipeline_mvdream import MVDreamPipeline
++    from LGM.large_multiview_gaussian_model import LargeMultiviewGaussianModel
++    from LGM.nerf_marching_cubes_converter import GSConverterNeRFMarchingCubes
++except Exception:
++    pass
++
++try:
++    from TripoSR.system import TSR
++except Exception:
++    TSR = None
++
++try:
++    from StableFast3D.sf3d import utils as sf3d_utils
++    from StableFast3D.sf3d.system import SF3D
++except Exception:
++    SF3D = None
++
++try:
++    from InstantMesh.utils.camera_util import oribt_camera_poses_to_input_cameras
++except Exception:
++    pass
++
++try:
++    from CRM.model.crm.model import ConvolutionalReconstructionModel
++    from CRM.model.crm.sampler import CRMSampler
++except Exception:
++    pass
++
++try:
++    from Wonder3D.pipelines.pipeline_mvdiffusion_image import MVDiffusionImagePipeline
++    from Wonder3D.data.single_image_dataset import SingleImageDataset as MVSingleImageDataset
++    from Wonder3D.utils.misc import load_config as load_config_wonder3d
++except Exception:
++    pass
++
++try:
++    from Zero123Plus.pipeline import Zero123PlusPipeline
++except Exception:
++    pass
++
++try:
++    from Era3D.mvdiffusion.pipelines.pipeline_mvdiffusion_unclip import StableUnCLIPImg2ImgPipeline
++    from Era3D.mvdiffusion.data.single_image_dataset import SingleImageDataset as Era3DSingleImageDataset
++    from Era3D.utils.misc import load_config as load_config_era3d
++except Exception:
++    pass
++
++try:
++    from Unique3D.custum_3d_diffusion.custum_pipeline.unifield_pipeline_img2mvimg import StableDiffusionImage2MVCustomPipeline
++    from Unique3D.custum_3d_diffusion.custum_pipeline.unifield_pipeline_img2img import StableDiffusionImageCustomPipeline
++    from Unique3D.scripts.mesh_init import fast_geo
++    from Unique3D.scripts.utils import from_py3d_mesh, to_py3d_mesh, to_pyml_mesh, simple_clean_mesh
++    from Unique3D.scripts.project_mesh import multiview_color_projection, multiview_color_projection_texture, get_cameras_list, get_orbit_cameras_list
++    from Unique3D.mesh_reconstruction.recon import reconstruct_stage1
++    from Unique3D.mesh_reconstruction.refine import run_mesh_refine
++except Exception:
++    pass
++
++try:
++    from CharacterGen.character_inference import Inference2D_API, Inference3D_API
++    from CharacterGen.Stage_3D.lrm.utils.config import load_config as load_config_cg3d
++except Exception:
++    pass
++
++try:
++    import craftsman
++except Exception:
++    pass
++try:
++    from craftsman.systems.base import BaseSystem
++    from craftsman.utils.config import ExperimentConfig as ExperimentConfigCraftsman, load_config as load_config_craftsman
++except Exception:
++    pass
++
++try:
++    from CRM_T2I_V2.model.crm.sampler import CRMSamplerV2
++    from CRM_T2I_V2.model.t2i_adapter_v2 import T2IAdapterV2
++    from CRM_T2I_V3.model.crm.sampler import CRMSamplerV3
++except Exception:
++    pass
++
++try:
++    from Hunyuan3D_V1.mvd.hunyuan3d_mvd_std_pipeline import HunYuan3D_MVD_Std_Pipeline
++    from Hunyuan3D_V1.mvd.hunyuan3d_mvd_lite_pipeline import Hunyuan3D_MVD_Lite_Pipeline
++    from Hunyuan3D_V1.infer import Views2Mesh
++except Exception:
++    pass
++
++try:
++    from Hunyuan3D_V2.hy3dgen.shapegen import FaceReducer, FloaterRemover, DegenerateFaceRemover, Hunyuan3DDiTFlowMatchingPipeline
++    from Hunyuan3D_V2.hy3dgen.texgen import Hunyuan3DPaintPipeline
++    from Hunyuan3D_V2.hy3dgen.rembg import BackgroundRemover
++except Exception:
++    pass
++
++try:
++    from TRELLIS.trellis.pipelines import TrellisImageTo3DPipeline
++    from TRELLIS.trellis.utils import postprocessing_utils
++except Exception:
++    pass
++
++try:
++    from TripoSG.pipelines.pipeline_triposg import TripoSGPipeline
++    from TripoSG.pipelines.pipeline_triposg_scribble import TripoSGScribblePipeline
++except Exception:
++    pass
++
++try:
++    from Stable3DGen.pipeline_builders import StableGenPipelineBuilder
++except Exception as _sg_err:
++    class StableGenPipelineBuilder:
++        @staticmethod
++        def get_available_backends():
++            return (["sdpa"], ["spconv"])
++        @staticmethod
++        def build_trellis_pipeline(*args, **kwargs):
++            raise RuntimeError("StableGen Trellis pipeline unavailable: " + str(_sg_err))
++        @staticmethod
++        def build_stablex_pipeline(*args, **kwargs):
++            raise RuntimeError("StableGen StableX pipeline unavailable: " + str(_sg_err))
++        @staticmethod
++        def create_trellis_pipeline_params(*args, **kwargs):
++            return {}
++
++try:
++    from MV_Adapter.mvadapter_node_utils import (
++            prepare_pipeline as mvadapter_prepare_pipeline,
++            run_pipeline as mvadapter_run_pipeline, 
++            prepare_tg2mv_pipeline as mvadapter_prepare_tg2mv_pipeline,
++            run_tg2mv_pipeline as mvadapter_run_tg2mv_pipeline,
++            prepare_texture_pipeline as mvadapter_prepare_texture_pipeline,
++            download_texture_checkpoints,
++        )
++except Exception:
++    pass
++
++try:
++    from mmgp import offload, profile_type
++except Exception:
++    pass
++
++try:
++    from Gen_3D_Modules.Hunyuan3D_2_1 import (
++        FaceReducer_2_1, 
++        Hunyuan3DDiTFlowMatchingPipeline_2_1,
++        export_to_trimesh_2_1,
++        BackgroundRemover_2_1,
++        Hunyuan3DPaintPipeline_2_1,
++        Hunyuan3DPaintConfig_2_1,
++        create_glb_with_pbr_materials_2_1,
++    )
++    from Gen_3D_Modules.Hunyuan3D_2_1.hy3dpaint.utils.torchvision_fix import apply_fix
++    apply_fix()
++except Exception:
++    pass
++
++try:
++    from Gen_3D_Modules.PartCrafter.partcrafter_src.pipelines.pipeline_partcrafter import PartCrafterPipeline
++    from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.data_utils import get_colored_mesh_composition
++except Exception:
++    pass
+ from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.render_utils import explode_mesh
+ import zipfile
+ 
+@@ -143,21 +245,24 @@ from .shared_utils.camera_utils import (
+ from .shared_utils.log_utils import cstr
+ from .shared_utils.common_utils import parse_save_filename, get_list_filenames, resume_or_download_model_from_hf
+ 
++_pipe_candidates = [
++    ("MVDreamPipeline", "MVDreamPipeline"),
++    ("Wonder3DMVDiffusionPipeline", "MVDiffusionImagePipeline"),
++    ("Zero123PlusPipeline", "Zero123PlusPipeline"),
++    ("DiffusionPipeline", "DiffusionPipeline"),
++    ("StableDiffusionPipeline", "StableDiffusionPipeline"),
++    ("Era3DPipeline", "StableUnCLIPImg2ImgPipeline"),
++    ("Unique3DImage2MVCustomPipeline", "StableDiffusionImage2MVCustomPipeline"),
++    ("Unique3DImageCustomPipeline", "StableDiffusionImageCustomPipeline"),
++    ("HunYuan3DMVDStdPipeline", "HunYuan3D_MVD_Std_Pipeline"),
++    ("Hunyuan3DMVDLitePipeline", "Hunyuan3D_MVD_Lite_Pipeline"),
++    ("Hunyuan3DDiTFlowMatchingPipeline", "Hunyuan3DDiTFlowMatchingPipeline"),
++    ("Hunyuan3DPaintPipeline", "Hunyuan3DPaintPipeline"),
++    ("TripoSGPipeline", "TripoSGPipeline"),
++    ("TripoSGScribblePipeline", "TripoSGScribblePipeline"),
++]
+ DIFFUSERS_PIPE_DICT = OrderedDict([
+-    ("MVDreamPipeline", MVDreamPipeline),
+-    ("Wonder3DMVDiffusionPipeline", MVDiffusionImagePipeline),
+-    ("Zero123PlusPipeline", Zero123PlusPipeline),
+-    ("DiffusionPipeline", DiffusionPipeline),
+-    ("StableDiffusionPipeline", StableDiffusionPipeline),
+-    ("Era3DPipeline", StableUnCLIPImg2ImgPipeline),
+-    ("Unique3DImage2MVCustomPipeline", StableDiffusionImage2MVCustomPipeline),
+-    ("Unique3DImageCustomPipeline", StableDiffusionImageCustomPipeline),
+-    ("HunYuan3DMVDStdPipeline", HunYuan3D_MVD_Std_Pipeline),
+-    ("Hunyuan3DMVDLitePipeline", Hunyuan3D_MVD_Lite_Pipeline),
+-    ("Hunyuan3DDiTFlowMatchingPipeline", Hunyuan3DDiTFlowMatchingPipeline),
+-    ("Hunyuan3DPaintPipeline", Hunyuan3DPaintPipeline),
+-    ("TripoSGPipeline", TripoSGPipeline),
+-    ("TripoSGScribblePipeline", TripoSGScribblePipeline),
++    (k, globals()[v]) for k, v in _pipe_candidates if v in globals() and globals()[v] is not None
+ ])
+ 
+ DIFFUSERS_SCHEDULER_DICT = OrderedDict([
+diff --git a/webserver/server.py b/webserver/server.py
+index dfa98fd..579b58c 100644
+--- a/webserver/server.py
++++ b/webserver/server.py
+@@ -23,16 +23,17 @@ def set_web_conf(new_web_conf):
+     global web_conf
+     web_conf = new_web_conf
+ 
+-@server.PromptServer.instance.routes.get("/viewfile")
+ async def view_file(request):
+     query = request.rel_url.query
+-    # Security check to see if query client is local
+-    if request.remote in web_conf['clients_ip'] and "filepath" in query:
++    if web_conf and request.remote in web_conf.get("clients_ip", []) and "filepath" in query:
+         filepath = query["filepath"]
+-        
+         cstr(f"[Server Query view_file] Get file {filepath}").msg.print()
+-        
+         if filepath.lower().endswith(SUPPORTED_VIEW_EXTENSIONS) and os.path.exists(filepath):
+             return web.FileResponse(filepath)
+-    
+     return web.Response(status=404)
++
++try:
++    if hasattr(server.PromptServer, "instance") and server.PromptServer.instance is not None:
++        server.PromptServer.instance.routes.get("/viewfile")(view_file)
++except Exception:
++    pass

@@ -1,0 +1,31 @@
+diff --git a/gemma_encoder.py b/gemma_encoder.py
+index 9d1505f..b0e8e5f 100644
+--- a/gemma_encoder.py
++++ b/gemma_encoder.py
+@@ -8,13 +8,19 @@ import comfy.supported_models_base
+ import folder_paths
+ import torch
+ from PIL import Image
+-from transformers import (
+-    AutoImageProcessor,
+-    AutoTokenizer,
+-    Gemma3Config,
+-    Gemma3ForConditionalGeneration,
+-    Gemma3Processor,
+-)
++try:
++    from transformers import (
++        AutoImageProcessor,
++        AutoTokenizer,
++        Gemma3Config,
++        Gemma3ForConditionalGeneration,
++        Gemma3Processor,
++    )
++except ImportError:
++    from transformers import AutoImageProcessor, AutoTokenizer
++    Gemma3Config = object
++    Gemma3ForConditionalGeneration = object
++    Gemma3Processor = object
+ from transformers.modeling_rope_utils import ROPE_INIT_FUNCTIONS
+ from transformers.models.auto.modeling_auto import MODEL_MAPPING_NAMES
+ 

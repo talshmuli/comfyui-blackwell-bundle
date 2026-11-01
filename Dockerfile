@@ -1,9 +1,10 @@
 # ==============================================================================
 # ComfyUI & Blender Docker Container Suite for NVIDIA Blackwell (RTX 5090 / 5080)
-# Multi-Stage Lean Architecture:
+# Multi-Stage Matrix Architecture:
 #   - base: ComfyUI Core + PyTorch Nightly CUDA 12.8 (sm_120) (~12 GB)
 #   - nodes: Generative Video & Character Animation Stack (~16 GB)
 #   - blender-worker: Lean Headless Blender 4.4 LTS OptiX/CUDA (~3.5 GB)
+#   - full: All-In-One Monolith (ComfyUI + All Nodes + Blender 4.4 LTS) (~19 GB)
 # ==============================================================================
 
 # ==============================================================================
@@ -16,9 +17,9 @@ LABEL maintainer="Tal Shmuli" \
       org.opencontainers.image.title="ComfyUI Blackwell Base (RTX 5090 / 5080)" \
       org.opencontainers.image.description="ComfyUI Core Docker Container for NVIDIA Blackwell RTX 5090 / 5080 (sm_120, CUDA 12.8)" \
       org.opencontainers.image.authors="Tal Shmuli <70902336+talshmuli@users.noreply.github.com>" \
-      org.opencontainers.image.url="https://github.com/talshmuli/comfyui-blackwell-docker" \
-      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-docker" \
-      org.opencontainers.image.documentation="https://github.com/talshmuli/comfyui-blackwell-docker/blob/master/README.md" \
+      org.opencontainers.image.url="https://github.com/talshmuli/comfyui-blackwell-bundle" \
+      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-bundle" \
+      org.opencontainers.image.documentation="https://github.com/talshmuli/comfyui-blackwell-bundle/blob/master/README.md" \
       org.opencontainers.image.vendor="Tal Shmuli" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.base.name="ghcr.io/ai-dock/comfyui:latest-cuda"
@@ -29,15 +30,19 @@ USER root
 # Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Apply official Ubuntu security updates and eliminate dormant daemons (Caddy, Syncthing, Cloudflared)
-# hadolint ignore=DL3008,DL3015
+# Apply official Ubuntu security updates, patch npm/tar, install libjpeg-dev for Pillow, and eliminate dormant daemons
+# hadolint ignore=DL3008,DL3015,DL3016
 RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends libjpeg-dev && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /opt/caddy /opt/syncthing /usr/bin/cloudflared \
            /opt/environments/python/jupyter \
            /opt/environments/python/serviceportal \
-           /opt/environments/python/api
+           /opt/environments/python/api \
+           /opt/environments/python/python_310 && \
+    export PATH="/opt/nvm/versions/node/v22.2.0/bin:$PATH" && \
+    npm install -g npm@10.9.9
 
 # Install official PyTorch, torchvision, and torchaudio nightly builds compiled
 # with native CUDA 12.8 and Blackwell sm_120 compute capability kernels.
@@ -45,6 +50,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         --force-reinstall --no-deps --pre \
         torch torchvision torchaudio \
         --index-url https://download.pytorch.org/whl/nightly/cu128 && \
+    /opt/environments/python/comfyui/bin/pip freeze | grep -E '^(torch|torchvision|torchaudio)==' > /opt/environments/python/comfyui/constraints.txt && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         nvidia-cufile-cu12 \
         nvidia-cusparselt-cu12 \
@@ -57,14 +63,43 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "nvidia-cuda-runtime-cu12>=12.8" \
         "nvidia-cuda-nvrtc-cu12>=12.8" \
         "nvidia-nccl-cu12>=2.29" && \
+    mkdir -p /opt/wheels /tmp/pillow-build && \
+    curl -sL "https://files.pythonhosted.org/packages/source/p/pillow/pillow-13.0.0.tar.gz" | tar -xz -C /tmp/pillow-build --strip-components=1 && \
+    sed -i 's/requires-python = ">=3.11"/requires-python = ">=3.10"/g' /tmp/pillow-build/pyproject.toml && \
+    /opt/environments/python/comfyui/bin/pip wheel --no-cache-dir --no-deps -w /opt/wheels /tmp/pillow-build && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps /opt/wheels/pillow-13.0.0-*.whl && \
+    rm -rf /tmp/pillow-build && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
-        "pillow>=10.4.0" \
+        "aiohttp>=3.13.4" \
+        "pip>=24.0" \
+        "setuptools>=70.0.0" \
+        "jinja2>=3.1.5" \
         "gitpython>=3.1.44" \
         "pyjwt>=2.9.0" \
         "certifi>=2024.8.30" \
         "h11>=0.14.0" \
         "anyio>=4.6.0" && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
+
+# Enforce pip constraints globally to prevent runtime custom node installs from downgrading PyTorch
+ENV PIP_CONSTRAINT=/opt/environments/python/comfyui/constraints.txt
+
+# Update ComfyUI core to latest upstream master to support modern custom nodes (comfy_api, Wan2.1, LTXVideo)
+# Install modern ComfyUI master dependencies with --no-deps to protect cu128 PyTorch and prevent resolver backtracking
+RUN git -C /opt/ComfyUI fetch --depth=1 origin master && \
+    git -C /opt/ComfyUI checkout -f FETCH_HEAD && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+        av && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
+        "SQLAlchemy>=2.0.0" \
+        alembic \
+        simpleeval \
+        blake3 \
+        comfy-aimdo \
+        comfy-kitchen \
+        comfyui-frontend-package \
+        comfyui-workflow-templates \
+        comfyui-embedded-docs
 
 WORKDIR /workspace
 
@@ -81,21 +116,65 @@ LABEL maintainer="Tal Shmuli" \
 # Fix Hadolint DL3003: Use WORKDIR to switch directories instead of cd
 WORKDIR /opt/ComfyUI/custom_nodes
 
-# Pre-install baseline custom nodes:
-# 1. VideoHelperSuite: Essential video ingestion, extraction, and mastering pipeline
-# 2. LivePortraitKJ: Real-time expressive facial animation, micro-expressions, eye contact
-# 3. LatentSyncWrapper: High-fidelity audio-conditioned latent phoneme lip-sync
-# 4. AnimateDiff-Evolved: Industry standard for temporally coherent neural animation
-# 5. ComfyUI-3D-Pack: 3D mesh rendering, UV processing, and neural reconstruction
-RUN git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
-    git -C ComfyUI-VideoHelperSuite checkout 593fcb07 && \
-    git clone --depth=1 https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
-    git clone --depth=1 https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git && \
-    git clone https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git && \
-    git -C ComfyUI-AnimateDiff-Evolved checkout b3e508a && \
-    git clone --depth=1 https://github.com/MrForExample/ComfyUI-3D-Pack.git
+# Install system libraries for 3D processing, OpenGL rendering, and headless GLSL
+# hadolint ignore=DL3008,DL3015
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libopengl0 \
+        libgl1-mesa-glx \
+        libglib2.0-0 && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies for video generation and portrait animation,
+# Pre-install complete AI video, 3D, and music production custom node suite with network retry resilience
+RUN clone_node() { \
+        local url="$1"; \
+        local commit="${2:-}"; \
+        local dir; \
+        dir="$(basename "$url" .git)"; \
+        local max_attempts=3; \
+        local attempt=1; \
+        while [ "$attempt" -le "$max_attempts" ]; do \
+            echo "Cloning $dir (attempt $attempt/$max_attempts)..."; \
+            rm -rf "$dir"; \
+            if [ -n "$commit" ]; then \
+                if git clone "$url" "$dir" && git -C "$dir" checkout "$commit"; then \
+                    return 0; \
+                fi; \
+            elif git clone --depth=1 "$url" "$dir"; then \
+                return 0; \
+            fi; \
+            echo "Clone failed for $dir. Retrying in 3s..."; \
+            rm -rf "$dir"; \
+            sleep 3; \
+            attempt=$((attempt + 1)); \
+        done; \
+        echo "Error: Failed to clone $dir after $max_attempts attempts." >&2; \
+        return 1; \
+    }; \
+    export GIT_TERMINAL_PROMPT=0 && \
+    clone_node https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git 593fcb07 && \
+    clone_node https://github.com/kijai/ComfyUI-LivePortraitKJ.git && \
+    clone_node https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git && \
+    clone_node https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git b3e508a && \
+    clone_node https://github.com/MrForExample/ComfyUI-3D-Pack.git && \
+    clone_node https://github.com/city96/ComfyUI-GGUF.git && \
+    clone_node https://github.com/kijai/ComfyUI-WanVideoWrapper.git && \
+    clone_node https://github.com/kijai/ComfyUI-KJNodes.git && \
+    clone_node https://github.com/Fannovel16/ComfyUI-Frame-Interpolation.git && \
+    clone_node https://github.com/cubiq/ComfyUI_IPAdapter_plus.git && \
+    clone_node https://github.com/pmarmotte2/Comfyui-Song-Generation-Suite.git && \
+    clone_node https://github.com/filliptm/ComfyUI-FL-YuE2.git && \
+    clone_node https://github.com/AIFSH/ComfyUI-RVC.git && \
+    clone_node https://github.com/Lightricks/ComfyUI-LTXVideo.git && \
+    clone_node https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
+    clone_node https://github.com/AIDC-AI/ComfyUI-Copilot.git && \
+    sed -i 's/from sqlalchemy.orm import identity/# from sqlalchemy.orm import identity/' ComfyUI-Copilot/backend/controller/conversation_api.py && \
+    sed -i 's/from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer/try:\n    from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer\n    from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController\n    from DiffRastMesh.diff_mesh import DiffRastRenderer\nexcept Exception:\n    pass\n# /' ComfyUI-3D-Pack/nodes.py && \
+    sed -i 's/from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController/# from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController/' ComfyUI-3D-Pack/nodes.py && \
+    sed -i 's/from DiffRastMesh.diff_mesh import DiffRastRenderer/# from DiffRastMesh.diff_mesh import DiffRastRenderer/' ComfyUI-3D-Pack/nodes.py && \
+    sed -i 's/from .rvc.train import vc,gpus,default_batch_size,preprocess_dataset,extract_f0_feature,train1key/try:\n    from .rvc.train import vc,gpus,default_batch_size,preprocess_dataset,extract_f0_feature,train1key\nexcept Exception:\n    pass/' ComfyUI-RVC/nodes.py && \
+    sed -i 's/cmd_opts = parser.parse_args()/cmd_opts, _ = parser.parse_known_args()/' ComfyUI-RVC/rvc/configs/config.py
+
+# Install Python dependencies for video generation, portrait animation, 3D, and music production,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "numpy<2.0.0,>=1.24.0" \
@@ -108,13 +187,32 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "mediapipe<0.10.15" \
         moviepy \
         ffmpeg-python \
-        av \
+        pydub \
+        pymeshlab \
         omegaconf \
         einops \
         onnxruntime-gpu \
         pyhocon \
         plyfile \
-        trimesh && \
+        trimesh \
+        "sqlalchemy>=2.0.0" \
+        python-dotenv \
+        lazy_loader \
+        objprint \
+        varname \
+        "gguf>=0.13.0" \
+        sentencepiece \
+        ftfy \
+        comfy_angle \
+        PyOpenGL \
+        PyOpenGL_accelerate \
+        comfyui-workflow-templates-core \
+        comfyui-workflow-templates-media-video \
+        comfyui-workflow-templates-media-image \
+        comfyui-workflow-templates-media-api \
+        comfyui-workflow-templates-media-other \
+        comfyui-workflow-templates-media-assets-01 \
+        comfyui-workflow-templates-media-assets-02 && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
         "diffusers>=0.30.0,<0.31.0" \
         accelerate \
@@ -122,7 +220,13 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         torchmetrics \
         onnx2torch \
         facenet-pytorch \
-        kiui
+        kiui && \
+    /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
+        /opt/wheels/pillow-13.0.0-*.whl && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
+        "aiohttp>=3.13.4" \
+        "jinja2>=3.1.5"
 
 WORKDIR /workspace
 
@@ -136,9 +240,9 @@ LABEL maintainer="Tal Shmuli" \
       org.opencontainers.image.title="Blender Worker (RTX 5090 / 5080)" \
       org.opencontainers.image.description="Blender 4.4 LTS Headless Worker for RTX 5090 Blackwell (CUDA 12.8, OptiX)" \
       org.opencontainers.image.authors="Tal Shmuli <70902336+talshmuli@users.noreply.github.com>" \
-      org.opencontainers.image.url="https://github.com/talshmuli/comfyui-blackwell-docker" \
-      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-docker" \
-      org.opencontainers.image.documentation="https://github.com/talshmuli/comfyui-blackwell-docker/blob/master/README.md" \
+      org.opencontainers.image.url="https://github.com/talshmuli/comfyui-blackwell-bundle" \
+      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-bundle" \
+      org.opencontainers.image.documentation="https://github.com/talshmuli/comfyui-blackwell-bundle/blob/master/README.md" \
       org.opencontainers.image.vendor="Tal Shmuli" \
       org.opencontainers.image.licenses="MIT"
 
@@ -171,7 +275,8 @@ RUN curl -sL "https://download.blender.org/release/Blender4.4/blender-4.4.3-linu
     tar -xJ -C /opt/blender --strip-components=1 && \
     ln -s /opt/blender/blender /usr/local/bin/blender && \
     mkdir -p /opt/blender/4.4/scripts/addons && \
-    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node
+    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node && \
+    /opt/blender/4.4/python/bin/python3.11 -m pip install --no-cache-dir --upgrade certifi urllib3 requests setuptools pip
 
 WORKDIR /workspace
 RUN mkdir -p /workspace/scenes /workspace/passes /opt/scripts
@@ -182,3 +287,49 @@ RUN chmod +x /opt/scripts/blender_entrypoint.sh /opt/scripts/blender_runner.py
 
 ENTRYPOINT ["/opt/scripts/blender_entrypoint.sh"]
 CMD ["python3", "/opt/scripts/blender_runner.py"]
+
+# ==============================================================================
+# Stage 4: Full (Studio Monolith) - ComfyUI + All Nodes + Blender 4.4 LTS (~19 GB)
+# All-In-One Studio VFX container with ComfyUI core, custom nodes, and Blender
+# ==============================================================================
+FROM nodes AS full
+
+LABEL maintainer="Tal Shmuli" \
+      org.opencontainers.image.title="ComfyUI Blackwell Full Studio (RTX 5090 / 5080)" \
+      org.opencontainers.image.description="All-In-One ComfyUI & Blender 4.4 LTS VFX Studio for NVIDIA Blackwell RTX 5090 / 5080 (sm_120, CUDA 12.8)" \
+      org.opencontainers.image.authors="Tal Shmuli <70902336+talshmuli@users.noreply.github.com>" \
+      org.opencontainers.image.url="https://github.com/talshmuli/comfyui-blackwell-bundle" \
+      org.opencontainers.image.source="https://github.com/talshmuli/comfyui-blackwell-bundle" \
+      org.opencontainers.image.documentation="https://github.com/talshmuli/comfyui-blackwell-bundle/blob/master/README.md" \
+      org.opencontainers.image.vendor="Tal Shmuli" \
+      org.opencontainers.image.licenses="MIT"
+
+# Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# hadolint ignore=DL3008,DL3015
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libx11-6 \
+        libxxf86vm1 \
+        libxcursor1 \
+        libxi6 \
+        libxrandr2 \
+        libxinerama1 \
+        libgl1 \
+        libegl1 \
+        libsm6 \
+        libxext6 \
+        libxkbcommon0 \
+        libdbus-1-3 && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/blender
+RUN curl -sL "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" | \
+    tar -xJ -C /opt/blender --strip-components=1 && \
+    ln -s /opt/blender/blender /usr/local/bin/blender && \
+    mkdir -p /opt/blender/4.4/scripts/addons && \
+    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node && \
+    /opt/blender/4.4/python/bin/python3.11 -m pip install --no-cache-dir --upgrade certifi urllib3 requests setuptools pip
+
+WORKDIR /workspace
+

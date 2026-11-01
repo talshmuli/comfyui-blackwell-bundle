@@ -1,0 +1,42 @@
+diff --git a/__init__.py b/__init__.py
+index a8fcc26..c6d4937 100644
+--- a/__init__.py
++++ b/__init__.py
+@@ -61,11 +61,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
+     "CombineAudio": "CombineAudio"
+ }
+ 
+-@PromptServer.instance.routes.get("/rvc/reboot")
+-def restart(self):
+-    try:
+-        sys.stdout.close_log()
+-    except Exception as e:
+-        pass
+-
+-    return os.execv(sys.executable, [sys.executable] + sys.argv)
+\ No newline at end of file
++try:
++    if hasattr(PromptServer, "instance") and PromptServer.instance is not None:
++        @PromptServer.instance.routes.get("/rvc/reboot")
++        def restart(self):
++            try:
++                sys.stdout.close_log()
++            except Exception as e:
++                pass
++            return os.execv(sys.executable, [sys.executable] + sys.argv)
++except Exception:
++    pass
+\ No newline at end of file
+diff --git a/rvc/configs/config.py b/rvc/configs/config.py
+index fae8085..b5fa7b4 100644
+--- a/rvc/configs/config.py
++++ b/rvc/configs/config.py
+@@ -101,7 +101,7 @@ class Config:
+         parser.add_argument(
+             "--update", action="store_true", help="Update to latest assets"
+         )
+-        cmd_opts = parser.parse_args()
++        cmd_opts, _ = parser.parse_known_args()
+ 
+         cmd_opts.port = cmd_opts.port if 0 <= cmd_opts.port <= 65535 else 7865
+ 
