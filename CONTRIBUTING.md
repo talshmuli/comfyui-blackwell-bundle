@@ -34,6 +34,8 @@ This repository provides automated build pipelines and Docker configurations tai
    assert 'VHS_VideoCombine' in nodes.NODE_CLASS_MAPPINGS
    assert 'DownloadAndLoadLivePortraitModels' in nodes.NODE_CLASS_MAPPINGS
    assert 'LatentSyncNode' in nodes.NODE_CLASS_MAPPINGS
+   assert 'WanVideoModelLoader' in nodes.NODE_CLASS_MAPPINGS
+   assert 'Load3D' in nodes.NODE_CLASS_MAPPINGS
    print('ALL LOCAL CI VALIDATION CHECKS PASSED!')
    "
    ```
