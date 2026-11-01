@@ -3,16 +3,23 @@ services:
   # ComfyUI Production Workstation (Video, Lip-Sync, & Custom Nodes)
   # ============================================================================
   comfyui:
-    image: ${COMFYUI_IMAGE:-ghcr.io/talshmuli/comfyui-blackwell-docker:nodes-cuda128-sm120}
+    image: ${COMFYUI_IMAGE:-ghcr.io/talshmuli/comfyui-blackwell-bundle:nodes-cuda128-sm120}
     container_name: ${COMFYUI_CONTAINER_NAME:-comfyui-nodes}
     profiles: ["modular", "nodes"]
     restart: unless-stopped
+    shm_size: ${SHM_SIZE:-16gb}
     ports:
-      - "${COMFYUI_PORT:-8188}:8188"
+      - "${COMFYUI_BIND_IP:-0.0.0.0}:${COMFYUI_PORT:-8188}:8188"
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - COMFYUI_FLAGS=--preview-method auto --normalvram
+      - WORKSPACE_UID=${PUID:-1000}
+      - WORKSPACE_GID=${PGID:-1000}
+      - UMASK=${UMASK:-0022}
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
+      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
+      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:
@@ -25,7 +32,10 @@ services:
     volumes:
       - ./data/models:/opt/ComfyUI/models
       - ./data/output:/opt/ComfyUI/output
+      - ./workflows:/opt/ComfyUI/user/default/workflows
       - passes_bus:/opt/ComfyUI/input/passes
+      # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
+      # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
     networks:
       - vfx-net
 
@@ -33,16 +43,23 @@ services:
   # ComfyUI Lean Core (Base PyTorch Nightly sm_120 Runtime - Zero Custom Nodes)
   # ============================================================================
   comfyui-base:
-    image: ${COMFYUI_BASE_IMAGE:-ghcr.io/talshmuli/comfyui-blackwell-docker:base-cuda128-sm120}
+    image: ${COMFYUI_BASE_IMAGE:-ghcr.io/talshmuli/comfyui-blackwell-bundle:base-cuda128-sm120}
     container_name: ${COMFYUI_BASE_CONTAINER_NAME:-comfyui-base}
     profiles: ["dev", "base"]
     restart: unless-stopped
+    shm_size: ${SHM_SIZE:-16gb}
     ports:
-      - "${COMFYUI_PORT:-8188}:8188"
+      - "${COMFYUI_BIND_IP:-0.0.0.0}:${COMFYUI_PORT:-8188}:8188"
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - COMFYUI_FLAGS=--preview-method auto --normalvram
+      - WORKSPACE_UID=${PUID:-1000}
+      - WORKSPACE_GID=${PGID:-1000}
+      - UMASK=${UMASK:-0022}
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
+      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
+      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:
@@ -55,7 +72,10 @@ services:
     volumes:
       - ./data/models:/opt/ComfyUI/models
       - ./data/output:/opt/ComfyUI/output
+      - ./workflows:/opt/ComfyUI/user/default/workflows
       - passes_bus:/opt/ComfyUI/input/passes
+      # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
+      # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
     networks:
       - vfx-net
 
@@ -63,10 +83,11 @@ services:
   # Blender 4.4 LTS Headless Pass Renderer (OptiX / CUDA sm_120 Worker)
   # ============================================================================
   blender-worker:
-    image: ${BLENDER_IMAGE:-ghcr.io/talshmuli/comfyui-blackwell-docker:blender-worker}
+    image: ${BLENDER_IMAGE:-ghcr.io/talshmuli/comfyui-blackwell-bundle:blender-worker}
     container_name: ${BLENDER_CONTAINER_NAME:-blender-worker}
     profiles: ["modular", "dev"]
     restart: unless-stopped
+    shm_size: ${SHM_SIZE:-16gb}
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
@@ -81,6 +102,69 @@ services:
     volumes:
       - ./data/blender_scenes:/workspace/scenes
       - passes_bus:/workspace/passes
+    networks:
+      - vfx-net
+
+  # ============================================================================
+  # ComfyUI Full Studio (All-In-One Monolith: ComfyUI + Nodes + Blender 4.4 LTS)
+  # ============================================================================
+  comfyui-full:
+    image: ${COMFYUI_FULL_IMAGE:-ghcr.io/talshmuli/comfyui-blackwell-bundle:full-cuda128-sm120}
+    container_name: ${COMFYUI_FULL_CONTAINER_NAME:-comfyui-full}
+    profiles: ["monolith", "full"]
+    restart: unless-stopped
+    shm_size: ${SHM_SIZE:-16gb}
+    ports:
+      - "${COMFYUI_BIND_IP:-0.0.0.0}:${COMFYUI_PORT:-8188}:8188"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - WORKSPACE_UID=${PUID:-1000}
+      - WORKSPACE_GID=${PGID:-1000}
+      - UMASK=${UMASK:-0022}
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
+      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
+      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
+      - WEB_ENABLE_AUTH=false
+      - CF_QUICK_TUNNELS=false
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./data/models:/opt/ComfyUI/models
+      - ./data/output:/opt/ComfyUI/output
+      - ./data/blender_scenes:/workspace/scenes
+      # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
+      # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
+    networks:
+      - vfx-net
+
+  # ============================================================================
+  # Smart ComfyUI Gallery (Digital Asset Management & Workflow Catalog)
+  # ============================================================================
+  smartgallery:
+    image: ${SMARTGALLERY_IMAGE:-mmartial/smart-comfyui-gallery:latest}
+    container_name: ${SMARTGALLERY_CONTAINER_NAME:-comfyui-smartgallery}
+    profiles: ["modular", "nodes", "gallery", "full"]
+    restart: unless-stopped
+    ports:
+      - "${SMARTGALLERY_BIND_IP:-0.0.0.0}:${SMARTGALLERY_PORT:-8189}:8189"
+    environment:
+      - WANTED_UID=${PUID:-1000}
+      - WANTED_GID=${PGID:-1000}
+      - BASE_SMARTGALLERY_PATH=/smartgallery_data
+      - BASE_INPUT_PATH=/mnt/input
+      - BASE_OUTPUT_PATH=/mnt/output
+      - COMFYUI_URL=http://comfyui:8188
+    volumes:
+      - ${COMFYUI_OUTPUT_PATH:-./data/output}:/mnt/output
+      - ${COMFYUI_INPUT_PATH:-./data/input}:/mnt/input
+      - ./data/smartgallery:/smartgallery_data
     networks:
       - vfx-net
 
