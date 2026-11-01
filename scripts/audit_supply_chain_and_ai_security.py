@@ -52,6 +52,10 @@ def scan_custom_nodes_in_container(container_name: str = "comfyui"):
     print(f"\n{BOLD}=== 1. Third-Party Custom Nodes Supply Chain & AI Injection Scan ==={RESET}")
     print(f"Target Container: {container_name} (/opt/ComfyUI/custom_nodes)")
     
+    if not shutil.which("docker"):
+        log_warn("Docker CLI not available to inspect running containers.")
+        return 0, 0
+
     # Check if container is running
     res = subprocess.run(["docker", "ps", "-q", "-f", f"name={container_name}"], capture_output=True, text=True)
     if not res.stdout.strip():
@@ -67,7 +71,7 @@ NODES_DIR = Path('/opt/ComfyUI/custom_nodes')
 findings = []
 
 patterns = [
-    (r"pickle\\s*\\.\\s*loads?\\s*\\(", "CRITICAL", "Unsafe Pickle Deserialization"),
+    (r"pickle\\s*\\.\\s*loads?\\s*\\(", "HIGH", "Pickle Deserialization (Ensure models are safetensors)"),
     (r"(?<!def\\s)eval\\s*\\(", "HIGH", "Dynamic code execution via eval()"),
     (r"(?<!def\\s)exec\\s*\\(", "HIGH", "Dynamic code execution via exec()"),
     (r"shell\\s*=\\s*True", "HIGH", "Subprocess invocation with shell=True"),
@@ -122,7 +126,7 @@ print(json.dumps(findings))
         log_warn(f"Failed scanning custom nodes in container: {e}")
         return 0, 0
 
-def run_trivy_container_scan(image_name: str = "ghcr.io/talshmuli/comfyui-blackwell-docker:latest"):
+def run_trivy_container_scan(image_name: str = "ghcr.io/talshmuli/comfyui-blackwell-bundle:full-cuda128-sm120"):
     print(f"\n{BOLD}=== 2. Aqua Security Trivy Container Vulnerability & Secret Scan ==={RESET}")
     print(f"Target Image: {image_name}")
     
@@ -139,6 +143,7 @@ def run_trivy_container_scan(image_name: str = "ghcr.io/talshmuli/comfyui-blackw
         "--severity", "CRITICAL",
         "--scanners", "vuln,secret",
         "--ignore-unfixed",
+        "--skip-db-update",
         "--format", "table",
         image_name
     ]

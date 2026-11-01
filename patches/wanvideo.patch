@@ -1,0 +1,19 @@
+diff --git a/latent_preview.py b/latent_preview.py
+index 01ffae7..e067bcf 100644
+--- a/latent_preview.py
++++ b/latent_preview.py
+@@ -124,7 +124,13 @@ import io
+ import time
+ import struct
+ from importlib.util import find_spec
+-serv = server.PromptServer.instance
++class _ServProxy:
++    def __getattr__(self, name):
++        inst = getattr(server.PromptServer, "instance", None)
++        if inst is not None:
++            return getattr(inst, name)
++        return None
++serv = _ServProxy()
+ 
+ class WrappedPreviewer(LatentPreviewer):
+     def __init__(self, previewer, rate=16):
