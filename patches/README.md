@@ -6,5 +6,7 @@ This directory contains standalone compatibility patches for community custom no
 |---|---|---|
 | `3d_pack.patch` | [ComfyUI-3D-Pack](https://github.com/MrForExample/ComfyUI-3D-Pack) | Shields optional CUDA-compilation dependencies (`nvdiffrast`, `torchtyping`, `pytorch_msssim`, `jaxtyping`) behind fallback imports so all 97 core 3D mesh nodes register cleanly without display/driver overhead. |
 | `ltxvideo.patch` | [ComfyUI-LTXVideo](https://github.com/Lightricks/ComfyUI-LTXVideo) | Graceful fallback for `Gemma3` transformer classes when running standard transformers builds. |
-| `rvc.patch` | [ComfyUI-RVC](https://github.com/AIFSH/ComfyUI-RVC) | Safe CLI argument parsing (`parse_known_args`) preventing collisions with ComfyUI CLI flags. |
-| `wanvideo.patch` | [ComfyUI-WanVideoWrapper](https://github.com/kijai/ComfyUI-WanVideoWrapper) | Safe proxy for `PromptServer.instance` during headless worker and testing initialization. |
+| `rvc.patch` | [ComfyUI-RVC](https://github.com/AIFSH/ComfyUI-RVC) | Safe CLI argument parsing (`parse_known_args`) preventing collisions with ComfyUI CLI flags, eliminates global `users.pth` core module shadowing, and protects reboot routes. |
+| `wanvideo.patch` | [ComfyUI-WanVideoWrapper](https://github.com/kijai/ComfyUI-WanVideoWrapper) | Safe proxy for `PromptServer.instance`, sm_120 SDPA fallback for SageAttention, and resilient temporal/spatial alignment for WanVideo ControlNet. |
+| `vhs.patch` | [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) | Flexible `VALIDATE_INPUTS` supporting optional video inputs and variable keyword arguments during UI upload validation. |
+| `yue2.patch` | [ComfyUI-FL-YuE2](https://github.com/filliptm/ComfyUI-FL-YuE2) | Graceful exception handling for optional training endpoints, preserving core audio generation inference nodes. |

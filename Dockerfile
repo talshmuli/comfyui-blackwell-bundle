@@ -166,12 +166,17 @@ RUN clone_node() { \
     clone_node https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
     clone_node https://github.com/AIDC-AI/ComfyUI-Copilot.git && \
     sed -i 's/from sqlalchemy.orm import identity/# from sqlalchemy.orm import identity/' ComfyUI-Copilot/backend/controller/conversation_api.py && \
-    sed -i 's/from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer/try:\n    from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer\n    from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController\n    from DiffRastMesh.diff_mesh import DiffRastRenderer\nexcept Exception:\n    pass\n# /' ComfyUI-3D-Pack/nodes.py && \
-    sed -i 's/from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController/# from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController/' ComfyUI-3D-Pack/nodes.py && \
-    sed -i 's/from DiffRastMesh.diff_mesh import DiffRastRenderer/# from DiffRastMesh.diff_mesh import DiffRastRenderer/' ComfyUI-3D-Pack/nodes.py && \
-    sed -i 's/from .rvc.train import vc,gpus,default_batch_size,preprocess_dataset,extract_f0_feature,train1key/try:\n    from .rvc.train import vc,gpus,default_batch_size,preprocess_dataset,extract_f0_feature,train1key\nexcept Exception:\n    pass/' ComfyUI-RVC/nodes.py && \
-    sed -i 's/cmd_opts = parser.parse_args()/cmd_opts, _ = parser.parse_known_args()/' ComfyUI-RVC/rvc/configs/config.py && \
     sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py
+
+# Apply upstream compatibility patches for Blackwell sm_120 runtime and headless environments
+COPY patches /opt/patches
+RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch && \
+    git -C ComfyUI-WanVideoWrapper apply --ignore-whitespace /opt/patches/wanvideo.patch && \
+    git -C ComfyUI-RVC apply --ignore-whitespace /opt/patches/rvc.patch && \
+    git -C ComfyUI-LTXVideo apply --ignore-whitespace /opt/patches/ltxvideo.patch && \
+    git -C ComfyUI-VideoHelperSuite apply --ignore-whitespace /opt/patches/vhs.patch && \
+    git -C ComfyUI-FL-YuE2 apply --ignore-whitespace /opt/patches/yue2.patch && \
+    rm -rf /opt/patches
 
 # Install Python dependencies for video generation, portrait animation, 3D, and music production,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite

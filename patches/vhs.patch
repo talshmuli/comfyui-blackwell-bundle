@@ -1,0 +1,47 @@
+diff --git a/videohelpersuite/load_video_nodes.py b/videohelpersuite/load_video_nodes.py
+index 5c6bd0b..7fcb013 100644
+--- a/videohelpersuite/load_video_nodes.py
++++ b/videohelpersuite/load_video_nodes.py
+@@ -468,7 +468,7 @@ class LoadVideoUpload:
+         return calculate_file_hash(image_path)
+ 
+     @classmethod
+-    def VALIDATE_INPUTS(s, video):
++    def VALIDATE_INPUTS(s, video=None, **kwargs):
+         if not folder_paths.exists_annotated_filepath(video):
+             return "Invalid video file: {}".format(video)
+         return True
+@@ -517,7 +517,7 @@ class LoadVideoPath:
+         return hash_path(video)
+ 
+     @classmethod
+-    def VALIDATE_INPUTS(s, video):
++    def VALIDATE_INPUTS(s, video=None, **kwargs):
+         return validate_path(video, allow_none=True)
+ 
+ class LoadVideoFFmpegUpload:
+@@ -570,7 +570,7 @@ class LoadVideoFFmpegUpload:
+         return calculate_file_hash(image_path)
+ 
+     @classmethod
+-    def VALIDATE_INPUTS(s, video):
++    def VALIDATE_INPUTS(s, video=None, **kwargs):
+         if not folder_paths.exists_annotated_filepath(video):
+             return "Invalid video file: {}".format(video)
+         return True
+@@ -623,7 +623,7 @@ class LoadVideoFFmpegPath:
+         return hash_path(video)
+ 
+     @classmethod
+-    def VALIDATE_INPUTS(s, video):
++    def VALIDATE_INPUTS(s, video=None, **kwargs):
+         return validate_path(video, allow_none=True)
+ 
+ class LoadImagePath:
+@@ -668,5 +668,5 @@ class LoadImagePath:
+         return hash_path(image)
+ 
+     @classmethod
+-    def VALIDATE_INPUTS(s, image):
++    def VALIDATE_INPUTS(s, image=None, **kwargs):
+         return validate_path(image, allow_none=True)

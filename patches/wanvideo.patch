@@ -1,3 +1,50 @@
+diff --git a/controlnet/wan_controlnet.py b/controlnet/wan_controlnet.py
+index 242b64b..0aca209 100644
+--- a/controlnet/wan_controlnet.py
++++ b/controlnet/wan_controlnet.py
+@@ -178,10 +178,42 @@ class WanControlnet(ModelMixin, ConfigMixin, PeftAdapterMixin, FromOriginalModel
+                 )
+         rotary_emb = self.rope(hidden_states)
+ 
++        # Pre-trim raw control frames along temporal dimension if longer than target frame count
++        if controlnet_states.ndim == 5 and hidden_states.ndim == 5:
++            target_raw_frames = (hidden_states.shape[2] - 1) * 4 + 1 if hidden_states.shape[2] > 1 else 1
++            if controlnet_states.shape[2] > target_raw_frames:
++                controlnet_states = controlnet_states[:, :, :target_raw_frames, :, :]
++
+         # 0. Controlnet encoder
+         for control_encoder_block in self.control_encoder:
+             controlnet_states = control_encoder_block(controlnet_states)
+ 
++        # Resilient alignment of controlnet_states to hidden_states
++        if controlnet_states.shape[0] != hidden_states.shape[0]:
++            if controlnet_states.shape[0] == 1:
++                controlnet_states = controlnet_states.repeat(hidden_states.shape[0], 1, 1, 1, 1)
++            else:
++                controlnet_states = controlnet_states[:hidden_states.shape[0]]
++
++        if controlnet_states.shape[2:] != hidden_states.shape[2:]:
++            target_t, target_h, target_w = hidden_states.shape[2], hidden_states.shape[3], hidden_states.shape[4]
++            # 1. Temporal slice if longer
++            if controlnet_states.shape[2] > target_t:
++                controlnet_states = controlnet_states[:, :, :target_t, :, :]
++
++            # 2. Resample / interpolate if frames are fewer or spatial dimensions differ
++            if controlnet_states.shape[2:] != hidden_states.shape[2:]:
++                orig_dtype = controlnet_states.dtype
++                controlnet_states = torch.nn.functional.interpolate(
++                    controlnet_states.to(torch.float32),
++                    size=(target_t, target_h, target_w),
++                    mode="trilinear",
++                    align_corners=False,
++                ).to(orig_dtype)
++
++        if controlnet_states.dtype != hidden_states.dtype or controlnet_states.device != hidden_states.device:
++            controlnet_states = controlnet_states.to(device=hidden_states.device, dtype=hidden_states.dtype)
++
+         hidden_states = torch.cat([hidden_states, controlnet_states], dim=1)
+ 
+         ## 1. Patch embedding and stack
 diff --git a/latent_preview.py b/latent_preview.py
 index 01ffae7..e067bcf 100644
 --- a/latent_preview.py
@@ -39,3 +86,42 @@ index f5b7558..39439c2 100644
  
          gguf = False
          if model.endswith(".gguf"):
+diff --git a/nodes_sampler.py b/nodes_sampler.py
+index 32b51c6..cd20eac 100644
+--- a/nodes_sampler.py
++++ b/nodes_sampler.py
+@@ -1291,12 +1291,17 @@ class WanVideoSampler:
+                 if controlnet_latents is not None:
+                     if (controlnet_start <= current_step_percentage < controlnet_end):
+                         self.controlnet.to(device)
++                        control_input = controlnet_latents
++                        if control_input.ndim == 5 and z.ndim >= 2:
++                            target_raw_frames = (z.shape[1] - 1) * 4 + 1 if z.shape[1] > 1 else 1
++                            if control_input.shape[2] > target_raw_frames:
++                                control_input = control_input[:, :, :target_raw_frames]
+                         controlnet_states = self.controlnet(
+                             hidden_states=z.unsqueeze(0).to(device, self.controlnet.dtype),
+                             timestep=timestep,
+                             encoder_hidden_states=positive_embeds[0].unsqueeze(0).to(device, self.controlnet.dtype),
+                             attention_kwargs=None,
+-                            controlnet_states=controlnet_latents.to(device, self.controlnet.dtype),
++                            controlnet_states=control_input.to(device, self.controlnet.dtype),
+                             return_dict=False,
+                         )[0]
+                         if isinstance(controlnet_states, (tuple, list)):
+diff --git a/wanvideo/modules/model.py b/wanvideo/modules/model.py
+index e2566ec..54a64fb 100644
+--- a/wanvideo/modules/model.py
++++ b/wanvideo/modules/model.py
+@@ -3310,7 +3310,10 @@ class WanModel(torch.nn.Module):
+                     x[:, :self.original_seq_len] += uni3c_controlnet_states[b].to(x) * uni3c_data["controlnet_weight"]
+                 #controlnet
+                 if (controlnet is not None) and (b % controlnet["controlnet_stride"] == 0) and (b // controlnet["controlnet_stride"] < len(controlnet["controlnet_states"])):
+-                    x[:, :self.original_seq_len] += controlnet["controlnet_states"][b // controlnet["controlnet_stride"]].to(x) * controlnet["controlnet_weight"]
++                    c_state = controlnet["controlnet_states"][b // controlnet["controlnet_stride"]].to(x)
++                    if c_state.shape[1] > self.original_seq_len:
++                        c_state = c_state[:, :self.original_seq_len]
++                    x[:, :c_state.shape[1]] += c_state * controlnet["controlnet_weight"]
+                 # One-to-All-Animation controlnet
+                 if onetoall_control_enabled:
+                     if prev_x is not None and (b - 1) < len(self.controlnet.blocks):
