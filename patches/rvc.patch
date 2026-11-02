@@ -1,8 +1,41 @@
 diff --git a/__init__.py b/__init__.py
-index a8fcc26..c6d4937 100644
+index a8fcc26..00bdf6a 100644
 --- a/__init__.py
 +++ b/__init__.py
-@@ -61,11 +61,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
+@@ -4,28 +4,10 @@ from subprocess import Popen
+ from server import PromptServer
+ now_dir = os.path.dirname(os.path.abspath(__file__))
+ 
+-site_packages_roots = []
+-for path in site.getsitepackages():
+-    if "packages" in path:
+-        site_packages_roots.append(path)
+-if(site_packages_roots==[]):site_packages_roots=["%s/runtime/Lib/site-packages" % now_dir]
+-#os.environ["OPENBLAS_NUM_THREADS"] = "4"
+-for site_packages_root in site_packages_roots:
+-    if os.path.exists(site_packages_root):
+-        try:
+-            with open("%s/users.pth" % (site_packages_root), "a") as f:
+-                f.write(
+-                    "%s\n%s/rvc\n%s/rvc/infer"
+-                    % (now_dir,now_dir,now_dir)
+-                )
+-            break
+-        except PermissionError:
+-            raise PermissionError
+-
+-if os.path.isfile("%s/users.pth" % (site_packages_root)):
+-    print("!!!RVC path was added to " + "%s/users.pth" % (site_packages_root) 
+-    + "\n if meet `No module` error,try `python main.py` again")
+-
++if os.path.join(now_dir, 'rvc') not in sys.path:
++    sys.path.append(os.path.join(now_dir, 'rvc'))
++if os.path.join(now_dir, 'rvc', 'infer') not in sys.path:
++    sys.path.append(os.path.join(now_dir, 'rvc', 'infer'))
+ model_path = os.path.join(now_dir,"rvc", "assets")
+ 
+ if not os.path.exists(os.path.join(model_path, "pretrained_v2")):
+@@ -61,11 +43,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
      "CombineAudio": "CombineAudio"
  }
  

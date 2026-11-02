@@ -32,6 +32,7 @@ services:
     volumes:
       - ./data/models:/opt/ComfyUI/models
       - ./data/output:/opt/ComfyUI/output
+      - ./data/input:/opt/ComfyUI/input
       - ./workflows:/opt/ComfyUI/user/default/workflows
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
@@ -72,6 +73,7 @@ services:
     volumes:
       - ./data/models:/opt/ComfyUI/models
       - ./data/output:/opt/ComfyUI/output
+      - ./data/input:/opt/ComfyUI/input
       - ./workflows:/opt/ComfyUI/user/default/workflows
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:

@@ -17,3 +17,25 @@ index 01ffae7..e067bcf 100644
  
  class WrappedPreviewer(LatentPreviewer):
      def __init__(self, previewer, rate=16):
+diff --git a/nodes_model_loading.py b/nodes_model_loading.py
+index f5b7558..39439c2 100644
+--- a/nodes_model_loading.py
++++ b/nodes_model_loading.py
+@@ -1123,9 +1123,15 @@ class WanVideoModelLoader:
+ 
+         if "sage" in attention_mode:
+             try:
+-                from sageattention import sageattn
++                major = torch.cuda.get_device_capability()[0] if torch.cuda.is_available() else 0
++                if major >= 12:
++                    log.warning("[WanVideo] SageAttention does not support Blackwell sm_120 yet. Automatically falling back to PyTorch native 'sdpa'.")
++                    attention_mode = "sdpa"
++                else:
++                    from sageattention import sageattn
+             except Exception as e:
+-                raise ValueError(f"Can't import SageAttention: {str(e)}")
++                log.warning(f"[WanVideo] SageAttention unavailable ({e}). Falling back to 'sdpa'.")
++                attention_mode = "sdpa"
+ 
+         gguf = False
+         if model.endswith(".gguf"):

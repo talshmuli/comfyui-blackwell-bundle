@@ -1,5 +1,5 @@
 diff --git a/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py b/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py
-index bd72c38..31d1b7d 100644
+index bd72c38..1c0b0e4 100644
 --- a/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py
 +++ b/Gen_3D_Modules/Stable3DGen/trellis/backend_config.py
 @@ -7,7 +7,7 @@ import importlib
@@ -11,7 +11,23 @@ index bd72c38..31d1b7d 100644
  SPCONV_ALGO = 'implicit_gemm'  # Default algorithm
  
  def get_spconv_algo() -> str:
-@@ -88,7 +88,10 @@ def get_available_sparse_backends() -> Dict[str, bool]:
+@@ -45,14 +45,7 @@ def _try_import_flash_attn() -> bool:
+         return False
+ 
+ def _try_import_sageattention() -> bool:
+-    try:
+-        import torch.nn.functional as F
+-        from sageattention import sageattn
+-        F.scaled_dot_product_attention = sageattn
+-        #import sageattention
+-        return True
+-    except ImportError:
+-        return False
++    return False
+ 
+ def _try_import_spconv() -> bool:
+     try:
+@@ -88,7 +81,10 @@ def get_available_sparse_backends() -> Dict[str, bool]:
  def get_attention_backend() -> str:
      """Get current attention backend"""
      global ATTN
@@ -339,6 +355,34 @@ index e4b01fc..b0fecf8 100644
  ])
  
  DIFFUSERS_SCHEDULER_DICT = OrderedDict([
+diff --git a/shared_utils/image_utils.py b/shared_utils/image_utils.py
+index fcb23b3..d5756ec 100644
+--- a/shared_utils/image_utils.py
++++ b/shared_utils/image_utils.py
+@@ -21,12 +21,23 @@ def torch_imgs_to_pils(images, masks=None, alpha_min=0.1):
+     if len(images.shape) == 3:
+         images = images.unsqueeze(0)
+ 
++    images = images.clone()
++
+     if masks is not None:
+         masks = masks.to(dtype=images.dtype, device=images.device)
+         
+         if len(masks.shape) == 2:
+             masks = masks.unsqueeze(0)
+ 
++        if masks.shape[0] != images.shape[0] and masks.shape[0] == 1:
++            masks = masks.repeat(images.shape[0], 1, 1)
++
++        # Handle dummy 64x64 zero mask from LoadImage (no alpha channel)
++        if masks.shape[1] <= 64 and masks.shape[2] <= 64 and (masks.max() == 0.0):
++            masks = torch.ones((images.shape[0], images.shape[1], images.shape[2]), dtype=images.dtype, device=images.device)
++        elif masks.shape[1] != images.shape[1] or masks.shape[2] != images.shape[2]:
++            masks = F.interpolate(masks.unsqueeze(1).float(), size=(images.shape[1], images.shape[2]), mode="bilinear", align_corners=False).squeeze(1).to(dtype=images.dtype, device=images.device)
++
+         inv_mask_index = masks < alpha_min
+         images[inv_mask_index] = 0.
+         
 diff --git a/webserver/server.py b/webserver/server.py
 index dfa98fd..579b58c 100644
 --- a/webserver/server.py
