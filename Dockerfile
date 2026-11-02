@@ -63,12 +63,8 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "nvidia-cuda-runtime-cu12>=12.8" \
         "nvidia-cuda-nvrtc-cu12>=12.8" \
         "nvidia-nccl-cu12>=2.29" && \
-    mkdir -p /opt/wheels /tmp/pillow-build && \
-    curl -sL "https://files.pythonhosted.org/packages/source/p/pillow/pillow-13.0.0.tar.gz" | tar -xz -C /tmp/pillow-build --strip-components=1 && \
-    sed -i 's/requires-python = ">=3.11"/requires-python = ">=3.10"/g' /tmp/pillow-build/pyproject.toml && \
-    /opt/environments/python/comfyui/bin/pip wheel --no-cache-dir --no-deps -w /opt/wheels /tmp/pillow-build && \
-    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps /opt/wheels/pillow-13.0.0-*.whl && \
-    rm -rf /tmp/pillow-build && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+        "pillow==11.1.0" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
         "pip>=24.0" \
@@ -99,6 +95,7 @@ RUN git -C /opt/ComfyUI fetch --depth=1 origin master && \
         comfy-kitchen \
         comfyui-frontend-package \
         comfyui-workflow-templates \
+        comfyui-workflow-templates-json \
         comfyui-embedded-docs
 
 WORKDIR /workspace
@@ -116,12 +113,13 @@ LABEL maintainer="Tal Shmuli" \
 # Fix Hadolint DL3003: Use WORKDIR to switch directories instead of cd
 WORKDIR /opt/ComfyUI/custom_nodes
 
-# Install system libraries for 3D processing, OpenGL rendering, and headless GLSL
+# Install system libraries for 3D processing, OpenGL rendering, headless GLSL, and audio I/O
 # hadolint ignore=DL3008,DL3015
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libopengl0 \
         libgl1-mesa-glx \
-        libglib2.0-0 && \
+        libglib2.0-0 \
+        libportaudio2 && \
     rm -rf /var/lib/apt/lists/*
 
 # Pre-install complete AI video, 3D, and music production custom node suite with network retry resilience
@@ -168,11 +166,17 @@ RUN clone_node() { \
     clone_node https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
     clone_node https://github.com/AIDC-AI/ComfyUI-Copilot.git && \
     sed -i 's/from sqlalchemy.orm import identity/# from sqlalchemy.orm import identity/' ComfyUI-Copilot/backend/controller/conversation_api.py && \
-    sed -i 's/from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer/try:\n    from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer\n    from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController\n    from DiffRastMesh.diff_mesh import DiffRastRenderer\nexcept Exception:\n    pass\n# /' ComfyUI-3D-Pack/nodes.py && \
-    sed -i 's/from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController/# from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController/' ComfyUI-3D-Pack/nodes.py && \
-    sed -i 's/from DiffRastMesh.diff_mesh import DiffRastRenderer/# from DiffRastMesh.diff_mesh import DiffRastRenderer/' ComfyUI-3D-Pack/nodes.py && \
-    sed -i 's/from .rvc.train import vc,gpus,default_batch_size,preprocess_dataset,extract_f0_feature,train1key/try:\n    from .rvc.train import vc,gpus,default_batch_size,preprocess_dataset,extract_f0_feature,train1key\nexcept Exception:\n    pass/' ComfyUI-RVC/nodes.py && \
-    sed -i 's/cmd_opts = parser.parse_args()/cmd_opts, _ = parser.parse_known_args()/' ComfyUI-RVC/rvc/configs/config.py
+    sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py
+
+# Apply upstream compatibility patches for Blackwell sm_120 runtime and headless environments
+COPY patches /opt/patches
+RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch && \
+    git -C ComfyUI-WanVideoWrapper apply --ignore-whitespace /opt/patches/wanvideo.patch && \
+    git -C ComfyUI-RVC apply --ignore-whitespace /opt/patches/rvc.patch && \
+    git -C ComfyUI-LTXVideo apply --ignore-whitespace /opt/patches/ltxvideo.patch && \
+    git -C ComfyUI-VideoHelperSuite apply --ignore-whitespace /opt/patches/vhs.patch && \
+    git -C ComfyUI-FL-YuE2 apply --ignore-whitespace /opt/patches/yue2.patch && \
+    rm -rf /opt/patches
 
 # Install Python dependencies for video generation, portrait animation, 3D, and music production,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
@@ -200,6 +204,10 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         lazy_loader \
         objprint \
         varname \
+        questionary \
+        dataclasses-json \
+        python-multipart \
+        "packaging>=24.2" \
         "gguf>=0.13.0" \
         sentencepiece \
         ftfy \
@@ -214,7 +222,10 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         comfyui-workflow-templates-media-assets-01 \
         comfyui-workflow-templates-media-assets-02 && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
-        "diffusers>=0.30.0,<0.31.0" \
+        "diffusers>=0.35.0" \
+        "local-attention<=1.8.6" \
+        importlib-metadata \
+        tensorboardX \
         accelerate \
         lpips \
         torchmetrics \
@@ -222,8 +233,8 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         facenet-pytorch \
         kiui && \
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
-    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
-        /opt/wheels/pillow-13.0.0-*.whl && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+        "pillow==11.1.0" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
         "jinja2>=3.1.5"
