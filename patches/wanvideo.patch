@@ -64,8 +64,22 @@ index 01ffae7..e067bcf 100644
  
  class WrappedPreviewer(LatentPreviewer):
      def __init__(self, previewer, rate=16):
+diff --git a/nodes.py b/nodes.py
+index f0b0e84..3860436 100644
+--- a/nodes.py
++++ b/nodes.py
+@@ -404,7 +404,8 @@ class WanVideoTextEncode:
+                 context_null = encoder([negative_prompt], device_to)
+ 
+         if force_offload:
+-            encoder.model.to(offload_device)
++            encoder.model.to(mm.text_encoder_offload_device())
++            torch.cuda.empty_cache()
+             mm.soft_empty_cache()
+             gc.collect()
+ 
 diff --git a/nodes_model_loading.py b/nodes_model_loading.py
-index f5b7558..39439c2 100644
+index f5b7558..ad2db4e 100644
 --- a/nodes_model_loading.py
 +++ b/nodes_model_loading.py
 @@ -1123,9 +1123,15 @@ class WanVideoModelLoader:
@@ -86,11 +100,45 @@ index f5b7558..39439c2 100644
  
          gguf = False
          if model.endswith(".gguf"):
+@@ -1923,7 +1929,11 @@ class WanVideoVAELoader:
+         vae.eval()
+         vae.to(device=offload_device, dtype=dtype)
+         if compile_args is not None:
+-            vae.model.decoder = torch.compile(vae.model.decoder, fullgraph=compile_args["fullgraph"], dynamic=compile_args["dynamic"], backend=compile_args["backend"], mode=compile_args["mode"])
++            major = torch.cuda.get_device_capability()[0] if torch.cuda.is_available() else 0
++            if major >= 12:
++                log.warning('[WanVideo] PyTorch Inductor / Triton does not support Blackwell sm_120 JIT compilation yet. Skipping VAE torch.compile.')
++            else:
++                vae.model.decoder = torch.compile(vae.model.decoder, fullgraph=compile_args["fullgraph"], dynamic=compile_args["dynamic"], backend=compile_args["backend"], mode=compile_args["mode"])
+ 
+         return (vae,)
+ 
+@@ -1982,7 +1992,7 @@ class LoadWanVideoT5TextEncoder:
+     DESCRIPTION = "Loads Wan text_encoder model from 'ComfyUI/models/LLM'"
+ 
+     def loadmodel(self, model_name, precision, load_device="offload_device", quantization="disabled"):
+-        text_encoder_load_device = device if load_device == "main_device" else offload_device
++        text_encoder_load_device = device if load_device == "main_device" else mm.text_encoder_offload_device()
+ 
+         tokenizer_path = os.path.join(script_directory, "configs", "T5_tokenizer")
+ 
 diff --git a/nodes_sampler.py b/nodes_sampler.py
-index 32b51c6..cd20eac 100644
+index 32b51c6..1f2067f 100644
 --- a/nodes_sampler.py
 +++ b/nodes_sampler.py
-@@ -1291,12 +1291,17 @@ class WanVideoSampler:
+@@ -113,6 +113,11 @@ class WanVideoSampler:
+         vae_upscale_factor = 16 if is_5b else 8
+ 
+         # Load weights
++        mm.unload_all_models()
++        torch.cuda.empty_cache()
++        mm.soft_empty_cache()
++        gc.collect()
++
+         if transformer.audio_model is not None:
+             for block in transformer.blocks:
+                 if hasattr(block, 'audio_block'):
+@@ -1291,12 +1296,17 @@ class WanVideoSampler:
                  if controlnet_latents is not None:
                      if (controlnet_start <= current_step_percentage < controlnet_end):
                          self.controlnet.to(device)
@@ -109,6 +157,21 @@ index 32b51c6..cd20eac 100644
                              return_dict=False,
                          )[0]
                          if isinstance(controlnet_states, (tuple, list)):
+diff --git a/utils.py b/utils.py
+index e2bf184..1401dd1 100644
+--- a/utils.py
++++ b/utils.py
+@@ -616,6 +616,10 @@ def dict_to_device(tensor_dict, device, dtype=None):
+ def compile_model(transformer, compile_args=None):
+     if compile_args is None:
+         return transformer
++    major = torch.cuda.get_device_capability()[0] if torch.cuda.is_available() else 0
++    if major >= 12:
++        log.warning('[WanVideo] PyTorch Inductor / Triton does not support Blackwell sm_120 JIT compilation yet. Skipping torch.compile to prevent LLVM abort.')
++        return transformer
+     if hasattr(torch, '_dynamo') and hasattr(torch._dynamo, 'config'):
+         torch._dynamo.config.cache_size_limit = compile_args["dynamo_cache_size_limit"]
+         torch._dynamo.config.force_parameter_static_shapes = compile_args["force_parameter_static_shapes"]
 diff --git a/wanvideo/modules/model.py b/wanvideo/modules/model.py
 index e2566ec..54a64fb 100644
 --- a/wanvideo/modules/model.py

@@ -151,7 +151,7 @@
       ],
       "flags": {},
       "order": 1,
-      "mode": 0,
+      "mode": 2,
       "inputs": [
         {
           "localized_name": "backend",
@@ -224,9 +224,7 @@
           "name": "torch_compile_args",
           "type": "WANCOMPILEARGS",
           "slot_index": 0,
-          "links": [
-            121
-          ]
+          "links": []
         }
       ],
       "properties": {
@@ -266,7 +264,7 @@
           "name": "compile_args",
           "shape": 7,
           "type": "WANCOMPILEARGS",
-          "link": 121
+          "link": null
         },
         {
           "localized_name": "block_swap_args",
@@ -2411,14 +2409,6 @@
       28,
       1,
       "LATENT"
-    ],
-    [
-      121,
-      35,
-      0,
-      22,
-      0,
-      "WANCOMPILEARGS"
     ],
     [
       137,
