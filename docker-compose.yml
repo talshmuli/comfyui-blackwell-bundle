@@ -18,8 +18,8 @@ services:
       - UMASK=${UMASK:-0022}
       - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
       - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
-      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
-      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
+      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
+      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:
@@ -59,8 +59,8 @@ services:
       - UMASK=${UMASK:-0022}
       - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
       - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
-      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
-      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
+      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
+      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:
@@ -126,8 +126,8 @@ services:
       - UMASK=${UMASK:-0022}
       - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
       - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
-      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
-      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto --highvram}
+      - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
+      - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:

@@ -64,8 +64,22 @@ index 01ffae7..e067bcf 100644
  
  class WrappedPreviewer(LatentPreviewer):
      def __init__(self, previewer, rate=16):
+diff --git a/nodes.py b/nodes.py
+index f0b0e84..3860436 100644
+--- a/nodes.py
++++ b/nodes.py
+@@ -404,7 +404,8 @@ class WanVideoTextEncode:
+                 context_null = encoder([negative_prompt], device_to)
+ 
+         if force_offload:
+-            encoder.model.to(offload_device)
++            encoder.model.to(mm.text_encoder_offload_device())
++            torch.cuda.empty_cache()
+             mm.soft_empty_cache()
+             gc.collect()
+ 
 diff --git a/nodes_model_loading.py b/nodes_model_loading.py
-index f5b7558..39439c2 100644
+index f5b7558..30d33df 100644
 --- a/nodes_model_loading.py
 +++ b/nodes_model_loading.py
 @@ -1123,9 +1123,15 @@ class WanVideoModelLoader:
@@ -86,11 +100,32 @@ index f5b7558..39439c2 100644
  
          gguf = False
          if model.endswith(".gguf"):
+@@ -1982,7 +1988,7 @@ class LoadWanVideoT5TextEncoder:
+     DESCRIPTION = "Loads Wan text_encoder model from 'ComfyUI/models/LLM'"
+ 
+     def loadmodel(self, model_name, precision, load_device="offload_device", quantization="disabled"):
+-        text_encoder_load_device = device if load_device == "main_device" else offload_device
++        text_encoder_load_device = device if load_device == "main_device" else mm.text_encoder_offload_device()
+ 
+         tokenizer_path = os.path.join(script_directory, "configs", "T5_tokenizer")
+ 
 diff --git a/nodes_sampler.py b/nodes_sampler.py
-index 32b51c6..cd20eac 100644
+index 32b51c6..1f2067f 100644
 --- a/nodes_sampler.py
 +++ b/nodes_sampler.py
-@@ -1291,12 +1291,17 @@ class WanVideoSampler:
+@@ -113,6 +113,11 @@ class WanVideoSampler:
+         vae_upscale_factor = 16 if is_5b else 8
+ 
+         # Load weights
++        mm.unload_all_models()
++        torch.cuda.empty_cache()
++        mm.soft_empty_cache()
++        gc.collect()
++
+         if transformer.audio_model is not None:
+             for block in transformer.blocks:
+                 if hasattr(block, 'audio_block'):
+@@ -1291,12 +1296,17 @@ class WanVideoSampler:
                  if controlnet_latents is not None:
                      if (controlnet_start <= current_step_percentage < controlnet_end):
                          self.controlnet.to(device)
