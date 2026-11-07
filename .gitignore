@@ -6,8 +6,16 @@ output/
 .venv/
 __pycache__/
 
+# Environment configurations
+.env
+.env.*
+*.env
+!.env.example
+
 # Design docs, plans, and superpowers
 docs/superpowers/
 docs/
 superpowers/
 
+# Personal workflow isolation
+workflows/personal/

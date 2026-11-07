@@ -5,7 +5,7 @@
 # ==============================================================================
 set -euo pipefail
 
-MODELS_DIR="${1:-/path/to/external/models}"
+MODELS_DIR="${1:-${COMFYUI_MODELS_PATH:-./data/models}}"
 
 echo "=========================================================="
 echo " Downloading Wan 2.2 / 2.1 Models into: ${MODELS_DIR}"

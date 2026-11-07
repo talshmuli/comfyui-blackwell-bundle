@@ -66,13 +66,20 @@ index cc8c101..1823208 100644
  
  def cleanup():
 diff --git a/nodes.py b/nodes.py
-index e4b01fc..b0fecf8 100644
+index e4b01fc..098494d 100644
 --- a/nodes.py
 +++ b/nodes.py
-@@ -57,75 +57,177 @@ from GaussianSplatting.main_3DGS import GaussianSplatting3D, GaussianSplattingCa
- from GaussianSplatting.main_3DGS_renderer import GaussianSplattingRenderer
- from NeRF.Instant_NGP import InstantNGP
+@@ -50,82 +50,192 @@ from .mesh_processer.mesh_utils import (
+     decimate_mesh,
+ )
  
+-from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer
+-from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
+-from DiffRastMesh.diff_mesh import DiffRastRenderer
+-from GaussianSplatting.main_3DGS import GaussianSplatting3D, GaussianSplattingCameraController, GSParams
+-from GaussianSplatting.main_3DGS_renderer import GaussianSplattingRenderer
+-from NeRF.Instant_NGP import InstantNGP
+-
 -from TriplaneGaussian.triplane_gaussian_transformers import TGS
 -from TriplaneGaussian.utils.config import ExperimentConfig as ExperimentConfigTGS, load_config as load_config_tgs
 -from TriplaneGaussian.data import CustomImageOrbitDataset
@@ -142,6 +149,21 @@ index e4b01fc..b0fecf8 100644
 -apply_fix()
 -from Gen_3D_Modules.PartCrafter.partcrafter_src.pipelines.pipeline_partcrafter import PartCrafterPipeline
 -from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.data_utils import get_colored_mesh_composition
++try:
++    from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer
++    # from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
++    # from DiffRastMesh.diff_mesh import DiffRastRenderer
++except Exception:
++    pass
++# from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
++# from DiffRastMesh.diff_mesh import DiffRastRenderer
++try:
++    from GaussianSplatting.main_3DGS import GaussianSplatting3D, GaussianSplattingCameraController, GSParams
++    from GaussianSplatting.main_3DGS_renderer import GaussianSplattingRenderer
++    from NeRF.Instant_NGP import InstantNGP
++except Exception:
++    pass
++
 +try:
 +    from TriplaneGaussian.triplane_gaussian_transformers import TGS
 +    from TriplaneGaussian.utils.config import ExperimentConfig as ExperimentConfigTGS, load_config as load_config_tgs
@@ -316,7 +338,7 @@ index e4b01fc..b0fecf8 100644
  from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.render_utils import explode_mesh
  import zipfile
  
-@@ -143,21 +245,24 @@ from .shared_utils.camera_utils import (
+@@ -143,21 +253,24 @@ from .shared_utils.camera_utils import (
  from .shared_utils.log_utils import cstr
  from .shared_utils.common_utils import parse_save_filename, get_list_filenames, resume_or_download_model_from_hf
  

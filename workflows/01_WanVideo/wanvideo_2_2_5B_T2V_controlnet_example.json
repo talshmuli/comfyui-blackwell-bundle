@@ -1527,7 +1527,7 @@
         "save_metadata": true,
         "trim_to_audio": false,
         "pingpong": false,
-        "save_output": false,
+        "save_output": true,
         "videopreview": {
           "hidden": false,
           "paused": false,
@@ -1538,7 +1538,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideoWrapper_5BI2V_00004.png",
-            "fullpath": "/home/user/Projects/ComfyUI/temp/WanVideoWrapper_5BI2V_00004.mp4"
+            "fullpath": "temp/WanVideoWrapper_5BI2V_00004.mp4"
           }
         }
       }
@@ -1638,8 +1638,8 @@
         "Node name for S&R": "WanVideoTextEncode"
       },
       "widgets_values": [
-        "Close-up shot with soft lighting, focusing sharply on the lower half of a young woman's face. Her lips are slightly parted as she blows an enormous bubblegum bubble. The bubble is semi-transparent, shimmering gently under the light, and surprisingly contains a miniature aquarium inside, where two orange-and-white goldfish slowly swim, their fins delicately fluttering as if in an aquatic universe. The background is a pure light blue color.",
-        "Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards\"",
+        "Close-up cinematic shot with soft natural lighting, capturing dynamic motion and vibrant atmosphere in high detail, photorealistic 4k, smooth camera motion.",
+        "Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, floating limbs, flickers, jitter, many people in the background, walking backwards",
         true,
         false,
         "gpu"
