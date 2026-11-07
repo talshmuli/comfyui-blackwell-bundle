@@ -229,7 +229,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         comfyui-workflow-templates-media-assets-01 \
         comfyui-workflow-templates-media-assets-02 && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
-        "diffusers>=0.35.0" \
+        "diffusers==0.35.2" \
         "local-attention<=1.8.6" \
         importlib-metadata \
         tensorboardX \
@@ -238,7 +238,26 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         torchmetrics \
         onnx2torch \
         facenet-pytorch \
-        kiui && \
+        kiui \
+        faiss-cpu \
+        tiktoken \
+        pytorch-msssim \
+        pydantic-settings \
+        pymcubes \
+        xatlas \
+        diso \
+        fast_simplification \
+        fairseq \
+        librosa \
+        pyworld \
+        torchcrepe \
+        torchfcpe \
+        praat-parselmouth \
+        pyloudnorm \
+        audioread \
+        peft \
+        resampy \
+        soxr && \
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "pillow==11.1.0" && \

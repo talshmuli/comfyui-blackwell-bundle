@@ -17,3 +17,13 @@ docs/superpowers/
 docs/
 superpowers/
 
+# Personal & local workflow isolation (strictly prevent pushing personal workflows)
+workflows/personal/
+workflows/private/
+workflows/local/
+workflows/*.local.json
+workflows/*personal*
+workflows/*penguin*
+workflows/*kids*
+
+

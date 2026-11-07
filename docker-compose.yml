@@ -36,6 +36,7 @@ services:
       - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
       - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
       - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
+      - ${COMFYUI_PERSONAL_WORKFLOWS_PATH:-./workflows/personal}:/opt/ComfyUI/user/default/workflows/personal
       - ${COMFYUI_DEFAULT_WORKFLOW:-./default_workflow.json}:/opt/ComfyUI/default_workflow.json:ro
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
@@ -80,6 +81,7 @@ services:
       - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
       - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
       - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
+      - ${COMFYUI_PERSONAL_WORKFLOWS_PATH:-./workflows/personal}:/opt/ComfyUI/user/default/workflows/personal
       - ${COMFYUI_DEFAULT_WORKFLOW:-./default_workflow.json}:/opt/ComfyUI/default_workflow.json:ro
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
@@ -150,6 +152,7 @@ services:
       - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
       - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
       - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
+      - ${COMFYUI_PERSONAL_WORKFLOWS_PATH:-./workflows/personal}:/opt/ComfyUI/user/default/workflows/personal
       - ${COMFYUI_DEFAULT_WORKFLOW:-./default_workflow.json}:/opt/ComfyUI/default_workflow.json:ro
       - ${BLENDER_SCENES_PATH:-./data/blender_scenes}:/workspace/scenes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
