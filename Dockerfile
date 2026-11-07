@@ -116,6 +116,9 @@ LABEL maintainer="Tal Shmuli" \
       org.opencontainers.image.title="ComfyUI Blackwell Nodes (RTX 5090 / 5080)" \
       org.opencontainers.image.description="ComfyUI Production Nodes for NVIDIA Blackwell RTX 5090 / 5080 (sm_120, CUDA 12.8)"
 
+# Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Fix Hadolint DL3003: Use WORKDIR to switch directories instead of cd
 WORKDIR /opt/ComfyUI/custom_nodes
 
