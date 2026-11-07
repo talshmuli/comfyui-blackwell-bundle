@@ -20,6 +20,8 @@ services:
       - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
       - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
       - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
+      - DEFAULT_CHECKPOINT_ALIAS=${DEFAULT_CHECKPOINT_ALIAS:-DreamShaper_8_pruned.safetensors}
+      - DEFAULT_CHECKPOINT_NAME=${DEFAULT_CHECKPOINT_NAME:-v1-5-pruned-emaonly.safetensors}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:
@@ -34,6 +36,7 @@ services:
       - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
       - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
       - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
+      - ${COMFYUI_DEFAULT_WORKFLOW:-./default_workflow.json}:/opt/ComfyUI/default_workflow.json:ro
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
       # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
@@ -61,6 +64,8 @@ services:
       - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
       - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
       - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
+      - DEFAULT_CHECKPOINT_ALIAS=${DEFAULT_CHECKPOINT_ALIAS:-DreamShaper_8_pruned.safetensors}
+      - DEFAULT_CHECKPOINT_NAME=${DEFAULT_CHECKPOINT_NAME:-v1-5-pruned-emaonly.safetensors}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:
@@ -75,6 +80,7 @@ services:
       - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
       - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
       - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
+      - ${COMFYUI_DEFAULT_WORKFLOW:-./default_workflow.json}:/opt/ComfyUI/default_workflow.json:ro
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
       # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
@@ -128,6 +134,8 @@ services:
       - COMFYUI_PORT_LOCAL=${COMFYUI_PORT:-8188}
       - COMFYUI_ARGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
       - COMFYUI_FLAGS=--listen 0.0.0.0 --reserve-vram ${RESERVE_VRAM:-1.5} ${COMFYUI_FLAGS:---preview-method auto}
+      - DEFAULT_CHECKPOINT_ALIAS=${DEFAULT_CHECKPOINT_ALIAS:-DreamShaper_8_pruned.safetensors}
+      - DEFAULT_CHECKPOINT_NAME=${DEFAULT_CHECKPOINT_NAME:-v1-5-pruned-emaonly.safetensors}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
     deploy:
@@ -140,6 +148,7 @@ services:
     volumes:
       - ${COMFYUI_MODELS_PATH:-./data/models}:/opt/ComfyUI/models
       - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
+      - ${COMFYUI_DEFAULT_WORKFLOW:-./default_workflow.json}:/opt/ComfyUI/default_workflow.json:ro
       - ${BLENDER_SCENES_PATH:-./data/blender_scenes}:/workspace/scenes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
       # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node

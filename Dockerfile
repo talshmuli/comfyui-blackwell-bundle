@@ -100,6 +100,8 @@ RUN git -C /opt/ComfyUI fetch --depth=1 origin master && \
 
 # Copy verified default workflow ensuring immediate SD1.5 out-of-the-box UI functionality
 COPY default_workflow.json /opt/ComfyUI/default_workflow.json
+COPY scripts/preflight_model_alias.sh /opt/ai-dock/bin/preflight.d/20-model-alias.sh
+RUN chmod +x /opt/ai-dock/bin/preflight.d/20-model-alias.sh
 
 WORKDIR /workspace
 
