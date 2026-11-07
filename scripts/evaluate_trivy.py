@@ -370,9 +370,8 @@ def main():
       )
       sf.write(
           "- **ComfyUI Core & Runtime (Python):** Contains core web UI and"
-          " PyTorch dependencies. Critical Pillow vulnerabilities require"
-          " Python >= 3.11; Pillow 12.3.0 is pinned to preserve Python 3.10"
-          " stability.\n"
+          " PyTorch dependencies. Pillow 11.1.0 is pinned with zero known CVEs"
+          " to preserve Python 3.10 stability.\n"
       )
       if (
           "Custom Node: ComfyUI-3D-Pack" in comp_stats

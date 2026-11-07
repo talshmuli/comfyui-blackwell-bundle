@@ -148,6 +148,8 @@ services:
     volumes:
       - ${COMFYUI_MODELS_PATH:-./data/models}:/opt/ComfyUI/models
       - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
+      - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
+      - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
       - ${COMFYUI_DEFAULT_WORKFLOW:-./default_workflow.json}:/opt/ComfyUI/default_workflow.json:ro
       - ${BLENDER_SCENES_PATH:-./data/blender_scenes}:/workspace/scenes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:

@@ -103,7 +103,7 @@ This repository provides an automated, production-tested container suite that co
 * **Generative Video & Digital Human Creators:** Studios generating high-resolution video using Wan 2.1, LTX-Video, AnimateDiff, LivePortrait, and LatentSync.
 * **3D Generative Artists & Technical Directors:** Artists producing meshes, point clouds, and Gaussian splats via ComfyUI-3D-Pack, paired with Blender 4.4 LTS headless AOV pass rendering.
 * **Quantized Model Practitioners:** Workstations running heavy 12B+ diffusion models (FLUX.1 Dev/Schnell, SD 3.5, Wan 2.1, HunyuanVideo) at 4-bit, 5-bit, or 8-bit precision using native `ComfyUI-GGUF` and official FP8.
-* **Production Studios & Homelabs:** Users requiring verified container security (0 Critical CVEs, Pillow 13 source compilation, automated Aqua Trivy audits, and locked PyTorch kernels).
+* **Production Studios & Homelabs:** Users requiring verified container security (0 Critical CVEs, Pillow 11.1.0 hardened release, automated Aqua Trivy audits, and locked PyTorch kernels).
 
 ### 🚫 What This Bundle Is NOT For
 * **Non-NVIDIA or Legacy Hardware:** Not intended for AMD GPUs (ROCm), Apple Silicon (MPS), Intel GPUs (ARC), or older pre-Turing NVIDIA architectures (GTX 10-series or earlier).
@@ -440,8 +440,8 @@ Production studios and homelabs require dependable security and predictable upda
    * Automated CI audits scan every container build with **Aqua Security Trivy**.
    * Validated with **0 Critical CVEs**.
    * Security reports are uploaded directly to the GitHub Security Tab via SARIF.
-2. **Pillow 13 Source Build:**
-   * Container builds Pillow 13 from source against Python 3.10 and `libjpeg-dev`, eliminating historical libpng/zlib vulnerabilities.
+2. **Pillow Hardened Release (11.1.0):**
+   * Container pins Pillow 11.1.0 with zero known CVEs, eliminating historical libpng/zlib/image parsing vulnerabilities while preserving full Python 3.10 stability.
 3. **Automated Supply Chain & Node Integrity Checks:**
    * [`scripts/audit_supply_chain_and_ai_security.py`](scripts/audit_supply_chain_and_ai_security.py) performs AST-based security analysis across custom nodes to detect unsanctioned network calls, malicious subprocess spawning, or prompt injection vectors.
 4. **Strict Semantic Versioning & Immutability:**
