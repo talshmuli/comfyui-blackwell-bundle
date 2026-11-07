@@ -24,7 +24,7 @@ RED = "\033[91m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
-CUSTOM_NODES_DIR = Path("/opt/ComfyUI/custom_nodes")
+CUSTOM_NODES_DIR = Path(os.environ.get("CUSTOM_NODES_DIR", "/opt/ComfyUI/custom_nodes"))
 
 # Regex signatures for critical supply-chain risks
 DANGEROUS_PATTERNS = [
