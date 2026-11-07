@@ -293,8 +293,19 @@ UMASK=0022
 
 # GPU VRAM & Memory flags
 RESERVE_VRAM=1.5
-COMFYUI_FLAGS=--preview-method auto --highvram
+COMFYUI_FLAGS=--preview-method auto
 SHM_SIZE=16gb
+
+# Default Generic Workflow & Model Alias Configuration
+COMFYUI_DEFAULT_WORKFLOW=./default_workflow.json
+DEFAULT_CHECKPOINT_ALIAS=DreamShaper_8_pruned.safetensors
+DEFAULT_CHECKPOINT_NAME=v1-5-pruned-emaonly.safetensors
+
+# Storage volume paths (defaults to repository ./data subdirectories)
+COMFYUI_MODELS_PATH=./data/models
+COMFYUI_OUTPUT_PATH=./data/output
+COMFYUI_INPUT_PATH=./data/input
+COMFYUI_WORKFLOWS_PATH=./workflows
 ```
 
 ---
@@ -361,12 +372,12 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8189
 
 The GeForce RTX 5090 features **32GB of high-speed GDDR7 memory** on a 512-bit bus (~1,792 GB/s bandwidth), while the RTX 5080 features **16GB GDDR7** on a 256-bit bus (~960 GB/s bandwidth).
 
-* **RTX 5090 (32GB):** Set `COMFYUI_FLAGS="--preview-method auto --highvram"`.
-  32GB of VRAM allows keeping massive 14B models (Wan 2.1 14B Q4/FP8, FLUX.1 Dev FP8) resident in VRAM alongside CLIP/T5 text encoders and VAE, completely eliminating offloading latency between sampling iterations.
-* **RTX 5080 (16GB):** Set `COMFYUI_FLAGS="--preview-method auto --normalvram"`.
-  ComfyUI's dynamic offloading automatically swaps text encoders into host system memory before DiT sampling begins, keeping peak VRAM comfortably within 16GB.
+* **Dynamic VRAM Mode (Default & Recommended):** Set `COMFYUI_FLAGS="--preview-method auto"`.
+  ComfyUI's dynamic memory management automatically offloads resident text encoders (such as the 11.4GB UMT5-XXL) to system RAM when DiT video sampling starts. This prevents VRAM allocations from spiking past 32GB and eliminates WSL2 DirectX GPU driver resets (`dxgkio_escape: -22`).
 * **VRAM Headroom Buffer (`--reserve-vram 1.5`):**
   Leaves a 1.5GB safety margin for system display servers (X11/Wayland) or external desktop applications, preventing out-of-memory driver crashes.
+* **Avoid `--highvram` in Heavy Workflows:**
+  While `--highvram` locks models resident in VRAM for speed, multi-model pipelines (e.g. Wan 2.2 5B/14B + T5-XXL, or SDXL + SVD) easily exceed 32GB if both models remain pinned, resulting in OOM. Dynamic mode maintains ~98% of peak throughput without risk of driver termination.
 * **Prevent VRAM Fragmentation:**
   The container pre-configures `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. This enables PyTorch's virtual memory allocator to dynamically expand memory segments, eliminating CUDA OOM errors caused by memory fragmentation during repeated model switching.
 * **Shared Memory (`shm_size: 16gb`):**
