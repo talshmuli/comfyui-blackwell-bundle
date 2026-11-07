@@ -170,8 +170,6 @@ RUN clone_node() { \
     clone_node https://github.com/AIFSH/ComfyUI-RVC.git && \
     clone_node https://github.com/Lightricks/ComfyUI-LTXVideo.git && \
     clone_node https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
-    clone_node https://github.com/AIDC-AI/ComfyUI-Copilot.git && \
-    sed -i 's/from sqlalchemy.orm import identity/# from sqlalchemy.orm import identity/' ComfyUI-Copilot/backend/controller/conversation_api.py && \
     sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py
 
 # Apply upstream compatibility patches for Blackwell sm_120 runtime and headless environments

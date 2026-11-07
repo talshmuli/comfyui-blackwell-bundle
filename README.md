@@ -152,7 +152,6 @@ The `nodes` and `full` images ship with over 2,000 pre-verified, registered node
 | **[ComfyUI_IPAdapter_plus](https://github.com/cubiq/ComfyUI_IPAdapter_plus)** *(by cubiq)* | Image Prompt Adapter for style reference, FaceID consistency, regional conditioning, and cross-frame character identity persistence. |
 | **[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF)** *(by city96)* | Quantized inference engine supporting 4-bit, 5-bit, and 8-bit precision (Q4_K_M, Q5_K_M, Q8_0) for massive 12B+ models (FLUX.1, SD 3.5, Wan 2.1, HunyuanVideo). |
 | **[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)** *(by kijai)* | Indispensable workflow utilities: color correction, image batching, condition averaging, latent masking, and VAE optimization. |
-| **[ComfyUI-Copilot](https://github.com/AIDC-AI/ComfyUI-Copilot)** *(by AIDC-AI)* | In-canvas AI workflow assistant for node discovery, graph debugging, and prompt refinement. |
 
 ---
 
@@ -459,6 +458,9 @@ Production studios and homelabs require dependable security and predictable upda
      - `blender-worker`
    * **Latest Tag:**
      - `latest` points directly to the `nodes` production workstation.
+5. **Air-Gapped Local Execution & Zero Cloud Telemetry:**
+   * All third-party plugins that connect to external cloud endpoints, exfiltrate metadata, or inject unstyled DOM overlays (such as `ComfyUI-Copilot`) are permanently purged at the container build level (`Dockerfile`).
+   * 100% of model inference, LLM/T5 text encoding, and neural generation runs strictly locally on your Blackwell RTX 5090/5080 hardware with zero outbound cloud dependencies.
 
 ---
 
@@ -483,7 +485,6 @@ Production studios and homelabs require dependable security and predictable upda
 * **[ComfyUI_IPAdapter_plus](https://github.com/cubiq/ComfyUI_IPAdapter_plus)** by cubiq — Identity and style image prompting.
 * **[comfyui_controlnet_aux](https://github.com/Fannovel16/comfyui_controlnet_aux)** by Fannovel16 — ControlNet preprocessors.
 * **[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)** by Kijai — Workflow utilities.
-* **[ComfyUI-Copilot](https://github.com/AIDC-AI/ComfyUI-Copilot)** by AIDC-AI — In-canvas workflow assistant.
 * **[ComfyUI-BlenderAI-node](https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node)** by AIGODLIKE — Blender integration bridge.
 
 ---
