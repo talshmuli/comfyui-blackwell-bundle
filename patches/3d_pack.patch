@@ -66,28 +66,20 @@ index cc8c101..1823208 100644
  
  def cleanup():
 diff --git a/nodes.py b/nodes.py
-index e4b01fc..6def290 100644
+index e4b01fc..098494d 100644
 --- a/nodes.py
 +++ b/nodes.py
-@@ -50,82 +50,189 @@ from .mesh_processer.mesh_utils import (
+@@ -50,82 +50,192 @@ from .mesh_processer.mesh_utils import (
      decimate_mesh,
  )
  
 -from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer
 -from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
 -from DiffRastMesh.diff_mesh import DiffRastRenderer
-+try:
-+    from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer
-+    # from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
-+    # from DiffRastMesh.diff_mesh import DiffRastRenderer
-+except Exception:
-+    pass
-+# from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
-+# from DiffRastMesh.diff_mesh import DiffRastRenderer
- from GaussianSplatting.main_3DGS import GaussianSplatting3D, GaussianSplattingCameraController, GSParams
- from GaussianSplatting.main_3DGS_renderer import GaussianSplattingRenderer
- from NeRF.Instant_NGP import InstantNGP
- 
+-from GaussianSplatting.main_3DGS import GaussianSplatting3D, GaussianSplattingCameraController, GSParams
+-from GaussianSplatting.main_3DGS_renderer import GaussianSplattingRenderer
+-from NeRF.Instant_NGP import InstantNGP
+-
 -from TriplaneGaussian.triplane_gaussian_transformers import TGS
 -from TriplaneGaussian.utils.config import ExperimentConfig as ExperimentConfigTGS, load_config as load_config_tgs
 -from TriplaneGaussian.data import CustomImageOrbitDataset
@@ -113,21 +105,73 @@ index e4b01fc..6def290 100644
 -from Unique3D.custum_3d_diffusion.custum_pipeline.unifield_pipeline_img2img import StableDiffusionImageCustomPipeline
 -from Unique3D.scripts.mesh_init import fast_geo
 -from Unique3D.scripts.utils import from_py3d_mesh, to_py3d_mesh, to_pyml_mesh, simple_clean_mesh
--from Unique3D.scripts.project_mesh import multiview_color_projection, multiview_color_projection_texture, multiview_color_projection_fast
--from Unique3D.scripts.reconstruct import mesh_reconstruction
--from Hunyuan3D_V2.hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
--from Hunyuan3D_V2.hy3dgen.texturing import Hunyuan3DPaintPipeline
--from TripoSG.triposg.pipelines.pipeline_triposg import TripoSGPipeline
--from TripoSG.triposg.pipelines.pipeline_triposg_scribble import TripoSGScribblePipeline
+-from Unique3D.scripts.project_mesh import multiview_color_projection, multiview_color_projection_texture, get_cameras_list, get_orbit_cameras_list
+-from Unique3D.mesh_reconstruction.recon import reconstruct_stage1
+-from Unique3D.mesh_reconstruction.refine import run_mesh_refine
+-from CharacterGen.character_inference import Inference2D_API, Inference3D_API
+-from CharacterGen.Stage_3D.lrm.utils.config import load_config as load_config_cg3d
+-import craftsman
+-from craftsman.systems.base import BaseSystem
+-from craftsman.utils.config import ExperimentConfig as ExperimentConfigCraftsman, load_config as load_config_craftsman
+-from CRM_T2I_V2.model.crm.sampler import CRMSamplerV2
+-from CRM_T2I_V2.model.t2i_adapter_v2 import T2IAdapterV2
+-from CRM_T2I_V3.model.crm.sampler import CRMSamplerV3
+-from Hunyuan3D_V1.mvd.hunyuan3d_mvd_std_pipeline import HunYuan3D_MVD_Std_Pipeline
+-from Hunyuan3D_V1.mvd.hunyuan3d_mvd_lite_pipeline import Hunyuan3D_MVD_Lite_Pipeline
+-from Hunyuan3D_V1.infer import Views2Mesh
+-from Hunyuan3D_V2.hy3dgen.shapegen import FaceReducer, FloaterRemover, DegenerateFaceRemover, Hunyuan3DDiTFlowMatchingPipeline
+-from Hunyuan3D_V2.hy3dgen.texgen import Hunyuan3DPaintPipeline
+-from Hunyuan3D_V2.hy3dgen.rembg import BackgroundRemover
+-from TRELLIS.trellis.pipelines import TrellisImageTo3DPipeline
+-from TRELLIS.trellis.utils import postprocessing_utils
+-from TripoSG.pipelines.pipeline_triposg import TripoSGPipeline
+-from TripoSG.pipelines.pipeline_triposg_scribble import TripoSGScribblePipeline
+-from Stable3DGen.pipeline_builders import StableGenPipelineBuilder
+-from MV_Adapter.mvadapter_node_utils import (
+-        prepare_pipeline as mvadapter_prepare_pipeline,
+-        run_pipeline as mvadapter_run_pipeline, 
+-        prepare_tg2mv_pipeline as mvadapter_prepare_tg2mv_pipeline,
+-        run_tg2mv_pipeline as mvadapter_run_tg2mv_pipeline,
+-        prepare_texture_pipeline as mvadapter_prepare_texture_pipeline,
+-        download_texture_checkpoints,
+-    )
+-from mmgp import offload, profile_type
+-from Gen_3D_Modules.Hunyuan3D_2_1 import (
+-    FaceReducer_2_1, 
+-    Hunyuan3DDiTFlowMatchingPipeline_2_1,
+-    export_to_trimesh_2_1,
+-    BackgroundRemover_2_1,
+-    Hunyuan3DPaintPipeline_2_1,
+-    Hunyuan3DPaintConfig_2_1,
+-    create_glb_with_pbr_materials_2_1,
+-)
+-from Gen_3D_Modules.Hunyuan3D_2_1.hy3dpaint.utils.torchvision_fix import apply_fix
+-apply_fix()
 -from Gen_3D_Modules.PartCrafter.partcrafter_src.pipelines.pipeline_partcrafter import PartCrafterPipeline
 -from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.data_utils import get_colored_mesh_composition
++try:
++    from FlexiCubes.flexicubes_trainer import FlexiCubesTrainer
++    # from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
++    # from DiffRastMesh.diff_mesh import DiffRastRenderer
++except Exception:
++    pass
++# from DiffRastMesh.diff_mesh import DiffMesh, DiffMeshCameraController
++# from DiffRastMesh.diff_mesh import DiffRastRenderer
++try:
++    from GaussianSplatting.main_3DGS import GaussianSplatting3D, GaussianSplattingCameraController, GSParams
++    from GaussianSplatting.main_3DGS_renderer import GaussianSplattingRenderer
++    from NeRF.Instant_NGP import InstantNGP
++except Exception:
++    pass
++
 +try:
 +    from TriplaneGaussian.triplane_gaussian_transformers import TGS
 +    from TriplaneGaussian.utils.config import ExperimentConfig as ExperimentConfigTGS, load_config as load_config_tgs
 +    from TriplaneGaussian.data import CustomImageOrbitDataset
 +    from TriplaneGaussian.utils.misc import todevice, get_device
-+except Exception:
-+    pass
++except Exception as e:
++    TGS = None
++
 +try:
 +    from LGM.core.options import config_defaults
 +    from LGM.mvdream.pipeline_mvdream import MVDreamPipeline
@@ -135,59 +179,157 @@ index e4b01fc..6def290 100644
 +    from LGM.nerf_marching_cubes_converter import GSConverterNeRFMarchingCubes
 +except Exception:
 +    pass
++
 +try:
 +    from TripoSR.system import TSR
 +except Exception:
-+    pass
++    TSR = None
++
 +try:
 +    from StableFast3D.sf3d import utils as sf3d_utils
 +    from StableFast3D.sf3d.system import SF3D
 +except Exception:
-+    pass
++    SF3D = None
++
 +try:
 +    from InstantMesh.utils.camera_util import oribt_camera_poses_to_input_cameras
 +except Exception:
 +    pass
++
 +try:
 +    from CRM.model.crm.model import ConvolutionalReconstructionModel
 +    from CRM.model.crm.sampler import CRMSampler
 +except Exception:
 +    pass
++
 +try:
 +    from Wonder3D.pipelines.pipeline_mvdiffusion_image import MVDiffusionImagePipeline
 +    from Wonder3D.data.single_image_dataset import SingleImageDataset as MVSingleImageDataset
 +    from Wonder3D.utils.misc import load_config as load_config_wonder3d
 +except Exception:
 +    pass
++
 +try:
 +    from Zero123Plus.pipeline import Zero123PlusPipeline
 +except Exception:
 +    pass
++
 +try:
 +    from Era3D.mvdiffusion.pipelines.pipeline_mvdiffusion_unclip import StableUnCLIPImg2ImgPipeline
 +    from Era3D.mvdiffusion.data.single_image_dataset import SingleImageDataset as Era3DSingleImageDataset
 +    from Era3D.utils.misc import load_config as load_config_era3d
 +except Exception:
 +    pass
++
 +try:
 +    from Unique3D.custum_3d_diffusion.custum_pipeline.unifield_pipeline_img2mvimg import StableDiffusionImage2MVCustomPipeline
 +    from Unique3D.custum_3d_diffusion.custum_pipeline.unifield_pipeline_img2img import StableDiffusionImageCustomPipeline
 +    from Unique3D.scripts.mesh_init import fast_geo
 +    from Unique3D.scripts.utils import from_py3d_mesh, to_py3d_mesh, to_pyml_mesh, simple_clean_mesh
-+    from Unique3D.scripts.project_mesh import multiview_color_projection, multiview_color_projection_texture, multiview_color_projection_fast
-+    from Unique3D.scripts.reconstruct import mesh_reconstruction
++    from Unique3D.scripts.project_mesh import multiview_color_projection, multiview_color_projection_texture, get_cameras_list, get_orbit_cameras_list
++    from Unique3D.mesh_reconstruction.recon import reconstruct_stage1
++    from Unique3D.mesh_reconstruction.refine import run_mesh_refine
++except Exception:
++    pass
++
++try:
++    from CharacterGen.character_inference import Inference2D_API, Inference3D_API
++    from CharacterGen.Stage_3D.lrm.utils.config import load_config as load_config_cg3d
++except Exception:
++    pass
++
++try:
++    import craftsman
 +except Exception:
 +    pass
 +try:
-+    from Hunyuan3D_V2.hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
-+    from Hunyuan3D_V2.hy3dgen.texturing import Hunyuan3DPaintPipeline
++    from craftsman.systems.base import BaseSystem
++    from craftsman.utils.config import ExperimentConfig as ExperimentConfigCraftsman, load_config as load_config_craftsman
 +except Exception:
 +    pass
++
 +try:
-+    from TripoSG.triposg.pipelines.pipeline_triposg import TripoSGPipeline
-+    from TripoSG.triposg.pipelines.pipeline_triposg_scribble import TripoSGScribblePipeline
++    from CRM_T2I_V2.model.crm.sampler import CRMSamplerV2
++    from CRM_T2I_V2.model.t2i_adapter_v2 import T2IAdapterV2
++    from CRM_T2I_V3.model.crm.sampler import CRMSamplerV3
 +except Exception:
 +    pass
++
++try:
++    from Hunyuan3D_V1.mvd.hunyuan3d_mvd_std_pipeline import HunYuan3D_MVD_Std_Pipeline
++    from Hunyuan3D_V1.mvd.hunyuan3d_mvd_lite_pipeline import Hunyuan3D_MVD_Lite_Pipeline
++    from Hunyuan3D_V1.infer import Views2Mesh
++except Exception:
++    pass
++
++try:
++    from Hunyuan3D_V2.hy3dgen.shapegen import FaceReducer, FloaterRemover, DegenerateFaceRemover, Hunyuan3DDiTFlowMatchingPipeline
++    from Hunyuan3D_V2.hy3dgen.texgen import Hunyuan3DPaintPipeline
++    from Hunyuan3D_V2.hy3dgen.rembg import BackgroundRemover
++except Exception:
++    pass
++
++try:
++    from TRELLIS.trellis.pipelines import TrellisImageTo3DPipeline
++    from TRELLIS.trellis.utils import postprocessing_utils
++except Exception:
++    pass
++
++try:
++    from TripoSG.pipelines.pipeline_triposg import TripoSGPipeline
++    from TripoSG.pipelines.pipeline_triposg_scribble import TripoSGScribblePipeline
++except Exception:
++    pass
++
++try:
++    from Stable3DGen.pipeline_builders import StableGenPipelineBuilder
++except Exception as _sg_err:
++    class StableGenPipelineBuilder:
++        @staticmethod
++        def get_available_backends():
++            return (["sdpa"], ["spconv"])
++        @staticmethod
++        def build_trellis_pipeline(*args, **kwargs):
++            raise RuntimeError("StableGen Trellis pipeline unavailable: " + str(_sg_err))
++        @staticmethod
++        def build_stablex_pipeline(*args, **kwargs):
++            raise RuntimeError("StableGen StableX pipeline unavailable: " + str(_sg_err))
++        @staticmethod
++        def create_trellis_pipeline_params(*args, **kwargs):
++            return {}
++
++try:
++    from MV_Adapter.mvadapter_node_utils import (
++            prepare_pipeline as mvadapter_prepare_pipeline,
++            run_pipeline as mvadapter_run_pipeline, 
++            prepare_tg2mv_pipeline as mvadapter_prepare_tg2mv_pipeline,
++            run_tg2mv_pipeline as mvadapter_run_tg2mv_pipeline,
++            prepare_texture_pipeline as mvadapter_prepare_texture_pipeline,
++            download_texture_checkpoints,
++        )
++except Exception:
++    pass
++
++try:
++    from mmgp import offload, profile_type
++except Exception:
++    pass
++
++try:
++    from Gen_3D_Modules.Hunyuan3D_2_1 import (
++        FaceReducer_2_1, 
++        Hunyuan3DDiTFlowMatchingPipeline_2_1,
++        export_to_trimesh_2_1,
++        BackgroundRemover_2_1,
++        Hunyuan3DPaintPipeline_2_1,
++        Hunyuan3DPaintConfig_2_1,
++        create_glb_with_pbr_materials_2_1,
++    )
++    from Gen_3D_Modules.Hunyuan3D_2_1.hy3dpaint.utils.torchvision_fix import apply_fix
++    apply_fix()
++except Exception:
++    pass
++
 +try:
 +    from Gen_3D_Modules.PartCrafter.partcrafter_src.pipelines.pipeline_partcrafter import PartCrafterPipeline
 +    from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.data_utils import get_colored_mesh_composition
@@ -196,7 +338,7 @@ index e4b01fc..6def290 100644
  from Gen_3D_Modules.PartCrafter.partcrafter_src.utils.render_utils import explode_mesh
  import zipfile
  
-@@ -143,21 +250,24 @@ from .shared_utils.camera_utils import (
+@@ -143,21 +253,24 @@ from .shared_utils.camera_utils import (
  from .shared_utils.log_utils import cstr
  from .shared_utils.common_utils import parse_save_filename, get_list_filenames, resume_or_download_model_from_hf
  
@@ -254,12 +396,12 @@ index fcb23b3..d5756ec 100644
 +        if masks.shape[0] != images.shape[0] and masks.shape[0] == 1:
 +            masks = masks.repeat(images.shape[0], 1, 1)
 +
-         # Handle dummy 64x64 zero mask from LoadImage (no alpha channel)
-         if masks.shape[1] <= 64 and masks.shape[2] <= 64 and (masks.max() == 0.0):
-             masks = torch.ones((images.shape[0], images.shape[1], images.shape[2]), dtype=images.dtype, device=images.device)
-         elif masks.shape[1] != images.shape[1] or masks.shape[2] != images.shape[2]:
-             masks = F.interpolate(masks.unsqueeze(1).float(), size=(images.shape[1], images.shape[2]), mode="bilinear", align_corners=False).squeeze(1).to(dtype=images.dtype, device=images.device)
- 
++        # Handle dummy 64x64 zero mask from LoadImage (no alpha channel)
++        if masks.shape[1] <= 64 and masks.shape[2] <= 64 and (masks.max() == 0.0):
++            masks = torch.ones((images.shape[0], images.shape[1], images.shape[2]), dtype=images.dtype, device=images.device)
++        elif masks.shape[1] != images.shape[1] or masks.shape[2] != images.shape[2]:
++            masks = F.interpolate(masks.unsqueeze(1).float(), size=(images.shape[1], images.shape[2]), mode="bilinear", align_corners=False).squeeze(1).to(dtype=images.dtype, device=images.device)
++
          inv_mask_index = masks < alpha_min
          images[inv_mask_index] = 0.
          
