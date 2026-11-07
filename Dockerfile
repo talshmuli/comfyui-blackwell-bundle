@@ -98,6 +98,9 @@ RUN git -C /opt/ComfyUI fetch --depth=1 origin master && \
         comfyui-workflow-templates-json \
         comfyui-embedded-docs
 
+# Copy verified default workflow ensuring immediate SD1.5 out-of-the-box UI functionality
+COPY default_workflow.json /opt/ComfyUI/default_workflow.json
+
 WORKDIR /workspace
 
 # ==============================================================================
