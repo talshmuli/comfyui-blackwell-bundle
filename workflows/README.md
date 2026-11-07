@@ -23,5 +23,12 @@ For experimental or model-specific pipelines, example workflows from custom node
 - **3D Pack:** [MrForExample/ComfyUI-3D-Pack/_Example_Workflows](https://github.com/MrForExample/ComfyUI-3D-Pack/tree/main/_Example_Workflows)
 - **IPAdapter Plus:** [cubiq/ComfyUI_IPAdapter_plus/examples](https://github.com/cubiq/ComfyUI_IPAdapter_plus/tree/main/examples)
 
+## Personal & Private Workflows (Isolated & Git-Ignored)
+
+To use your private or project-specific workflows without accidentally committing them to the public git repository:
+1. Place private workflows in `workflows/personal/` (this directory is strictly excluded by `.gitignore`).
+2. Alternatively, set `COMFYUI_PERSONAL_WORKFLOWS_PATH=/path/to/private/workflows` in your `.env` file.
+Both paths are automatically mounted into ComfyUI under the `personal/` workflow catalog in the web UI.
+
 > [!TIP]
 > You can drop any `.json` or `.png` workflow into this folder on your host machine, and it will be immediately available in the ComfyUI browser without restarting the container.
