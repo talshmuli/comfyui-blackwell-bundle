@@ -30,10 +30,10 @@ services:
               count: all
               capabilities: [gpu]
     volumes:
-      - ./data/models:/opt/ComfyUI/models
-      - ./data/output:/opt/ComfyUI/output
-      - ./data/input:/opt/ComfyUI/input
-      - ./workflows:/opt/ComfyUI/user/default/workflows
+      - ${COMFYUI_MODELS_PATH:-./data/models}:/opt/ComfyUI/models
+      - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
+      - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
+      - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
       # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
@@ -71,10 +71,10 @@ services:
               count: all
               capabilities: [gpu]
     volumes:
-      - ./data/models:/opt/ComfyUI/models
-      - ./data/output:/opt/ComfyUI/output
-      - ./data/input:/opt/ComfyUI/input
-      - ./workflows:/opt/ComfyUI/user/default/workflows
+      - ${COMFYUI_MODELS_PATH:-./data/models}:/opt/ComfyUI/models
+      - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
+      - ${COMFYUI_INPUT_PATH:-./data/input}:/opt/ComfyUI/input
+      - ${COMFYUI_WORKFLOWS_PATH:-./workflows}:/opt/ComfyUI/user/default/workflows
       - passes_bus:/opt/ComfyUI/input/passes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
       # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
@@ -138,9 +138,9 @@ services:
               count: all
               capabilities: [gpu]
     volumes:
-      - ./data/models:/opt/ComfyUI/models
-      - ./data/output:/opt/ComfyUI/output
-      - ./data/blender_scenes:/workspace/scenes
+      - ${COMFYUI_MODELS_PATH:-./data/models}:/opt/ComfyUI/models
+      - ${COMFYUI_OUTPUT_PATH:-./data/output}:/opt/ComfyUI/output
+      - ${BLENDER_SCENES_PATH:-./data/blender_scenes}:/workspace/scenes
       # Optional: Mount additional community custom nodes individually to preserve pre-installed nodes:
       # - ./data/extra_custom_nodes/my-node:/opt/ComfyUI/custom_nodes/my-node
     networks:

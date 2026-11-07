@@ -1520,14 +1520,14 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "WanVideoWrapper_5BI2V",
+        "filename_prefix": "kids_animation/WanVideoWrapper_5BI2V",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 19,
         "save_metadata": true,
         "trim_to_audio": false,
         "pingpong": false,
-        "save_output": false,
+        "save_output": true,
         "videopreview": {
           "hidden": false,
           "paused": false,
@@ -1638,8 +1638,8 @@
         "Node name for S&R": "WanVideoTextEncode"
       },
       "widgets_values": [
-        "Close-up shot with soft lighting, focusing sharply on the lower half of a young woman's face. Her lips are slightly parted as she blows an enormous bubblegum bubble. The bubble is semi-transparent, shimmering gently under the light, and surprisingly contains a miniature aquarium inside, where two orange-and-white goldfish slowly swim, their fins delicately fluttering as if in an aquatic universe. The background is a pure light blue color.",
-        "Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards\"",
+        "Two cheerful young children laughing as they slide down a bright red playground tube slide in a sunny public park, high detail, photorealistic 4k, smooth cinematic lighting.",
+        "Bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, floating limbs, flickers, jitter, many people in the background, walking backwards",
         true,
         false,
         "gpu"
