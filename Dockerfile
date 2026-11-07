@@ -96,7 +96,8 @@ RUN git -C /opt/ComfyUI fetch --depth=1 origin master && \
         comfyui-frontend-package \
         comfyui-workflow-templates \
         comfyui-workflow-templates-json \
-        comfyui-embedded-docs
+        comfyui-embedded-docs && \
+    sed -i '/self.app.router.add_get("\/templates\/{path:.*}", handler)/a \                self.app.router.add_get("/api/templates/{path:.*}", handler)' /opt/ComfyUI/server.py
 
 # Copy verified default workflow ensuring immediate SD1.5 out-of-the-box UI functionality
 COPY default_workflow.json /opt/ComfyUI/default_workflow.json
