@@ -1,0 +1,91 @@
+{
+  "_schema_version": "1.0",
+  "target_gpu": "NVIDIA GeForce RTX 5090 / 5080 (Blackwell sm_120)",
+  "cuda_runtime": "cu128",
+  "nodes": [
+    {
+      "name": "ComfyUI-VideoHelperSuite",
+      "url": "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git",
+      "category": "video",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-WanVideoWrapper",
+      "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper.git",
+      "category": "video",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-LTXVideo",
+      "url": "https://github.com/Lightricks/ComfyUI-LTXVideo.git",
+      "category": "video",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-LivePortraitKJ",
+      "url": "https://github.com/kijai/ComfyUI-LivePortraitKJ.git",
+      "category": "animation",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-LatentSyncWrapper",
+      "url": "https://github.com/ShmuelRonen/ComfyUI-LatentSyncWrapper.git",
+      "category": "audio-sync",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-3D-Pack",
+      "url": "https://github.com/MrForExample/ComfyUI-3D-Pack.git",
+      "category": "3d",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-GGUF",
+      "url": "https://github.com/city96/ComfyUI-GGUF.git",
+      "category": "sampling",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-FL-YuE2",
+      "url": "https://github.com/filliptm/ComfyUI-FL-YuE2.git",
+      "category": "audio",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-RVC",
+      "url": "https://github.com/AIFSH/ComfyUI-RVC.git",
+      "category": "audio",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Crystools",
+      "url": "https://github.com/crystian/ComfyUI-Crystools.git",
+      "category": "observability",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-MelBandRoFormer",
+      "url": "https://github.com/kijai/ComfyUI-MelBandRoFormer.git",
+      "category": "audio",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI_FL-HeartMuLa",
+      "url": "https://github.com/filliptm/ComfyUI_FL-HeartMuLa.git",
+      "category": "audio",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ACE-Step-ComfyUI",
+      "url": "https://github.com/ace-step/ACE-Step-ComfyUI.git",
+      "category": "audio",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Step1X-Edit",
+      "url": "https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit.git",
+      "category": "image-editing",
+      "blackwell_verified": true
+    }
+  ]
+}
