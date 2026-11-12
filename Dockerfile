@@ -197,6 +197,7 @@ RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch 
     git -C ComfyUI-LTXVideo apply --ignore-whitespace /opt/patches/ltxvideo.patch && \
     git -C ComfyUI-VideoHelperSuite apply --ignore-whitespace /opt/patches/vhs.patch && \
     git -C ComfyUI-FL-YuE2 apply --ignore-whitespace /opt/patches/yue2.patch && \
+    git -C ComfyUI-Step1X-Edit apply --ignore-whitespace /opt/patches/step1x.patch && \
     rm -rf /opt/patches && \
     mkdir -p ComfyUI-RVC/rvc/assets/weights && \
     chmod -R 777 ComfyUI-RVC
@@ -281,7 +282,11 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         audioread \
         peft \
         resampy \
-        soxr && \
+        soxr \
+        py-cpuinfo \
+        rotary-embedding-torch \
+        qwen-vl-utils \
+        liger-kernel && \
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --force-reinstall --no-deps \
         /opt/wheels/pillow-13.0.0-*.whl && \
