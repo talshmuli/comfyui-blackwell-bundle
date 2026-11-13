@@ -1489,7 +1489,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_T2V_Stand_In_00008.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoWrapper_T2V_Stand_In_00008.mp4"
+            "fullpath": "temp/WanVideoWrapper_T2V_Stand_In_00008.mp4"
           }
         }
       }

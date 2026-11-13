@@ -273,7 +273,6 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         jaxtyping \
         typeguard \
         fairseq \
-        librosa \
         pyworld \
         torchcrepe \
         torchfcpe \
@@ -286,7 +285,12 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         py-cpuinfo \
         rotary-embedding-torch \
         qwen-vl-utils \
-        liger-kernel && \
+        liger-kernel \
+        zipp \
+        lightning-utilities \
+        tomli \
+        mako \
+        "sympy>=1.13.3" && \
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --force-reinstall --no-deps \
         /opt/wheels/pillow-13.0.0-*.whl && \

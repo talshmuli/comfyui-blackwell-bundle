@@ -1780,7 +1780,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 25,
             "workflow": "WanVideo2_1_InfiniteTalk_00007.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_1_InfiniteTalk_00007-audio.mp4"
+            "fullpath": "temp/WanVideo2_1_InfiniteTalk_00007-audio.mp4"
           }
         }
       }

@@ -1825,7 +1825,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoFantasyPortrait_00009.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoFantasyPortrait_00009.mp4"
+            "fullpath": "temp/WanVideoFantasyPortrait_00009.mp4"
           }
         }
       }
@@ -2081,7 +2081,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoFantasyPortrait_00019.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoFantasyPortrait_00019.mp4"
+            "fullpath": "temp/WanVideoFantasyPortrait_00019.mp4"
           }
         }
       }

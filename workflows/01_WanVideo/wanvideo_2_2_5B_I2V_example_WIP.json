@@ -986,7 +986,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideoWrapper_5BI2V_00004.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoWrapper_5BI2V_00004.mp4"
+            "fullpath": "temp/WanVideoWrapper_5BI2V_00004.mp4"
           }
         }
       }
