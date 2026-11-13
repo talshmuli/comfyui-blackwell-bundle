@@ -35,6 +35,11 @@ CUSTOM_NODE_DEPS = {
     ],
     "Custom Node: ComfyUI-LatentSyncWrapper": [],
     "Custom Node: ComfyUI-GGUF": ["gguf", "sentencepiece"],
+    "Custom Node: ComfyUI-Crystools": ["pynvml"],
+    "Custom Node: ComfyUI-MelBandRoFormer": ["librosa", "soundfile"],
+    "Custom Node: ComfyUI_FL-HeartMuLa": ["rotary-embedding-torch"],
+    "Custom Node: ACE-Step-ComfyUI": ["diffusers"],
+    "Custom Node: ComfyUI-Step1X-Edit": ["qwen-vl-utils"],
     "Blender Addon: ComfyUI-BlenderAI-node": [],
 }
 
@@ -67,6 +72,21 @@ COMPONENT_DESCRIPTIONS = {
     ),
     "Custom Node: ComfyUI-GGUF": (
         "Quantized GGUF model loader & inference engine (gguf, sentencepiece)"
+    ),
+    "Custom Node: ComfyUI-Crystools": (
+        "Hardware and resource monitoring tools for ComfyUI (pynvml)"
+    ),
+    "Custom Node: ComfyUI-MelBandRoFormer": (
+        "MelBand RoFormer vocal/instrumental audio separation (librosa, soundfile)"
+    ),
+    "Custom Node: ComfyUI_FL-HeartMuLa": (
+        "HeartMuLa music generation conditioning and inference (rotary-embedding-torch)"
+    ),
+    "Custom Node: ACE-Step-ComfyUI": (
+        "ACE-Step diffusion model pipeline and step scheduling (diffusers)"
+    ),
+    "Custom Node: ComfyUI-Step1X-Edit": (
+        "Step1X image editing with multimodal vision-language conditioning (qwen-vl-utils)"
     ),
     "Blender Addon: ComfyUI-BlenderAI-node": (
         "Procedural Blender-ComfyUI socket bridge addon"
@@ -101,6 +121,16 @@ def categorize_location(uri, pkg_name=""):
     return "Custom Node: ComfyUI-LatentSyncWrapper"
   if "custom_nodes/comfyui-gguf" in u:
     return "Custom Node: ComfyUI-GGUF"
+  if "custom_nodes/comfyui-crystools" in u:
+    return "Custom Node: ComfyUI-Crystools"
+  if "custom_nodes/comfyui-melbandroformer" in u:
+    return "Custom Node: ComfyUI-MelBandRoFormer"
+  if "custom_nodes/comfyui_fl-heartmula" in u:
+    return "Custom Node: ComfyUI_FL-HeartMuLa"
+  if "custom_nodes/ace-step-comfyui" in u:
+    return "Custom Node: ACE-Step-ComfyUI"
+  if "custom_nodes/comfyui-step1x-edit" in u:
+    return "Custom Node: ComfyUI-Step1X-Edit"
   if "comfyui-blenderai-node" in u:
     return "Blender Addon: ComfyUI-BlenderAI-node"
 
