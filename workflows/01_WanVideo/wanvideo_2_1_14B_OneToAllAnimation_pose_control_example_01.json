@@ -1595,7 +1595,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "onetotall_pose_00019.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\onetotall_pose_00019.mp4"
+            "fullpath": "temp/onetotall_pose_00019.mp4"
           }
         }
       }
@@ -2343,7 +2343,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00047.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo_OneToAllAnimation_00047.mp4"
+            "fullpath": "temp/WanVideo_OneToAllAnimation_00047.mp4"
           }
         }
       }
@@ -3861,7 +3861,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00056.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo_OneToAllAnimation_00056.mp4"
+            "fullpath": "temp/WanVideo_OneToAllAnimation_00056.mp4"
           }
         }
       }
@@ -4125,7 +4125,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00055.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo_OneToAllAnimation_00055.mp4"
+            "fullpath": "temp/WanVideo_OneToAllAnimation_00055.mp4"
           }
         }
       }
@@ -5286,7 +5286,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00057.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo_OneToAllAnimation_00057.mp4"
+            "fullpath": "temp/WanVideo_OneToAllAnimation_00057.mp4"
           }
         }
       }
@@ -5363,7 +5363,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00053.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo_OneToAllAnimation_00053.mp4"
+            "fullpath": "temp/WanVideo_OneToAllAnimation_00053.mp4"
           }
         }
       }

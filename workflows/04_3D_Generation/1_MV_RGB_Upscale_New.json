@@ -659,7 +659,7 @@
         "Node name for S&R": "VHS_LoadImagesPath"
       },
       "widgets_values": {
-        "directory": "C:\\Users\\reall\\Softwares\\ComfyUI_windows_portable\\ComfyUI\\output\\Unique3D\\RGB",
+        "directory": "output/Unique3D/RGB",
         "image_load_cap": 0,
         "skip_first_images": 0,
         "select_every_nth": 1,
@@ -670,7 +670,7 @@
           "params": {
             "frame_load_cap": 0,
             "skip_first_images": 0,
-            "filename": "C:\\Users\\reall\\Softwares\\ComfyUI_windows_portable\\ComfyUI\\output\\Unique3D\\RGB",
+            "filename": "output/Unique3D/RGB",
             "type": "path",
             "format": "folder",
             "select_every_nth": 1

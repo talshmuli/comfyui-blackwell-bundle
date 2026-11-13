@@ -1978,7 +1978,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_2_I2V_00027.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_2_I2V_00027.mp4"
+            "fullpath": "temp/WanVideo2_2_I2V_00027.mp4"
           }
         }
       }
@@ -2425,7 +2425,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_2_I2V_00028.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_2_I2V_00028.mp4"
+            "fullpath": "temp/WanVideo2_2_I2V_00028.mp4"
           }
         }
       }

@@ -1242,7 +1242,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideo_Ovi_00024.png",
-            "fullpath": "N:\\AI\\ComfyUI\\output\\WanVideo_Ovi_00024-audio.mp4"
+            "fullpath": "output/WanVideo_Ovi_00024-audio.mp4"
           }
         }
       }
