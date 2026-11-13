@@ -259,7 +259,7 @@
         "Node name for S&R": "VHS_LoadImagesPath"
       },
       "widgets_values": {
-        "directory": "C:\\Users\\reall\\Softwares\\ComfyUI_windows_portable\\ComfyUI\\output\\Unique3D\\Normals",
+        "directory": "output/Unique3D/Normals",
         "image_load_cap": 0,
         "skip_first_images": 0,
         "select_every_nth": 1,
@@ -270,7 +270,7 @@
           "params": {
             "frame_load_cap": 0,
             "skip_first_images": 0,
-            "filename": "C:\\Users\\reall\\Softwares\\ComfyUI_windows_portable\\ComfyUI\\output\\Unique3D\\Normals",
+            "filename": "output/Unique3D/Normals",
             "type": "path",
             "format": "folder",
             "select_every_nth": 1
@@ -452,7 +452,7 @@
         "Node name for S&R": "VHS_LoadImagesPath"
       },
       "widgets_values": {
-        "directory": "C:\\Users\\reall\\Softwares\\ComfyUI_windows_portable\\ComfyUI\\output\\Unique3D\\Normal_Inputs",
+        "directory": "output/Unique3D/Normal_Inputs",
         "image_load_cap": 0,
         "skip_first_images": 0,
         "select_every_nth": 1,
@@ -463,7 +463,7 @@
           "params": {
             "frame_load_cap": 0,
             "skip_first_images": 0,
-            "filename": "C:\\Users\\reall\\Softwares\\ComfyUI_windows_portable\\ComfyUI\\output\\Unique3D\\Normal_Inputs",
+            "filename": "output/Unique3D/Normal_Inputs",
             "type": "path",
             "format": "folder",
             "select_every_nth": 1

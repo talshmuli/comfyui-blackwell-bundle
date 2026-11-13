@@ -1636,7 +1636,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_1_T2V_00055.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_1_T2V_00055.mp4"
+            "fullpath": "temp/WanVideo2_1_T2V_00055.mp4"
           }
         }
       }
@@ -2396,7 +2396,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "Wanimate_00015.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\Wanimate_00015-audio.mp4"
+            "fullpath": "temp/Wanimate_00015-audio.mp4"
           }
         }
       }
@@ -2531,7 +2531,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_1_T2V_00054.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_1_T2V_00054.mp4"
+            "fullpath": "temp/WanVideo2_1_T2V_00054.mp4"
           }
         }
       }

@@ -10,6 +10,7 @@ Designed specifically for ComfyUI custom nodes and 3rd-party open-source extensi
 """
 
 import ast
+import json
 import os
 import re
 import sys
@@ -47,6 +48,20 @@ def log_warn(msg):
 def log_fail(msg, severity="HIGH"):
     color = RED if severity == "CRITICAL" else YELLOW
     print(f"  {color}✖ [{severity}]{RESET} {msg}")
+
+def parse_ast_scan_output(stdout: str, stderr: str = "", returncode: int = 0):
+    lines = [line.strip() for line in (stdout or "").strip().splitlines() if line.strip()]
+    if not lines:
+        if returncode != 0:
+            log_warn(f"Container scan exited with code {returncode}: {stderr[:200]}")
+        else:
+            log_warn("Container scan produced empty output.")
+        return None
+    try:
+        return json.loads(lines[-1])
+    except Exception as e:
+        log_warn(f"Failed to parse AST findings JSON: {e}")
+        return None
 
 def scan_custom_nodes_in_container(container_name: str = "comfyui"):
     print(f"\n{BOLD}=== 1. Third-Party Custom Nodes Supply Chain & AI Injection Scan ==={RESET}")
@@ -100,9 +115,16 @@ print(json.dumps(findings))
 """
     cmd = ["docker", "exec", container_name, "/opt/environments/python/comfyui/bin/python", "-c", scan_script]
     try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-        import json
-        findings = json.loads(proc.stdout.strip().splitlines()[-1])
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        lines = [line.strip() for line in proc.stdout.strip().splitlines() if line.strip()]
+        if not lines:
+            if proc.returncode != 0:
+                log_warn(f"Container scan exited with code {proc.returncode}: {proc.stderr[:200]}")
+            else:
+                log_warn("Container scan produced empty output.")
+            return 0, 0
+
+        findings = json.loads(lines[-1])
         criticals = 0
         highs = 0
         

@@ -2510,7 +2510,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_1_T2V_00004.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_1_T2V_00004.mp4"
+            "fullpath": "temp/WanVideo2_1_T2V_00004.mp4"
           }
         }
       }
@@ -2587,7 +2587,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_1_T2V_00002.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_1_T2V_00002.mp4"
+            "fullpath": "temp/WanVideo2_1_T2V_00002.mp4"
           }
         }
       }
@@ -2664,7 +2664,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "vitpose_00004.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\vitpose_00004.mp4"
+            "fullpath": "temp/vitpose_00004.mp4"
           }
         }
       }
@@ -3196,7 +3196,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "Wanimate_00002.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\Wanimate_00002-audio.mp4"
+            "fullpath": "temp/Wanimate_00002-audio.mp4"
           }
         }
       }

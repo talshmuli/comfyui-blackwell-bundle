@@ -1980,7 +1980,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "AnimateDiff_00008.png",
-            "fullpath": "N:\\AI\\ComfyUI\\output\\AnimateDiff_00008.mp4"
+            "fullpath": "output/AnimateDiff_00008.mp4"
           }
         }
       }

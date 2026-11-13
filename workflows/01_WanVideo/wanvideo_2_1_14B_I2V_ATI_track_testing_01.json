@@ -1127,7 +1127,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_I2V_00055.png",
-            "fullpath": "N:\\AI\\ComfyUI\\output\\WanVideoWrapper_I2V_00055.mp4"
+            "fullpath": "output/WanVideoWrapper_I2V_00055.mp4"
           }
         }
       }
@@ -1378,7 +1378,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_I2V_ATI_00001.png",
-            "fullpath": "N:\\AI\\ComfyUI\\output\\WanVideoWrapper_I2V_ATI_00001.mp4"
+            "fullpath": "output/WanVideoWrapper_I2V_ATI_00001.mp4"
           }
         }
       }

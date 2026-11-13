@@ -1761,7 +1761,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_1_T2V_00013.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo2_1_T2V_00013.mp4"
+            "fullpath": "temp/WanVideo2_1_T2V_00013.mp4"
           }
         }
       }

@@ -3734,7 +3734,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_Skyreels-A2_00012.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoWrapper_Skyreels-A2_00012.mp4"
+            "fullpath": "temp/WanVideoWrapper_Skyreels-A2_00012.mp4"
           }
         }
       }

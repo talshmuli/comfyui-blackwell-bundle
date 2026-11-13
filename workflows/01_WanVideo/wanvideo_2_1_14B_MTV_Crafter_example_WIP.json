@@ -422,7 +422,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "NLFtest_00010.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\NLFtest_00010.mp4"
+            "fullpath": "temp/NLFtest_00010.mp4"
           }
         }
       }
@@ -1438,7 +1438,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_MTV_Crafter_00012.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo_MTV_Crafter_00012.mp4"
+            "fullpath": "temp/WanVideo_MTV_Crafter_00012.mp4"
           }
         }
       }

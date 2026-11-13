@@ -2603,7 +2603,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_02_00010.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\SkyreelsDiffusionForcing_02_00010.mp4"
+            "fullpath": "temp/SkyreelsDiffusionForcing_02_00010.mp4"
           }
         }
       }
@@ -2680,7 +2680,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_02_00011.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\SkyreelsDiffusionForcing_02_00011.mp4"
+            "fullpath": "temp/SkyreelsDiffusionForcing_02_00011.mp4"
           }
         }
       }
@@ -3071,7 +3071,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_00026.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\SkyreelsDiffusionForcing_00026.mp4"
+            "fullpath": "temp/SkyreelsDiffusionForcing_00026.mp4"
           }
         }
       }
@@ -3199,7 +3199,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_01_00011.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\SkyreelsDiffusionForcing_01_00011.mp4"
+            "fullpath": "temp/SkyreelsDiffusionForcing_01_00011.mp4"
           }
         }
       }

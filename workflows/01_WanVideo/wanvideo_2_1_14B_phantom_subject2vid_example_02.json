@@ -1526,7 +1526,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideo21_Phantom_00012.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideo21_Phantom_00012.mp4"
+            "fullpath": "temp/WanVideo21_Phantom_00012.mp4"
           }
         }
       }

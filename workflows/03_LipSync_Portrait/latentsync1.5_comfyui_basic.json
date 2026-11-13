@@ -207,7 +207,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 25,
             "workflow": "latentsync_00036.png",
-            "fullpath": "D:\\ComfyUI_windows\\ComfyUI\\output\\latentsync_00036-audio.mp4"
+            "fullpath": "output/latentsync_00036-audio.mp4"
           },
           "muted": false
         }

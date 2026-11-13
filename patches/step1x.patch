@@ -1,0 +1,32 @@
+diff --git a/__init__.py b/__init__.py
+index d210686..5d8804a 100644
+--- a/__init__.py
++++ b/__init__.py
+@@ -8,6 +8,14 @@ NODE_CLASS_MAPPINGS = {
+     "Prompt": Prompt,
+     "GenerateEditedImage": GenerateEditedImage,
+     "SaveEditedImage": SaveEditedImage,
++
++    "Step1X_LoadImagePath": LoadImagePath,
++    "Step1X_LoadAEModel": LoadAEModel,
++    "Step1X_LoadDITModel": LoadDITModel,
++    "Step1X_LoadQwenVLModel": LoadQwenVLModel,
++    "Step1X_Prompt": Prompt,
++    "Step1X_GenerateEditedImage": GenerateEditedImage,
++    "Step1X_SaveEditedImage": SaveEditedImage,
+ }
+ 
+ NODE_DISPLAY_NAME_MAPPINGS = {
+diff --git a/nodes.py b/nodes.py
+index 68b031e..8e99b0e 100644
+--- a/nodes.py
++++ b/nodes.py
+@@ -15,7 +15,7 @@ from safetensors.torch import load_file
+ from torchvision.transforms import functional as F
+ from tqdm import tqdm 
+ 
+-import .src.sampling
++from .src import sampling
+ from .src.modules.autoencoder import AutoEncoder
+ from .src.modules.conditioner import Qwen25VL_7b_Embedder as Qwen2VLEmbedder
+ from .src.modules.model_edit import Step1XParams, Step1XEdit

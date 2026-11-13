@@ -745,7 +745,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_startendframe_00005.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoWrapper_VACE_startendframe_00005.mp4"
+            "fullpath": "temp/WanVideoWrapper_VACE_startendframe_00005.mp4"
           }
         }
       }
@@ -2731,7 +2731,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_outpaint_00002.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoWrapper_VACE_outpaint_00002.mp4"
+            "fullpath": "temp/WanVideoWrapper_VACE_outpaint_00002.mp4"
           }
         }
       }
@@ -4185,7 +4185,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_startendframe_00011.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoWrapper_VACE_startendframe_00011.mp4"
+            "fullpath": "temp/WanVideoWrapper_VACE_startendframe_00011.mp4"
           }
         }
       }
@@ -4655,7 +4655,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_startendframe_00001.png",
-            "fullpath": "N:\\AI\\ComfyUI\\temp\\WanVideoWrapper_VACE_startendframe_00001.mp4"
+            "fullpath": "temp/WanVideoWrapper_VACE_startendframe_00001.mp4"
           }
         }
       }
