@@ -86,6 +86,48 @@
       "url": "https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit.git",
       "category": "image-editing",
       "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-KJNodes",
+      "url": "https://github.com/kijai/ComfyUI-KJNodes.git",
+      "category": "utility",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI_IPAdapter_plus",
+      "url": "https://github.com/cubiq/ComfyUI_IPAdapter_plus.git",
+      "category": "conditioning",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-AnimateDiff-Evolved",
+      "url": "https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved.git",
+      "category": "animation",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Frame-Interpolation",
+      "url": "https://github.com/Fannovel16/ComfyUI-Frame-Interpolation.git",
+      "category": "video",
+      "blackwell_verified": true
+    },
+    {
+      "name": "comfyui_controlnet_aux",
+      "url": "https://github.com/Fannovel16/comfyui_controlnet_aux.git",
+      "category": "controlnet",
+      "blackwell_verified": true
+    },
+    {
+      "name": "Comfyui-Song-Generation-Suite",
+      "url": "https://github.com/pmarmotte2/Comfyui-Song-Generation-Suite.git",
+      "category": "audio",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-BlenderAI-node",
+      "url": "https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git",
+      "category": "3d",
+      "blackwell_verified": true
     }
   ]
 }
