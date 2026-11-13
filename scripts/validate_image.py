@@ -24,6 +24,26 @@ def validate_pytorch_and_blackwell():
     _ = torchvision.ops.nms
     print("✔ PyTorch Blackwell sm_120 and CUDA 12.8 verified successfully.")
 
+    if torch.cuda.is_available():
+        try:
+            device_name = torch.cuda.get_device_name(0)
+            print(f"CUDA Device Detected: {device_name}")
+            x = torch.randn(256, 256, device="cuda")
+            y = torch.matmul(x, x)
+            del x, y
+            torch.cuda.empty_cache()
+            print("✔ Real CUDA tensor matmul on sm_120: PASSED")
+
+            model = torch.nn.Linear(16, 16).cuda()
+            compiled = torch.compile(model, backend="inductor")
+            t = torch.randn(4, 16, device="cuda")
+            _ = compiled(t)
+            del model, compiled, t
+            torch.cuda.empty_cache()
+            print("✔ torch.compile (inductor) smoke test: PASSED")
+        except Exception as e:
+            print(f"⚠ GPU verification warning: {e}")
+
 
 def validate_base():
     validate_pytorch_and_blackwell()
@@ -94,6 +114,12 @@ def validate_custom_nodes():
     assert any("RVC" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: RVC missing"
     assert any("3D" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: 3D Pack missing"
     assert any("LTX" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: LTXVideo missing"
+    # Assertions for newly integrated nodes
+    assert any("Crystools" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: Crystools nodes missing"
+    assert any("MelBand" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: MelBandRoFormer nodes missing"
+    assert any("HeartMuLa" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: HeartMuLa nodes missing"
+    assert any("ACE" in k or "Ace" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: ACE-Step nodes missing"
+    assert any("Step1X" in k for k in nodes.NODE_CLASS_MAPPINGS), "FAIL: Step1X nodes missing"
     print("✔ All production custom nodes registered successfully!")
 
 

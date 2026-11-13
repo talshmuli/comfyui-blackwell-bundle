@@ -136,7 +136,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libopengl0 \
         libgl1-mesa-glx \
         libglib2.0-0 \
-        libportaudio2 && \
+        libportaudio2 \
+        libsndfile1 && \
     rm -rf /var/lib/apt/lists/*
 
 # Pre-install complete AI video, 3D, and music production custom node suite with network retry resilience
@@ -181,6 +182,11 @@ RUN clone_node() { \
     clone_node https://github.com/AIFSH/ComfyUI-RVC.git && \
     clone_node https://github.com/Lightricks/ComfyUI-LTXVideo.git && \
     clone_node https://github.com/Fannovel16/comfyui_controlnet_aux.git && \
+    clone_node https://github.com/crystian/ComfyUI-Crystools.git && \
+    clone_node https://github.com/kijai/ComfyUI-MelBandRoFormer.git && \
+    clone_node https://github.com/filliptm/ComfyUI_FL-HeartMuLa.git && \
+    clone_node https://github.com/ace-step/ACE-Step-ComfyUI.git && \
+    clone_node https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit.git && \
     sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py
 
 # Apply upstream compatibility patches for Blackwell sm_120 runtime and headless environments
@@ -191,6 +197,7 @@ RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch 
     git -C ComfyUI-LTXVideo apply --ignore-whitespace /opt/patches/ltxvideo.patch && \
     git -C ComfyUI-VideoHelperSuite apply --ignore-whitespace /opt/patches/vhs.patch && \
     git -C ComfyUI-FL-YuE2 apply --ignore-whitespace /opt/patches/yue2.patch && \
+    git -C ComfyUI-Step1X-Edit apply --ignore-whitespace /opt/patches/step1x.patch && \
     rm -rf /opt/patches && \
     mkdir -p ComfyUI-RVC/rvc/assets/weights && \
     chmod -R 777 ComfyUI-RVC
@@ -237,7 +244,12 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         comfyui-workflow-templates-media-api \
         comfyui-workflow-templates-media-other \
         comfyui-workflow-templates-media-assets-01 \
-        comfyui-workflow-templates-media-assets-02 && \
+        comfyui-workflow-templates-media-assets-02 \
+        pynvml \
+        deepdiff \
+        soundfile \
+        librosa \
+        piexif && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
         "diffusers==0.35.2" \
         "local-attention<=1.8.6" \
@@ -270,7 +282,11 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         audioread \
         peft \
         resampy \
-        soxr && \
+        soxr \
+        py-cpuinfo \
+        rotary-embedding-torch \
+        qwen-vl-utils \
+        liger-kernel && \
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --force-reinstall --no-deps \
         /opt/wheels/pillow-13.0.0-*.whl && \
