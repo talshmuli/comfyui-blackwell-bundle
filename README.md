@@ -22,7 +22,9 @@ Includes a comprehensive pre-installed suite of state-of-the-art custom nodes fo
   - [Video Generation & Temporal Diffusion](#video-generation--temporal-diffusion)
   - [3D Generation & Spatial Kinematics](#3d-generation--spatial-kinematics)
   - [Audio, Voice & Music Production](#audio-voice--music-production)
-  - [Vision Guidance & Workflow Utilities](#vision-guidance--workflow-utilities)
+  - [Vision, Editing & Multi-Modal](#vision-editing--multi-modal)
+  - [Hardware Observability & Monitoring](#hardware-observability--monitoring)
+  - [Utilities & Quality of Life](#utilities--quality-of-life)
 - [4. Companion Service: Smart ComfyUI Gallery](#4-companion-service-smart-comfyui-gallery)
 - [5. 4-Tier Multi-Stage Image Matrix](#5-4-tier-multi-stage-image-matrix)
 - [6. Quick Start Guide](#6-quick-start-guide)
@@ -115,7 +117,7 @@ This repository provides an automated, production-tested container suite that co
 
 ## 3. Pre-Installed Custom Node Suite
 
-The `nodes` and `full` images ship with over 2,000 pre-verified, registered node types across the entire generative AI spectrum.
+The `nodes` and `full` images ship with over 2,106+ pre-verified, registered node types across the entire generative AI spectrum.
 
 ### Video Generation & Temporal Diffusion
 
@@ -143,15 +145,30 @@ The `nodes` and `full` images ship with over 2,000 pre-verified, registered node
 | **[ComfyUI-FL-YuE2](https://github.com/filliptm/ComfyUI-FL-YuE2)** *(by filliptm)* | Full-song generation engine producing multi-genre compositions with vocal and instrumental tracks from structured lyrics. |
 | **[Comfyui-Song-Generation-Suite](https://github.com/pmarmotte2/Comfyui-Song-Generation-Suite)** *(by pmarmotte2)* | Complete musical score composition, audio adapter training, and multi-track audio generation workflows. |
 | **[ComfyUI-RVC](https://github.com/AIFSH/ComfyUI-RVC)** *(by AIFSH)* | Retrieval-based Voice Conversion for vocal timbre cloning, pitch extraction (RMVPE/Harvest), and voice alteration. |
+| **[ComfyUI-MelBandRoFormer](https://github.com/kijai/ComfyUI-MelBandRoFormer)** *(by kijai)* | High-fidelity audio stem separation (vocals, drums, bass, instruments) using multi-band RoFormer models for studio-grade isolation. |
+| **[ComfyUI_FL-HeartMuLa](https://github.com/filliptm/ComfyUI_FL-HeartMuLa)** *(by filliptm)* | Music generation and conditioning suite utilizing HeartMuLa architecture for high-resolution musical style synthesis and lyric-guided composition. |
+| **[ACE-Step-ComfyUI](https://github.com/ace-step/ACE-Step-ComfyUI)** *(by ace-step)* | Advanced audio, vocal, and sound effect synthesis pipeline with step-based generation and zero-shot acoustic matching. |
 
-### Vision Guidance & Workflow Utilities
+### Vision, Editing & Multi-Modal
 
 | Custom Node Repository | Key Features & Capabilities |
 | :--- | :--- |
 | **[comfyui_controlnet_aux](https://github.com/Fannovel16/comfyui_controlnet_aux)** *(by Fannovel16)* | Complete suite of ControlNet annotators: DWPose, OpenPose, Depth Anything (v1/v2), MiDaS, Canny, LineArt, and NormalBae. |
 | **[ComfyUI_IPAdapter_plus](https://github.com/cubiq/ComfyUI_IPAdapter_plus)** *(by cubiq)* | Image Prompt Adapter for style reference, FaceID consistency, regional conditioning, and cross-frame character identity persistence. |
-| **[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF)** *(by city96)* | Quantized inference engine supporting 4-bit, 5-bit, and 8-bit precision (Q4_K_M, Q5_K_M, Q8_0) for massive 12B+ models (FLUX.1, SD 3.5, Wan 2.1, HunyuanVideo). |
+| **[ComfyUI-Step1X-Edit](https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit)** *(by Yuan-ManX)* | Next-generation multi-modal image editing and instruction-guided visual manipulation with precise localized control. |
+
+### Hardware Observability & Monitoring
+
+| Custom Node Repository | Key Features & Capabilities |
+| :--- | :--- |
+| **[ComfyUI-Crystools](https://github.com/crystian/ComfyUI-Crystools)** *(by crystian)* | Real-time hardware telemetry and observability dashboard directly inside ComfyUI: monitor Blackwell RTX 5090/5080 VRAM utilization, GPU core load, temperature, system RAM, CPU usage, and execution timing. |
+
+### Utilities & Quality of Life
+
+| Custom Node Repository | Key Features & Capabilities |
+| :--- | :--- |
 | **[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)** *(by kijai)* | Indispensable workflow utilities: color correction, image batching, condition averaging, latent masking, and VAE optimization. |
+| **[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF)** *(by city96)* | Quantized inference engine supporting 4-bit, 5-bit, and 8-bit precision (Q4_K_M, Q5_K_M, Q8_0) for massive 12B+ models (FLUX.1, SD 3.5, Wan 2.1, HunyuanVideo). |
 
 ---
 
@@ -486,6 +503,11 @@ Production studios and homelabs require dependable security and predictable upda
 * **[comfyui_controlnet_aux](https://github.com/Fannovel16/comfyui_controlnet_aux)** by Fannovel16 — ControlNet preprocessors.
 * **[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)** by Kijai — Workflow utilities.
 * **[ComfyUI-BlenderAI-node](https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node)** by AIGODLIKE — Blender integration bridge.
+* **[ComfyUI-Crystools](https://github.com/crystian/ComfyUI-Crystools)** by crystian — Hardware monitoring and resource telemetry.
+* **[ComfyUI-MelBandRoFormer](https://github.com/kijai/ComfyUI-MelBandRoFormer)** by Kijai — High-fidelity audio stem separation.
+* **[ComfyUI_FL-HeartMuLa](https://github.com/filliptm/ComfyUI_FL-HeartMuLa)** by filliptm — HeartMuLa music generation.
+* **[ACE-Step-ComfyUI](https://github.com/ace-step/ACE-Step-ComfyUI)** by ace-step — Advanced step-based music and audio synthesis.
+* **[ComfyUI-Step1X-Edit](https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit)** by Yuan-ManX — Multi-modal instruction-guided image editing.
 
 ---
 
