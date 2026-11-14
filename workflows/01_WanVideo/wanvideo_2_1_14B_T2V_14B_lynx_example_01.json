@@ -443,7 +443,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\fp8_scaled_kj\\T2V\\Wan2_1-T2V-14B_fp8_e4m3fn_scaled_KJ.safetensors",
+        "WanVideo/fp8_scaled_kj/T2V/Wan2_1-T2V-14B_fp8_e4m3fn_scaled_KJ.safetensors",
         "fp16_fast",
         "disabled",
         "offload_device",
@@ -577,7 +577,7 @@
         "Node name for S&R": "LoadLynxResampler"
       },
       "widgets_values": [
-        "WanVideo\\lynx\\lynx_lite_resampler_fp32.safetensors",
+        "WanVideo/lynx/lynx_lite_resampler_fp32.safetensors",
         "fp16"
       ]
     },
@@ -723,7 +723,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_1_VAE_bf16.safetensors",
+        "wanvideo/Wan2_1_VAE_bf16.safetensors",
         "bf16"
       ],
       "color": "#322",
@@ -847,7 +847,7 @@
         "Node name for S&R": "WanVideoExtraModelSelect"
       },
       "widgets_values": [
-        "WanVideo\\lynx\\Wan2_1-T2V-Lynx_full_ref_layers_fp16.safetensors"
+        "WanVideo/lynx/Wan2_1-T2V-Lynx_full_ref_layers_fp16.safetensors"
       ],
       "color": "#223",
       "bgcolor": "#335"
@@ -889,7 +889,7 @@
         "Node name for S&R": "WanVideoExtraModelSelect"
       },
       "widgets_values": [
-        "WanVideo\\lynx\\Wan2_1-T2V-Lynx_lite_ip_layers_fp16.safetensors"
+        "WanVideo/lynx/Wan2_1-T2V-Lynx_lite_ip_layers_fp16.safetensors"
       ],
       "color": "#223",
       "bgcolor": "#335"
@@ -960,9 +960,9 @@
         "Node name for S&R": "WanVideoLoraSelectMulti"
       },
       "widgets_values": [
-        "WanVideo\\Lightx2v\\lightx2v_T2V_14B_cfg_step_distill_v2_lora_rank64_bf16_.safetensors",
+        "WanVideo/Lightx2v/lightx2v_T2V_14B_cfg_step_distill_v2_lora_rank64_bf16_.safetensors",
         1,
-        "WanVid\\funreward\\Wan2.1-Fun-14B-InP-HPS2.1_reward_lora_comfy.safetensors",
+        "WanVid/funreward/Wan2.1-Fun-14B-InP-HPS2.1_reward_lora_comfy.safetensors",
         0.5,
         "none",
         1,

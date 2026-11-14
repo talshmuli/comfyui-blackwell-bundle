@@ -42,7 +42,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_1_VAE_bf16.safetensors",
+        "wanvideo/Wan2_1_VAE_bf16.safetensors",
         "bf16"
       ],
       "color": "#322",
@@ -217,7 +217,7 @@
         "Node name for S&R": "LoadVQVAE"
       },
       "widgets_values": [
-        "wanvideo\\MTV_Crafter_4DMoT_VQVAE_fp32.safetensors"
+        "wanvideo/MTV_Crafter_4DMoT_VQVAE_fp32.safetensors"
       ],
       "color": "#322",
       "bgcolor": "#533"
@@ -1674,7 +1674,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\fp8_scaled_kj\\I2V\\Wan2_1-I2V-14B-MAGREF_fp8_e4m3fn_scaled_KJ.safetensors",
+        "WanVideo/fp8_scaled_kj/I2V/Wan2_1-I2V-14B-MAGREF_fp8_e4m3fn_scaled_KJ.safetensors",
         "fp16_fast",
         "disabled",
         "offload_device",
@@ -1713,7 +1713,7 @@
         "Node name for S&R": "WanVideoExtraModelSelect"
       },
       "widgets_values": [
-        "WanVideo\\MTVCrafter\\Wan2_1_MTV-Crafter_motion_adapter_bf16.safetensors"
+        "WanVideo/MTVCrafter/Wan2_1_MTV-Crafter_motion_adapter_bf16.safetensors"
       ]
     },
     {

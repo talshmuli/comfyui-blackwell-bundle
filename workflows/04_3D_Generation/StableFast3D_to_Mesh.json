@@ -284,7 +284,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "SF3D_Test\\mesh.glb"
+        "SF3D_Test/mesh.glb"
       ]
     },
     {

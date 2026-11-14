@@ -64,7 +64,7 @@ diff --git a/nodes.py b/nodes.py
 index 0538837..47db971 100644
 --- a/nodes.py
 +++ b/nodes.py
-@@ -6,7 +6,10 @@ import numpy as np
+@@ -6,7 +6,11 @@ import numpy as np
  from pydub import AudioSegment
  from multiprocessing import cpu_count
  from scipy.io.wavfile import write as wavwrite
@@ -72,7 +72,8 @@ index 0538837..47db971 100644
 +try:
 +    from .rvc.train import vc,gpus,default_batch_size,preprocess_dataset,extract_f0_feature,train1key
 +except Exception:
-+    pass
++    vc, gpus, default_batch_size = None, '0', 4
++    preprocess_dataset = extract_f0_feature = train1key = None
  
  now_dir = os.path.dirname(os.path.abspath(__file__))
  out_path = folder_paths.get_output_directory()

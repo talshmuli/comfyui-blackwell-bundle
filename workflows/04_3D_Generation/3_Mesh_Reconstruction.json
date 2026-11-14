@@ -755,7 +755,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Unique3D\\Mesh_Gen_0\\mesh.obj"
+        "Unique3D/Mesh_Gen_0/mesh.obj"
       ]
     },
     {
@@ -794,7 +794,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Unique3D\\Mesh_Gen_1\\mesh.obj"
+        "Unique3D/Mesh_Gen_1/mesh.obj"
       ]
     },
     {
@@ -833,7 +833,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Unique3D\\Mesh_Gen_2\\mesh.obj"
+        "Unique3D/Mesh_Gen_2/mesh.obj"
       ]
     },
     {
@@ -872,7 +872,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Unique3D\\Mesh_Gen_3\\mesh.obj"
+        "Unique3D/Mesh_Gen_3/mesh.obj"
       ]
     },
     {

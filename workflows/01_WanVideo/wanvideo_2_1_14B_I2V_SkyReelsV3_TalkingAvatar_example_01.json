@@ -42,7 +42,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_1_VAE_bf16.safetensors",
+        "wanvideo/Wan2_1_VAE_bf16.safetensors",
         "bf16",
         false,
         false
@@ -705,7 +705,7 @@
         "Node name for S&R": "MelBandRoFormerModelLoader"
       },
       "widgets_values": [
-        "MelBandRoFormer\\MelBandRoformer_fp16.safetensors"
+        "MelBandRoFormer/MelBandRoformer_fp16.safetensors"
       ]
     },
     {
@@ -2750,7 +2750,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\SkyreelsV3\\Wan21_SkyReelsV3-A2V_fp8_scaled_mixed.safetensors",
+        "WanVideo/SkyreelsV3/Wan21_SkyReelsV3-A2V_fp8_scaled_mixed.safetensors",
         "fp16_fast",
         "disabled",
         "offload_device",

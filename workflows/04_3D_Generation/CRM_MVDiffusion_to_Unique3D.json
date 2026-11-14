@@ -1644,7 +1644,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Craftsman_Unique3D\\Mesh_Gen_0\\mesh.obj"
+        "Craftsman_Unique3D/Mesh_Gen_0/mesh.obj"
       ]
     },
     {
@@ -1683,7 +1683,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "CRM_Unique3D\\Mesh_Gen_1\\mesh.obj"
+        "CRM_Unique3D/Mesh_Gen_1/mesh.obj"
       ]
     },
     {
@@ -1722,7 +1722,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "CRM_Unique3D\\Mesh_Gen_2\\mesh.obj"
+        "CRM_Unique3D/Mesh_Gen_2/mesh.obj"
       ]
     },
     {
@@ -1761,7 +1761,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "CRM_Unique3D\\Mesh_Gen_3\\mesh.obj"
+        "CRM_Unique3D/Mesh_Gen_3/mesh.obj"
       ]
     },
     {
@@ -1820,7 +1820,7 @@
         }
       },
       "widgets_values": [
-        "CRM_Unique3D\\Upscales\\rgb_highres"
+        "CRM_Unique3D/Upscales/rgb_highres"
       ],
       "color": "#223",
       "bgcolor": "#335"

@@ -73,7 +73,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_1_VAE_bf16.safetensors",
+        "wanvideo/Wan2_1_VAE_bf16.safetensors",
         "bf16"
       ],
       "color": "#322",
@@ -3204,7 +3204,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\wan2.1_t2v_1.3B_fp16.safetensors",
+        "WanVideo/wan2.1_t2v_1.3B_fp16.safetensors",
         "fp16",
         "disabled",
         "offload_device",
@@ -3289,7 +3289,7 @@
         "Node name for S&R": "WanVideoVACEModelSelect"
       },
       "widgets_values": [
-        "WanVideo\\Wan2_1-VACE_module_1_3B_bf16.safetensors"
+        "WanVideo/Wan2_1-VACE_module_1_3B_bf16.safetensors"
       ]
     },
     {

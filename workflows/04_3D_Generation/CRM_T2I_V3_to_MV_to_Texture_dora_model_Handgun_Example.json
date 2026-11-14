@@ -1060,7 +1060,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Test_CRM_T21_V3\\gun_0.obj"
+        "Test_CRM_T21_V3/gun_0.obj"
       ]
     },
     {
@@ -1427,7 +1427,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Test_CRM_T21_V3\\gun_out.obj"
+        "Test_CRM_T21_V3/gun_out.obj"
       ]
     }
   ],

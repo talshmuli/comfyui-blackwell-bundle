@@ -221,7 +221,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "CharacterGen\\Mesh\\Mesh_Girl.glb"
+        "CharacterGen/Mesh/Mesh_Girl.glb"
       ]
     },
     {
@@ -439,7 +439,7 @@
       ],
       "properties": {},
       "widgets_values": [
-        "CharacterGen\\Multi_Views\\image"
+        "CharacterGen/Multi_Views/image"
       ]
     },
     {
@@ -465,7 +465,7 @@
       ],
       "properties": {},
       "widgets_values": [
-        "CharacterGen\\Multi_View_Masks\\image"
+        "CharacterGen/Multi_View_Masks/image"
       ]
     },
     {

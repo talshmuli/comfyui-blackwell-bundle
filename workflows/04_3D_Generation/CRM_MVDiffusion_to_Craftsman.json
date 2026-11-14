@@ -387,7 +387,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Craftsman_test\\Mesh_Cat_CRM.obj"
+        "Craftsman_test/Mesh_Cat_CRM.obj"
       ]
     }
   ],
