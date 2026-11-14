@@ -302,7 +302,9 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         /opt/wheels/pillow-13.0.0-*.whl && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
-        "jinja2>=3.1.5"
+        "jinja2>=3.1.5" && \
+    chown -R user:ai-dock /opt/ComfyUI/custom_nodes && \
+    chmod -R g+w /opt/ComfyUI/custom_nodes
 
 WORKDIR /workspace
 
