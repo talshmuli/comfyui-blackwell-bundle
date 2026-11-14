@@ -24,7 +24,9 @@ ALL_PREINSTALLED_NODES = [
     "ComfyUI-Frame-Interpolation",
     "comfyui_controlnet_aux",
     "Comfyui-Song-Generation-Suite",
-    "ComfyUI-BlenderAI-node"
+    "ComfyUI-BlenderAI-node",
+    "ComfyUI_UltimateSDUpscale",
+    "ComfyUI-Impact-Pack"
 ]
 
 def test_catalog():

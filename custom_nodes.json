@@ -128,6 +128,18 @@
       "url": "https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git",
       "category": "3d",
       "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI_UltimateSDUpscale",
+      "url": "https://github.com/ssitu/ComfyUI_UltimateSDUpscale.git",
+      "category": "upscale",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Impact-Pack",
+      "url": "https://github.com/ltdrdata/ComfyUI-Impact-Pack.git",
+      "category": "enhancement",
+      "blackwell_verified": true
     }
   ]
 }

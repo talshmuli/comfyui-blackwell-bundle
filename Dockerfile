@@ -191,6 +191,8 @@ RUN clone_node() { \
     clone_node https://github.com/filliptm/ComfyUI_FL-HeartMuLa.git && \
     clone_node https://github.com/ace-step/ACE-Step-ComfyUI.git && \
     clone_node https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit.git && \
+    clone_node https://github.com/ssitu/ComfyUI_UltimateSDUpscale.git && \
+    clone_node https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py
 
 # Apply upstream compatibility patches for Blackwell sm_120 runtime and headless environments
@@ -253,7 +255,9 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         deepdiff \
         soundfile \
         librosa \
-        piexif && \
+        piexif \
+        segment-anything \
+        dill && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
         "diffusers==0.35.2" \
         "local-attention<=1.8.6" \
@@ -303,8 +307,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
         "jinja2>=3.1.5" && \
-    chown -R user:ai-dock /opt/ComfyUI/custom_nodes && \
-    chmod -R g+w /opt/ComfyUI/custom_nodes
+    chmod -R 777 /opt/ComfyUI/custom_nodes
 
 WORKDIR /workspace
 

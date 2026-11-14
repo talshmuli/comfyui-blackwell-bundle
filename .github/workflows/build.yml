@@ -265,7 +265,7 @@ jobs:
             docker run --rm "$LOCAL_TAG" /opt/blender/blender --background --python-expr "import bpy; print('✔ Blender bpy Python module initialized cleanly!')"
           else
             echo "--- Testing live container node discovery and CPU initialization ---"
-            docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c "import sys; sys.path.append('/opt/ComfyUI'); import torch; assert 'sm_120' in torch.__config__.show(), 'FAIL: sm_120 missing from torch build'; import nodes; assert len(nodes.NODE_CLASS_MAPPINGS) > 0, 'FAIL: Zero registered nodes'; print(f'✔ In-container node registration check passed ({len(nodes.NODE_CLASS_MAPPINGS)} nodes).')"
+            docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c "import sys; sys.path.append('/opt/ComfyUI'); import comfy.cli_args; comfy.cli_args.args.cpu = True; import comfy.model_management; comfy.model_management.cpu_state = comfy.model_management.CPUState.CPU; import torch; assert 'sm_120' in torch.__config__.show(), 'FAIL: sm_120 missing from torch build'; import nodes; assert len(nodes.NODE_CLASS_MAPPINGS) > 0, 'FAIL: Zero registered nodes'; print(f'✔ In-container node registration check passed ({len(nodes.NODE_CLASS_MAPPINGS)} nodes).')"
 
             if [ "$TARGET" = "nodes" ] || [ "$TARGET" = "full" ]; then
               echo "--- Testing universal workflow compatibility in container Python environment ---"

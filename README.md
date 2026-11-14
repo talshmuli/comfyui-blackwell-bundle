@@ -156,6 +156,8 @@ The `nodes` and `full` images ship with over 2,106+ pre-verified, registered nod
 | **[comfyui_controlnet_aux](https://github.com/Fannovel16/comfyui_controlnet_aux)** *(by Fannovel16)* | Complete suite of ControlNet annotators: DWPose, OpenPose, Depth Anything (v1/v2), MiDaS, Canny, LineArt, and NormalBae. |
 | **[ComfyUI_IPAdapter_plus](https://github.com/cubiq/ComfyUI_IPAdapter_plus)** *(by cubiq)* | Image Prompt Adapter for style reference, FaceID consistency, regional conditioning, and cross-frame character identity persistence. |
 | **[ComfyUI-Step1X-Edit](https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit)** *(by Yuan-ManX)* | Next-generation multi-modal image editing and instruction-guided visual manipulation with precise localized control. |
+| **[ComfyUI_UltimateSDUpscale](https://github.com/ssitu/ComfyUI_UltimateSDUpscale)** *(by ssitu)* | Tile-based high-resolution image upscaling with seam-blending and modular upscaler algorithm integration. |
+| **[ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)** *(by ltdrdata)* | Comprehensive image enhancement suite featuring SAM detector/segmenter, face/hand detailer, latent manipulation, and workflow logic routing. |
 
 ### Hardware Observability & Monitoring
 
@@ -508,6 +510,8 @@ Production studios and homelabs require dependable security and predictable upda
 * **[ComfyUI_FL-HeartMuLa](https://github.com/filliptm/ComfyUI_FL-HeartMuLa)** by filliptm — HeartMuLa music generation.
 * **[ACE-Step-ComfyUI](https://github.com/ace-step/ACE-Step-ComfyUI)** by ace-step — Advanced step-based music and audio synthesis.
 * **[ComfyUI-Step1X-Edit](https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit)** by Yuan-ManX — Multi-modal instruction-guided image editing.
+* **[ComfyUI_UltimateSDUpscale](https://github.com/ssitu/ComfyUI_UltimateSDUpscale)** by ssitu — Tile-based upscaling and seam blending.
+* **[ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)** by ltdrdata — Modular detection, face detailing, and image enhancement.
 
 ---
 
