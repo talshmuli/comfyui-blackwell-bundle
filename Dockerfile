@@ -347,8 +347,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/blender
-RUN curl -sL "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" | \
-    tar -xJ -C /opt/blender --strip-components=1 && \
+RUN for attempt in 1 2 3 4 5; do \
+        echo "Attempt $attempt: downloading Blender 4.4 LTS..." && \
+        if curl -fsSL --retry 3 --retry-delay 2 "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" -o /tmp/blender.tar.xz; then \
+            tar -xJ -f /tmp/blender.tar.xz -C /opt/blender --strip-components=1 && \
+            rm -f /tmp/blender.tar.xz && break; \
+        fi; \
+        echo "Attempt $attempt failed. Retrying in 5 seconds..." >&2; \
+        sleep 5; \
+    done && test -x /opt/blender/blender && \
     ln -s /opt/blender/blender /usr/local/bin/blender && \
     mkdir -p /opt/blender/4.4/scripts/addons && \
     git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node && \
@@ -400,8 +407,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/blender
-RUN curl -sL "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" | \
-    tar -xJ -C /opt/blender --strip-components=1 && \
+RUN for attempt in 1 2 3 4 5; do \
+        echo "Attempt $attempt: downloading Blender 4.4 LTS..." && \
+        if curl -fsSL --retry 3 --retry-delay 2 "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" -o /tmp/blender.tar.xz; then \
+            tar -xJ -f /tmp/blender.tar.xz -C /opt/blender --strip-components=1 && \
+            rm -f /tmp/blender.tar.xz && break; \
+        fi; \
+        echo "Attempt $attempt failed. Retrying in 5 seconds..." >&2; \
+        sleep 5; \
+    done && test -x /opt/blender/blender && \
     ln -s /opt/blender/blender /usr/local/bin/blender && \
     mkdir -p /opt/blender/4.4/scripts/addons && \
     git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node && \
