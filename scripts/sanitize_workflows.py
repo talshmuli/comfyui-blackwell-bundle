@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Sanitize ComfyUI workflow JSON files by removing absolute Windows drive paths
+and normalizing cross-platform backslash paths.
 
-replaces upstream author-specific paths (e.g. D:\\ComfyUI_windows\\...,
-N:\\AI\\ComfyUI\\..., C:\\Users\\...\\input\\...) with container-portable relative paths.
+Replaces upstream author-specific paths (e.g. D:\\ComfyUI_windows\\...,
+N:\\AI\\ComfyUI\\..., C:\\Users\\...\\input\\...) with container-portable relative paths,
+and converts Windows-style relative model paths (e.g. WanVideo\\2_2\\...) to standard POSIX slashes.
 Supports --check (for CI / pre-commit audits) and --fix (for in-place remediation).
 """
 
@@ -14,29 +16,43 @@ import sys
 from typing import Any, List, Tuple
 
 WIN_DRIVE_PATTERN = re.compile(r'^[a-zA-Z]:[\\/]')
+ASSET_EXTENSIONS = (
+    '.safetensors', '.ckpt', '.pt', '.pth', '.bin', '.onnx',
+    '.png', '.jpg', '.jpeg', '.webp', '.mp4', '.mov', '.wav', '.mp3',
+    '.obj', '.ply', '.glb', '.gltf', '.json', '.yaml', '.yml'
+)
 
 def sanitize_path_value(val: str) -> str:
-    """Normalize and strip Windows drive letters and ComfyUI root prefixes."""
-    if not isinstance(val, str) or not WIN_DRIVE_PATTERN.match(val):
+    """Normalize and strip Windows drive letters, author root prefixes, and cross-platform backslashes."""
+    if not isinstance(val, str):
         return val
 
-    # Normalize backslashes to forward slashes
-    norm = val.replace('\\', '/')
+    # 1. Handle absolute Windows drive paths (e.g. D:\..., C:/...)
+    if WIN_DRIVE_PATTERN.match(val):
+        norm = val.replace('\\', '/')
+        for marker in ('/output/', '/input/', '/temp/', '/models/'):
+            idx = norm.lower().find(marker)
+            if idx != -1:
+                return norm[idx + 1:]
+        stripped = re.sub(r'^[a-zA-Z]:[\\/]+', '', norm)
+        stripped = re.sub(r'^Users/[^/]+/Softwares/[^/]+/', '', stripped)
+        stripped = re.sub(r'^Users/[^/]+/', '', stripped)
+        return stripped
 
-    # Find known ComfyUI subdirectories
-    for marker in ('/output/', '/input/', '/temp/', '/models/'):
-        idx = norm.lower().find(marker)
-        if idx != -1:
-            return norm[idx + 1:]
+    # 2. Handle cross-platform relative backslash paths (e.g. wanvideo\Wan2_2_VAE_bf16.safetensors, .\foo\bar)
+    if '\\' in val:
+        val_lower = val.lower()
+        if (
+            any(val_lower.endswith(ext) for ext in ASSET_EXTENSIONS)
+            or val.startswith('.\\')
+            or re.match(r'^[A-Za-z0-9_.\-]+(\\[A-Za-z0-9_.\-]+)+$', val)
+        ):
+            norm = val.replace('\\', '/')
+            if norm.startswith('./'):
+                norm = norm[2:]
+            return norm
 
-    # Strip drive letter and leading slashes
-    stripped = re.sub(r'^[a-zA-Z]:[\\/]+', '', norm)
-
-    # Strip common upstream user directory prefixes if present
-    stripped = re.sub(r'^Users/[^/]+/Softwares/[^/]+/', '', stripped)
-    stripped = re.sub(r'^Users/[^/]+/', '', stripped)
-
-    return stripped
+    return val
 
 def sanitize_workflow_data(obj: Any) -> Tuple[Any, int]:
     """Recursively traverse a JSON object and sanitize string path values."""
@@ -108,7 +124,7 @@ def main():
             total_violations += c
             files_affected += 1
 
-    print(f"\nAudit complete: {total_violations} Windows drive paths found across {files_affected} files.")
+    print(f"\nAudit complete: {total_violations} Windows paths found across {files_affected} files.")
 
     if args.check and total_violations > 0:
         sys.exit(1)

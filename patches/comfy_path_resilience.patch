@@ -1,0 +1,64 @@
+diff --git a/execution.py b/execution.py
+index 0d50df2..5ee9a80 100644
+--- a/execution.py
++++ b/execution.py
+@@ -1069,8 +1069,33 @@ async def validate_inputs(prompt_id, prompt, item, validated, visiting=None):
+                         combo_options = input_type
+                     is_multiselect = extra_info.get("multiselect", False)
+                     if is_multiselect and isinstance(val, list):
++                        norm_list = []
++                        for item in val:
++                            if isinstance(item, str) and item not in combo_options:
++                                n_item = item.replace("\\", "/")
++                                if n_item in combo_options:
++                                    norm_list.append(n_item)
++                                else:
++                                    b_item = os.path.basename(n_item)
++                                    m = [opt for opt in combo_options if isinstance(opt, str) and (opt == b_item or os.path.basename(opt) == b_item)]
++                                    norm_list.append(m[0] if len(m) == 1 else item)
++                            else:
++                                norm_list.append(item)
++                        val = norm_list
++                        inputs[x] = val
+                         invalid_vals = [v for v in val if v not in combo_options]
+                     else:
++                        if isinstance(val, str) and val not in combo_options:
++                            norm_val = val.replace("\\", "/")
++                            if norm_val in combo_options:
+                                 val = norm_val
+                                 inputs[x] = val
++                            else:
++                                base_val = os.path.basename(norm_val)
++                                matches = [opt for opt in combo_options if isinstance(opt, str) and (opt == base_val or os.path.basename(opt) == base_val)]
++                                if len(matches) == 1:
++                                    val = matches[0]
++                                    inputs[x] = val
+                         invalid_vals = [val] if val not in combo_options else []
+                     if invalid_vals:
+                         input_config = info
+diff --git a/folder_paths.py b/folder_paths.py
+index 0673f6c..496ae9f 100644
+--- a/folder_paths.py
++++ b/folder_paths.py
+@@ -456,6 +456,8 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
+     if folder_name not in folder_names_and_paths:
+         return None
+     folders = folder_names_and_paths[folder_name]
++    if isinstance(filename, str):
++        filename = filename.replace("\\", "/")
+     filename = os.path.relpath(os.path.join("/", filename), "/")
+     for x in folders[0]:
+         full_path = os.path.join(x, filename)
+@@ -464,6 +466,12 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
+         elif os.path.islink(full_path):
+             logging.warning("WARNING path {} exists but doesn't link anywhere, skipping.".format(full_path))
+ 
++    base_name = os.path.basename(filename)
++    for x in folders[0]:
++        flat_path = os.path.join(x, base_name)
++        if os.path.isfile(flat_path):
++            return flat_path
++
+     return None
+ 
+ 

@@ -123,7 +123,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_1_VAE_bf16.safetensors",
+        "wanvideo/Wan2_1_VAE_bf16.safetensors",
         "bf16"
       ],
       "color": "#322",
@@ -303,7 +303,7 @@
         "Node name for S&R": "WanVideoLoraSelect"
       },
       "widgets_values": [
-        "WanVid\\funreward\\Wan2.1-Fun-1.3B-InP-MPS_reward_lora_comfy.safetensors",
+        "WanVid/funreward/Wan2.1-Fun-1.3B-InP-MPS_reward_lora_comfy.safetensors",
         0.4,
         false,
         true
@@ -409,7 +409,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\EchoShot\\Wan2_1-T2V-1-3B-EchoShot_fp16.safetensors",
+        "WanVideo/EchoShot/Wan2_1-T2V-1-3B-EchoShot_fp16.safetensors",
         "fp16_fast",
         "disabled",
         "offload_device",

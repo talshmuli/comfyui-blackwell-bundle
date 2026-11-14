@@ -90,8 +90,11 @@ ENV PIP_CONSTRAINT=/opt/environments/python/comfyui/constraints.txt
 
 # Update ComfyUI core to latest upstream master to support modern custom nodes (comfy_api, Wan2.1, LTXVideo)
 # Install modern ComfyUI master dependencies with --no-deps to protect cu128 PyTorch and prevent resolver backtracking
+COPY patches/comfy_path_resilience.patch /tmp/comfy_path_resilience.patch
 RUN git -C /opt/ComfyUI fetch --depth=1 origin master && \
     git -C /opt/ComfyUI checkout -f FETCH_HEAD && \
+    git -C /opt/ComfyUI apply --ignore-whitespace /tmp/comfy_path_resilience.patch && \
+    rm -f /tmp/comfy_path_resilience.patch && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         av && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \

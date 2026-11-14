@@ -407,7 +407,7 @@
       ],
       "properties": {},
       "widgets_values": [
-        "CRMTest\\MVs\\cat"
+        "CRMTest/MVs/cat"
       ]
     },
     {
@@ -433,7 +433,7 @@
       ],
       "properties": {},
       "widgets_values": [
-        "CRMTest\\CCMs\\cat"
+        "CRMTest/CCMs/cat"
       ]
     },
     {

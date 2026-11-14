@@ -721,7 +721,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "InstantMesh_test\\Mesh_Girl.glb"
+        "InstantMesh_test/Mesh_Girl.glb"
       ]
     },
     {
