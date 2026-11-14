@@ -32,6 +32,20 @@ on:
       - '.gitignore'
       - 'docs/**'
 
+  # Trigger on Pull Requests against master/main for build & smoke test validation (no push)
+  pull_request:
+    branches:
+      - master
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - 'SECURITY.md'
+      - 'CONTRIBUTING.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.gitignore'
+      - 'docs/**'
+
 permissions:
   contents: read
   packages: write
@@ -66,6 +80,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Run Host Unit & Workflow Discovery Tests
+        run: |
+          echo "=== Running Host Unit Tests ==="
+          python3 -m unittest discover -s scripts
+
       - name: Scan Repository for Leaked Secrets & Sensitive Credentials
         uses: trufflesecurity/trufflehog@main
         with:
@@ -82,6 +101,13 @@ jobs:
           echo "=== Pipeline Trigger Evaluation ==="
           echo "Event: $EVENT"
           echo "Force build flag: $FORCE_BUILD"
+
+          if [ "$EVENT" = "pull_request" ]; then
+            echo "Triggered by pull_request event. Proceeding with PR test build (no push)."
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "reason=Pull Request validation" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
           if [ "$EVENT" = "push" ]; then
             echo "Triggered by push event. Proceeding with build."
@@ -124,7 +150,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Log in to GitHub Container Registry
-        if: steps.check_updates.outputs.should_build == 'true'
+        if: steps.check_updates.outputs.should_build == 'true' && github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
@@ -227,6 +253,39 @@ jobs:
           echo "ALL CI VALIDATION CHECKS PASSED FOR ${TARGET}!"
           echo "============================================================"
 
+      - name: Run Container Smoke & Workflow Resolution Test (${{ matrix.flavor.target }})
+        if: steps.check_updates.outputs.should_build == 'true'
+        run: |
+          TARGET="${{ matrix.flavor.target }}"
+          LOCAL_TAG="temp-stage:${TARGET}"
+          echo "============================================================"
+          echo "Executing Container Smoke & Workflow Resolution for: ${TARGET}"
+          echo "============================================================"
+          if [ "$TARGET" = "blender-worker" ]; then
+            docker run --rm "$LOCAL_TAG" python3 -c "import bpy; print('✔ Blender bpy Python module initialized cleanly!')"
+          else
+            echo "--- Testing live container node discovery and CPU initialization ---"
+            docker run --rm "$LOCAL_TAG" /opt/environments/python/comfyui/bin/python -c "
+            import sys
+            sys.path.append('/opt/ComfyUI')
+            import torch
+            assert 'sm_120' in torch.__config__.show(), 'FAIL: sm_120 missing from torch build'
+            import nodes
+            assert len(nodes.NODE_CLASS_MAPPINGS) > 0, 'FAIL: Zero registered nodes'
+            print(f'✔ In-container node registration check passed ({len(nodes.NODE_CLASS_MAPPINGS)} nodes).')
+            "
+
+            echo "--- Testing universal workflow compatibility in container Python environment ---"
+            docker run --rm \
+              -v "$(pwd)/scripts:/tmp/scripts:ro" \
+              -v "$(pwd)/workflows:/opt/ComfyUI/workflows:ro" \
+              "$LOCAL_TAG" \
+              /opt/environments/python/comfyui/bin/python /tmp/scripts/test_all_workflows_functionality.py
+          fi
+          echo "============================================================"
+          echo "CONTAINER SMOKE & WORKFLOW RESOLUTION TEST PASSED FOR ${TARGET}!"
+          echo "============================================================"
+
       - name: Audit Container Filesystem for Exposed Sensitive Data & Keys
         if: steps.check_updates.outputs.should_build == 'true'
         run: |
@@ -305,7 +364,7 @@ jobs:
           retention-days: 30
 
       - name: Tag and Push Docker Image
-        if: steps.check_updates.outputs.should_build == 'true'
+        if: steps.check_updates.outputs.should_build == 'true' && github.event_name != 'pull_request'
         run: |
           LOCAL_TAG="temp-stage:${{ matrix.flavor.target }}"
           TARGET_BASE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
@@ -338,11 +397,14 @@ jobs:
       - name: Workflow Run Summary
         run: |
           {
-            echo "### Build & Publish Execution Summary for \`${{ matrix.flavor.target }}\`"
+            echo "### Build & Validation Execution Summary for \`${{ matrix.flavor.target }}\`"
             echo "* **Target:** \`${{ matrix.flavor.target }}\`"
             echo "* **Trigger Event:** \`${{ github.event_name }}\`"
             echo "* **Decision:** \`${{ steps.check_updates.outputs.reason }}\`"
-            if [ "${{ steps.check_updates.outputs.should_build }}" = "true" ]; then
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "* **Mode:** Pull Request Test Build (image NOT pushed to registry)."
+              echo "* **Validation Status:** Passed all Blackwell sm_120 integrity and container smoke checks."
+            elif [ "${{ steps.check_updates.outputs.should_build }}" = "true" ]; then
               echo "* **Published SemVer Tag:** \`${{ steps.prebuild.outputs.real_semver_tag }}\`"
               echo "* **Published Canonical Tag:** \`${{ steps.prebuild.outputs.canonical_tag }}\`"
               echo "* **Published Short Tag:** \`${{ steps.prebuild.outputs.short_tag }}\`"
