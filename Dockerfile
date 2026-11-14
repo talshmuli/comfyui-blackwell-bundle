@@ -110,7 +110,8 @@ RUN git -C /opt/ComfyUI fetch --depth=1 origin master && \
 # Copy verified default workflow ensuring immediate SD1.5 out-of-the-box UI functionality
 COPY default_workflow.json /opt/ComfyUI/default_workflow.json
 COPY scripts/preflight_model_alias.sh /opt/ai-dock/bin/preflight.d/20-model-alias.sh
-RUN chmod +x /opt/ai-dock/bin/preflight.d/20-model-alias.sh
+COPY scripts/preflight_user_permissions.sh /opt/ai-dock/bin/preflight.d/25-user-permissions.sh
+RUN chmod +x /opt/ai-dock/bin/preflight.d/20-model-alias.sh /opt/ai-dock/bin/preflight.d/25-user-permissions.sh
 
 WORKDIR /workspace
 
@@ -273,6 +274,8 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         jaxtyping \
         typeguard \
         fairseq \
+        hydra-core \
+        omegaconf \
         pyworld \
         torchcrepe \
         torchfcpe \
