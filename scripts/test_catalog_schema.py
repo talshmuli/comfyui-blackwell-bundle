@@ -26,7 +26,20 @@ ALL_PREINSTALLED_NODES = [
     "Comfyui-Song-Generation-Suite",
     "ComfyUI-BlenderAI-node",
     "ComfyUI_UltimateSDUpscale",
-    "ComfyUI-Impact-Pack"
+    "ComfyUI-Impact-Pack",
+    "ComfyUI-Custom-Scripts",
+    "ComfyUI-Inspire-Pack",
+    "ComfyUI-DepthAnythingV2",
+    "ComfyUI-Florence2",
+    "ComfyUI-segment-anything-2",
+    "ComfyMath",
+    "ComfyUI-WanAnimatePreprocess",
+    "ComfyUI-SCAIL-Pose",
+    "ComfyUI-Video-Depth-Anything",
+    "ComfyUI-Kolors-MZ",
+    "RES4LYF",
+    "eden_comfy_pipelines",
+    "was-node-suite-comfyui"
 ]
 
 def test_catalog():

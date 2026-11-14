@@ -140,6 +140,84 @@
       "url": "https://github.com/ltdrdata/ComfyUI-Impact-Pack.git",
       "category": "enhancement",
       "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Custom-Scripts",
+      "url": "https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git",
+      "category": "utility",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Inspire-Pack",
+      "url": "https://github.com/ltdrdata/ComfyUI-Inspire-Pack.git",
+      "category": "enhancement",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-DepthAnythingV2",
+      "url": "https://github.com/kijai/ComfyUI-DepthAnythingV2.git",
+      "category": "vision",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Florence2",
+      "url": "https://github.com/kijai/ComfyUI-Florence2.git",
+      "category": "vision",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-segment-anything-2",
+      "url": "https://github.com/kijai/ComfyUI-segment-anything-2.git",
+      "category": "vision",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyMath",
+      "url": "https://github.com/evanspearman/ComfyMath.git",
+      "category": "utility",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-WanAnimatePreprocess",
+      "url": "https://github.com/kijai/ComfyUI-WanAnimatePreprocess.git",
+      "category": "video",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-SCAIL-Pose",
+      "url": "https://github.com/kijai/ComfyUI-SCAIL-Pose.git",
+      "category": "video",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Video-Depth-Anything",
+      "url": "https://github.com/yuvraj108c/ComfyUI-Video-Depth-Anything.git",
+      "category": "vision",
+      "blackwell_verified": true
+    },
+    {
+      "name": "ComfyUI-Kolors-MZ",
+      "url": "https://github.com/MinusZoneAI/ComfyUI-Kolors-MZ.git",
+      "category": "utility",
+      "blackwell_verified": true
+    },
+    {
+      "name": "RES4LYF",
+      "url": "https://github.com/ClownsharkBatwing/RES4LYF.git",
+      "category": "sampling",
+      "blackwell_verified": true
+    },
+    {
+      "name": "eden_comfy_pipelines",
+      "url": "https://github.com/edenartlab/eden_comfy_pipelines.git",
+      "category": "3d",
+      "blackwell_verified": true
+    },
+    {
+      "name": "was-node-suite-comfyui",
+      "url": "https://github.com/WASasquatch/was-node-suite-comfyui.git",
+      "category": "utility",
+      "blackwell_verified": true
     }
   ]
 }
