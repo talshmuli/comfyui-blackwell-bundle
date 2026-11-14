@@ -390,7 +390,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_2_VAE_bf16.safetensors",
+        "wanvideo/Wan2_2_VAE_bf16.safetensors",
         "bf16"
       ],
       "color": "#322",
@@ -684,8 +684,8 @@
         "Node name for S&R": "OviMMAudioVAELoader"
       },
       "widgets_values": [
-        "mmaudio\\mmaudio_vae_16k_bf16.safetensors",
-        "mmaudio\\mmaudio_vocoder_bigvgan_best_netG_bf16.safetensors",
+        "mmaudio/mmaudio_vae_16k_bf16.safetensors",
+        "mmaudio/mmaudio_vocoder_bigvgan_best_netG_bf16.safetensors",
         "bf16"
       ],
       "color": "#323",
@@ -770,7 +770,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\Ovi\\model_960x960_10s.safetensors",
+        "WanVideo/Ovi/model_960x960_10s.safetensors",
         "bf16",
         "disabled",
         "offload_device",

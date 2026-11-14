@@ -31,6 +31,16 @@ class TestWorkflowSanitizer(unittest.TestCase):
         clean = sanitize_path_value(val)
         self.assertEqual(clean, "output/preview.mp4")
 
+    def test_sanitize_path_value_relative_model_backslash(self):
+        val = "wanvideo\\Wan2_2_VAE_bf16.safetensors"
+        clean = sanitize_path_value(val)
+        self.assertEqual(clean, "wanvideo/Wan2_2_VAE_bf16.safetensors")
+
+    def test_sanitize_path_value_relative_dot_backslash(self):
+        val = ".\\example_workflows\\_Example_Inputs_Files\\dragon_all_renders\\Mask"
+        clean = sanitize_path_value(val)
+        self.assertEqual(clean, "example_workflows/_Example_Inputs_Files/dragon_all_renders/Mask")
+
     def test_preserves_urls_and_normal_strings(self):
         url = "https://huggingface.co/Kijai/WanVideo_comfy/tree/main"
         self.assertEqual(sanitize_path_value(url), url)

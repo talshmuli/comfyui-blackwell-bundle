@@ -647,7 +647,7 @@
         "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
-        "sd15\\v1-5-pruned-emaonly.ckpt"
+        "sd15/v1-5-pruned-emaonly.ckpt"
       ]
     },
     {
@@ -1089,7 +1089,7 @@
         }
       },
       "widgets_values": [
-        "Unique3D\\Upscales\\rgb_highres"
+        "Unique3D/Upscales/rgb_highres"
       ],
       "color": "#223",
       "bgcolor": "#335"

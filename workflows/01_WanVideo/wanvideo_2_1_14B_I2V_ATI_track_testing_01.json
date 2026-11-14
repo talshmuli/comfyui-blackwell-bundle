@@ -377,7 +377,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_1_VAE_bf16.safetensors",
+        "wanvideo/Wan2_1_VAE_bf16.safetensors",
         "bf16"
       ],
       "color": "#322",
@@ -1046,7 +1046,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\Wan2_1-Wan-I2V-ATI-14B_fp8_e4m3fn.safetensors",
+        "WanVideo/Wan2_1-Wan-I2V-ATI-14B_fp8_e4m3fn.safetensors",
         "fp16_fast",
         "fp8_e4m3fn",
         "offload_device",

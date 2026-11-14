@@ -993,7 +993,7 @@
         "Node name for S&R": "WanVideoLoraSelectMulti"
       },
       "widgets_values": [
-        "WanVideo\\Wan22-Lightning\\Wan2.2-Lightning_T2V-A14B-4steps-lora_HIGH_fp16.safetensors",
+        "WanVideo/Wan22-Lightning/Wan2.2-Lightning_T2V-A14B-4steps-lora_HIGH_fp16.safetensors",
         1,
         "none",
         1,
@@ -1087,7 +1087,7 @@
         "Node name for S&R": "WanVideoVAELoader"
       },
       "widgets_values": [
-        "wanvideo\\Wan2_1_VAE_bf16.safetensors",
+        "wanvideo/Wan2_1_VAE_bf16.safetensors",
         "bf16"
       ],
       "color": "#322",
@@ -1801,7 +1801,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\2_2\\Fun\\Wan2_2-Fun-Control-A14B-HIGH_fp8_e4m3fn_scaled_KJ_fixed.safetensors",
+        "WanVideo/2_2/Fun/Wan2_2-Fun-Control-A14B-HIGH_fp8_e4m3fn_scaled_KJ_fixed.safetensors",
         "fp16_fast",
         "fp8_e4m3fn_scaled",
         "offload_device",
@@ -1896,7 +1896,7 @@
         "Node name for S&R": "WanVideoModelLoader"
       },
       "widgets_values": [
-        "WanVideo\\2_2\\Fun\\Wan2_2-Fun-Control-A14B-LOW_fp8_e4m3fn_scaled_KJ_fixed.safetensors",
+        "WanVideo/2_2/Fun/Wan2_2-Fun-Control-A14B-LOW_fp8_e4m3fn_scaled_KJ_fixed.safetensors",
         "fp16_fast",
         "fp8_e4m3fn_scaled",
         "offload_device",
@@ -1948,7 +1948,7 @@
         "Node name for S&R": "WanVideoLoraSelectMulti"
       },
       "widgets_values": [
-        "WanVideo\\Lightx2v\\lightx2v_T2V_14B_cfg_step_distill_v2_lora_rank64_bf16_.safetensors",
+        "WanVideo/Lightx2v/lightx2v_T2V_14B_cfg_step_distill_v2_lora_rank64_bf16_.safetensors",
         1.5,
         "none",
         1,

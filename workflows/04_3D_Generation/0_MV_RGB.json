@@ -156,7 +156,7 @@
       ],
       "properties": {},
       "widgets_values": [
-        "Unique3D\\RGB\\rgb"
+        "Unique3D/RGB/rgb"
       ]
     },
     {
@@ -224,7 +224,7 @@
       ],
       "properties": {},
       "widgets_values": [
-        "Unique3D\\Normal_Inputs\\refined_sr_rgb_0"
+        "Unique3D/Normal_Inputs/refined_sr_rgb_0"
       ]
     },
     {

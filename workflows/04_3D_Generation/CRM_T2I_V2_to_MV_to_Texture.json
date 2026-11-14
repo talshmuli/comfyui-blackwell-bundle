@@ -621,7 +621,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Test_CRM_MV_Color_Bake\\mesh_f1.obj"
+        "Test_CRM_MV_Color_Bake/mesh_f1.obj"
       ]
     },
     {

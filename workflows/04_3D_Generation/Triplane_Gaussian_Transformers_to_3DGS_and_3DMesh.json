@@ -324,7 +324,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "MeshTest\\3DMesh_Picacho.obj"
+        "MeshTest/3DMesh_Picacho.obj"
       ]
     },
     {
@@ -437,7 +437,7 @@
         "Node name for S&R": "[Comfy3D] Save 3DGS"
       },
       "widgets_values": [
-        "MeshTest\\3DGS_Picacho.ply"
+        "MeshTest/3DGS_Picacho.ply"
       ]
     },
     {

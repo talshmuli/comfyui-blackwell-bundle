@@ -493,7 +493,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Test_Hunyuan3D_V1\\mesh_t_1.obj"
+        "Test_Hunyuan3D_V1/mesh_t_1.obj"
       ]
     },
     {
@@ -572,7 +572,7 @@
         "Node name for S&R": "[Comfy3D] Save 3D Mesh"
       },
       "widgets_values": [
-        "Test_Hunyuan3D_V1\\mesh_1.obj"
+        "Test_Hunyuan3D_V1/mesh_1.obj"
       ]
     }
   ],
