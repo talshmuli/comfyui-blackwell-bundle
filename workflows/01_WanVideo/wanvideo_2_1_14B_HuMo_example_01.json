@@ -1080,31 +1080,14 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": {
-        "frame_rate": 25,
-        "loop_count": 0,
-        "filename_prefix": "WanVideo21_HuMo",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": true,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": false,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "WanVideo21_HuMo_00005-audio.mp4",
-            "subfolder": "",
-            "type": "temp",
-            "format": "video/h264-mp4",
-            "frame_rate": 25,
-            "workflow": "WanVideo21_HuMo_00005.png",
-            "fullpath": "temp/WanVideo21_HuMo_00005-audio.mp4"
-          }
-        }
-      }
+      "widgets_values": [
+        25.0,
+        0,
+        "WanVideo21_HuMo",
+        "video/h264-mp4",
+        false,
+        false
+      ]
     },
     {
       "id": 118,

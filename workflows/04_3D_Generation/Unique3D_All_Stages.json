@@ -1557,11 +1557,11 @@
       "properties": {
         "Node name for S&R": "VHS_MergeImages"
       },
-      "widgets_values": {
-        "merge_strategy": "match B",
-        "scale_method": "bilinear",
-        "crop": "disabled"
-      }
+      "widgets_values": [
+        "match B",
+        "bilinear",
+        "disabled"
+      ]
     },
     {
       "id": 279,
@@ -2106,11 +2106,11 @@
       "properties": {
         "Node name for S&R": "VHS_MergeImages"
       },
-      "widgets_values": {
-        "merge_strategy": "match B",
-        "scale_method": "bilinear",
-        "crop": "disabled"
-      }
+      "widgets_values": [
+        "match B",
+        "bilinear",
+        "disabled"
+      ]
     },
     {
       "id": 318,

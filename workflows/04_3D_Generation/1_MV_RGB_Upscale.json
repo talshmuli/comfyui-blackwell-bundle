@@ -306,25 +306,20 @@
       "properties": {
         "Node name for S&R": "VHS_LoadImagesPath"
       },
-      "widgets_values": {
-        "directory": "output/Unique3D/RGB",
-        "image_load_cap": 0,
-        "skip_first_images": 0,
-        "select_every_nth": 1,
-        "choose folder to upload": "image",
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "frame_load_cap": 0,
-            "skip_first_images": 0,
-            "filename": "output/Unique3D/RGB",
-            "type": "path",
-            "format": "folder",
-            "select_every_nth": 1
-          }
+      "widgets_values": [
+        "output/Unique3D/RGB",
+        0,
+        0,
+        1
+      ],
+      "inputs": [
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
         }
-      }
+      ]
     },
     {
       "id": 248,

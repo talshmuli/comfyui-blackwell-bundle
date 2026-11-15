@@ -2399,31 +2399,14 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": {
-        "frame_rate": 16,
-        "loop_count": 0,
-        "filename_prefix": "WanVideoWrapper_Fun22ControlCamera",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": true,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": false,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "WanVideoWrapper_Fun22ControlCamera_00018.mp4",
-            "subfolder": "",
-            "type": "temp",
-            "format": "video/h264-mp4",
-            "frame_rate": 16,
-            "workflow": "WanVideoWrapper_Fun22ControlCamera_00018.png",
-            "fullpath": "temp/WanVideoWrapper_Fun22ControlCamera_00018.mp4"
-          }
-        }
-      }
+      "widgets_values": [
+        16.0,
+        0,
+        "WanVideoWrapper_Fun22ControlCamera",
+        "video/h264-mp4",
+        false,
+        false
+      ]
     },
     {
       "id": 97,

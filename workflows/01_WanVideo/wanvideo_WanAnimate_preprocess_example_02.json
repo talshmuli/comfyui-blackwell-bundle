@@ -448,32 +448,16 @@
         "ver": "8e4d79471bf1952154768e8435a9300077b534fa",
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": {
-        "video": "raw.mp4",
-        "force_rate": 16,
-        "custom_width": 960,
-        "custom_height": 544,
-        "frame_load_cap": 0,
-        "skip_first_frames": 0,
-        "select_every_nth": 1,
-        "format": "AnimateDiff",
-        "choose video to upload": "image",
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "raw.mp4",
-            "type": "input",
-            "format": "video/mp4",
-            "force_rate": 16,
-            "custom_width": 960,
-            "custom_height": 544,
-            "frame_load_cap": 0,
-            "skip_first_frames": 0,
-            "select_every_nth": 1
-          }
-        }
-      }
+      "widgets_values": [
+        "raw.mp4",
+        16.0,
+        960,
+        544,
+        0,
+        0,
+        1,
+        "AnimateDiff"
+      ]
     },
     {
       "id": 158,
@@ -2489,31 +2473,14 @@
         "ver": "8e4d79471bf1952154768e8435a9300077b534fa",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": {
-        "frame_rate": 16,
-        "loop_count": 0,
-        "filename_prefix": "WanVideo2_1_T2V",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": true,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": false,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "WanVideo2_1_T2V_00004.mp4",
-            "subfolder": "",
-            "type": "temp",
-            "format": "video/h264-mp4",
-            "frame_rate": 16,
-            "workflow": "WanVideo2_1_T2V_00004.png",
-            "fullpath": "temp/WanVideo2_1_T2V_00004.mp4"
-          }
-        }
-      }
+      "widgets_values": [
+        16.0,
+        0,
+        "WanVideo2_1_T2V",
+        "video/h264-mp4",
+        false,
+        false
+      ]
     },
     {
       "id": 181,
@@ -2566,31 +2533,14 @@
         "ver": "8e4d79471bf1952154768e8435a9300077b534fa",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": {
-        "frame_rate": 16,
-        "loop_count": 0,
-        "filename_prefix": "WanVideo2_1_T2V",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": true,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": false,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "WanVideo2_1_T2V_00002.mp4",
-            "subfolder": "",
-            "type": "temp",
-            "format": "video/h264-mp4",
-            "frame_rate": 16,
-            "workflow": "WanVideo2_1_T2V_00002.png",
-            "fullpath": "temp/WanVideo2_1_T2V_00002.mp4"
-          }
-        }
-      }
+      "widgets_values": [
+        16.0,
+        0,
+        "WanVideo2_1_T2V",
+        "video/h264-mp4",
+        false,
+        false
+      ]
     },
     {
       "id": 174,
@@ -2643,31 +2593,14 @@
         "ver": "0edce8ef7ce173ac97a3ed3d6f4636029d1a4530",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": {
-        "frame_rate": 16,
-        "loop_count": 0,
-        "filename_prefix": "vitpose",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": true,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": false,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "vitpose_00004.mp4",
-            "subfolder": "",
-            "type": "temp",
-            "format": "video/h264-mp4",
-            "frame_rate": 16,
-            "workflow": "vitpose_00004.png",
-            "fullpath": "temp/vitpose_00004.mp4"
-          }
-        }
-      }
+      "widgets_values": [
+        16.0,
+        0,
+        "vitpose",
+        "video/h264-mp4",
+        false,
+        false
+      ]
     },
     {
       "id": 183,
@@ -3175,31 +3108,14 @@
         "ver": "8e4d79471bf1952154768e8435a9300077b534fa",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": {
-        "frame_rate": 16,
-        "loop_count": 0,
-        "filename_prefix": "Wanimate",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": true,
-        "trim_to_audio": true,
-        "pingpong": false,
-        "save_output": true,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "Wanimate_00002-audio.mp4",
-            "subfolder": "",
-            "type": "temp",
-            "format": "video/h264-mp4",
-            "frame_rate": 16,
-            "workflow": "Wanimate_00002.png",
-            "fullpath": "temp/Wanimate_00002-audio.mp4"
-          }
-        }
-      }
+      "widgets_values": [
+        16.0,
+        0,
+        "Wanimate",
+        "video/h264-mp4",
+        false,
+        true
+      ]
     },
     {
       "id": 164,

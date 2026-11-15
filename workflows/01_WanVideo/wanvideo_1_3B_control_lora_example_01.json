@@ -363,31 +363,14 @@
       "properties": {
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": {
-        "frame_rate": 16,
-        "loop_count": 0,
-        "filename_prefix": "WanVideoWrapper_I2V",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": true,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": true,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "WanVideoWrapper_I2V_00159.mp4",
-            "subfolder": "",
-            "type": "output",
-            "format": "video/h264-mp4",
-            "frame_rate": 16,
-            "workflow": "WanVideoWrapper_I2V_00159.png",
-            "fullpath": "output/WanVideoWrapper_I2V_00159.mp4"
-          }
-        }
-      }
+      "widgets_values": [
+        16.0,
+        0,
+        "WanVideoWrapper_I2V",
+        "video/h264-mp4",
+        false,
+        true
+      ]
     },
     {
       "id": 38,
@@ -481,32 +464,16 @@
       "properties": {
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": {
-        "video": "wolf_interpolated.mp4",
-        "force_rate": 0,
-        "custom_width": 0,
-        "custom_height": 0,
-        "frame_load_cap": 0,
-        "skip_first_frames": 0,
-        "select_every_nth": 1,
-        "format": "AnimateDiff",
-        "choose video to upload": "image",
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "wolf_interpolated.mp4",
-            "type": "input",
-            "format": "video/mp4",
-            "force_rate": 0,
-            "custom_width": 0,
-            "custom_height": 0,
-            "frame_load_cap": 0,
-            "skip_first_frames": 0,
-            "select_every_nth": 1
-          }
-        }
-      }
+      "widgets_values": [
+        "wolf_interpolated.mp4",
+        0.0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        "AnimateDiff"
+      ]
     },
     {
       "id": 95,

@@ -54,6 +54,93 @@ def sanitize_path_value(val: str) -> str:
 
     return val
 
+def normalize_vhs_node(n: dict) -> bool:
+    """Normalize legacy dict-based widgets_values in VHS nodes to standard LiteGraph arrays."""
+    ntype = n.get("type")
+    wv = n.get("widgets_values")
+    if not isinstance(wv, dict):
+        return False
+
+    if ntype == "VHS_LoadImagesPath":
+        n["widgets_values"] = [
+            wv.get("directory", "output/Unique3D/RGB"),
+            int(wv.get("image_load_cap", 0)),
+            int(wv.get("skip_first_images", 0)),
+            int(wv.get("select_every_nth", 1))
+        ]
+        if n.get("inputs") is None:
+            n["inputs"] = [{"name": "meta_batch", "type": "VHS_BatchManager", "link": None, "shape": 7}]
+        return True
+
+    elif ntype == "VHS_LoadImages":
+        n["widgets_values"] = [
+            wv.get("directory", "input"),
+            int(wv.get("image_load_cap", 0)),
+            int(wv.get("skip_first_images", 0)),
+            int(wv.get("select_every_nth", 1))
+        ]
+        if n.get("inputs") is None:
+            n["inputs"] = [{"name": "meta_batch", "type": "VHS_BatchManager", "link": None, "shape": 7}]
+        return True
+
+    elif ntype in ("VHS_LoadVideo", "VHS_LoadVideoPath"):
+        custom_w = int(wv.get("custom_width", 0))
+        custom_h = int(wv.get("custom_height", 0))
+        force_size = wv.get("force_size", "Disabled")
+        if force_size and "x" in str(force_size):
+            parts = str(force_size).split("x")
+            try:
+                if parts[0] != "?":
+                    custom_w = int(parts[0])
+                if parts[1] != "?":
+                    custom_h = int(parts[1])
+            except Exception:
+                pass
+        n["widgets_values"] = [
+            wv.get("video", "input_video.mp4"),
+            float(wv.get("force_rate", 0)),
+            custom_w,
+            custom_h,
+            int(wv.get("frame_load_cap", 0)),
+            int(wv.get("skip_first_frames", 0)),
+            int(wv.get("select_every_nth", 1)),
+            wv.get("format", "video/h264-mp4")
+        ]
+        return True
+
+    elif ntype == "VHS_VideoCombine":
+        save_out = wv.get("save_output", wv.get("save_image", True))
+        n["widgets_values"] = [
+            float(wv.get("frame_rate", 16)),
+            int(wv.get("loop_count", 0)),
+            str(wv.get("filename_prefix", "ComfyUI")),
+            str(wv.get("format", "video/h264-mp4")),
+            bool(wv.get("pingpong", False)),
+            bool(save_out)
+        ]
+        return True
+
+    elif ntype == "VHS_MergeImages":
+        n["widgets_values"] = [
+            str(wv.get("merge_strategy", "match_A")),
+            str(wv.get("scale_method", "lanczos")),
+            str(wv.get("crop", "center"))
+        ]
+        return True
+
+    elif ntype == "VHS_SplitImages":
+        n["widgets_values"] = [
+            int(wv.get("split_index", 0))
+        ]
+        return True
+
+    elif ntype == "VHS_VideoInfo":
+        n["widgets_values"] = []
+        return True
+
+    return False
+
+
 def sanitize_workflow_data(obj: Any) -> Tuple[Any, int]:
     """Recursively traverse a JSON object and sanitize string path values."""
     replacements = 0
@@ -88,15 +175,22 @@ def scan_workflow_file(file_path: str, fix: bool = False) -> int:
         return 0
 
     cleaned_data, count = sanitize_workflow_data(data)
-    if count > 0 and fix:
+    node_fixes = 0
+    if isinstance(cleaned_data, dict) and "nodes" in cleaned_data:
+        for node in cleaned_data.get("nodes", []):
+            if isinstance(node, dict) and normalize_vhs_node(node):
+                node_fixes += 1
+
+    total_changes = count + node_fixes
+    if total_changes > 0 and fix:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(cleaned_data, f, indent=2, ensure_ascii=False)
             f.write('\n')
-        print(f"Fixed {count} Windows paths in {file_path}")
-    elif count > 0 and not fix:
-        print(f"Found {count} Windows paths in {file_path}")
+        print(f"Fixed {total_changes} items ({count} paths, {node_fixes} node schemas) in {file_path}")
+    elif total_changes > 0 and not fix:
+        print(f"Found {total_changes} items ({count} paths, {node_fixes} node schemas) in {file_path}")
 
-    return count
+    return total_changes
 
 def main():
     parser = argparse.ArgumentParser(description="Sanitize workflow JSON files")
