@@ -231,6 +231,14 @@ def workflow_graph_to_prompt(wf: Dict[str, Any], obj_info: Dict[str, Any]) -> Tu
 
     nodes_by_id = {node["id"]: node for node in nodes if "id" in node}
 
+    set_nodes_by_var = {}
+    for node in nodes:
+        if node.get("type") == "SetNode":
+            wv = node.get("widgets_values")
+            var_name = wv[0] if wv and isinstance(wv, list) and len(wv) > 0 else node.get("title")
+            if var_name:
+                set_nodes_by_var[var_name] = node
+
     def resolve_link(link_id: int, visited: Optional[set] = None) -> Any:
         if visited is None:
             visited = set()
@@ -254,6 +262,18 @@ def workflow_graph_to_prompt(wf: Dict[str, Any], obj_info: Dict[str, Any]) -> Tu
                 wv = origin_node.get("widgets_values")
                 if wv:
                     return wv[0]
+            elif ntype == "GetNode":
+                wv = origin_node.get("widgets_values")
+                var_name = wv[0] if wv and isinstance(wv, list) and len(wv) > 0 else origin_node.get("title")
+                target_set = set_nodes_by_var.get(var_name)
+                if target_set:
+                    sinp = target_set.get("inputs", [])
+                    if sinp and sinp[0].get("link") is not None:
+                        return resolve_link(sinp[0]["link"], visited)
+            elif ntype == "SetNode":
+                sinp = origin_node.get("inputs", [])
+                if sinp and sinp[0].get("link") is not None:
+                    return resolve_link(sinp[0]["link"], visited)
         return [str(origin_id), origin_slot]
 
     prompt: Dict[str, Any] = {}
@@ -261,7 +281,14 @@ def workflow_graph_to_prompt(wf: Dict[str, Any], obj_info: Dict[str, Any]) -> Tu
     for node in nodes:
         nid = str(node.get("id"))
         ntype = node.get("type")
-        if not ntype or ntype in ("Note", "MarkdownNote", "PrimitiveNode", "Reroute"):
+        if not ntype or ntype in (
+            "Note",
+            "MarkdownNote",
+            "PrimitiveNode",
+            "Reroute",
+            "SetNode",
+            "GetNode",
+        ):
             continue
 
         if ntype not in obj_info:
