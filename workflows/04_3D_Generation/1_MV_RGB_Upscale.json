@@ -808,7 +808,7 @@
         "Node name for S&R": "ControlNetLoader"
       },
       "widgets_values": [
-        "control_unique3d_sd15_tile.safetensors"
+        "control_v11f1e_sd15_tile.pth"
       ]
     },
     {

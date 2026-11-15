@@ -50,7 +50,15 @@ if [ -d "$DIFF_DIR" ]; then
     done
 fi
 
-# 5. Default Media Fallback Assets
+# 5. ControlNet Aliasing (e.g. Unique3D tile -> standard v11f1e tile)
+CN_DIR="/opt/ComfyUI/models/controlnet"
+if [ -d "$CN_DIR" ]; then
+    if [ -f "$CN_DIR/control_v11f1e_sd15_tile.pth" ] && [ ! -e "$CN_DIR/control_unique3d_sd15_tile.pth" ]; then
+        ln -sf "control_v11f1e_sd15_tile.pth" "$CN_DIR/control_unique3d_sd15_tile.pth"
+    fi
+fi
+
+# 6. Default Media Fallback Assets
 if [ -d "$INPUT_DIR" ]; then
     # Starter 16-bit PCM WAV audio for LoadAudio nodes
     if [ ! -f "$INPUT_DIR/example.wav" ]; then
