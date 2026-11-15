@@ -2974,7 +2974,8 @@
         "MrForExample/Unique3D",
         "",
         false,
-        "image2mvimage"
+        "image2mvimage",
+        true
       ]
     },
     {
@@ -3010,7 +3011,8 @@
         "MrForExample/Unique3D",
         "",
         false,
-        "image2normal"
+        "image2normal",
+        true
       ]
     },
     {

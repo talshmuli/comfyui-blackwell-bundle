@@ -754,7 +754,8 @@
         "MrForExample/Unique3D",
         "",
         false,
-        "image2normal"
+        "image2normal",
+        true
       ]
     },
     {

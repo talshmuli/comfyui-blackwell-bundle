@@ -377,7 +377,19 @@ index e4b01fc..098494d 100644
  ])
  
  DIFFUSERS_SCHEDULER_DICT = OrderedDict([
-diff --git a/shared_utils/image_utils.py b/shared_utils/image_utils.py
+@@ -1553,7 +1666,10 @@ class Load_Diffusers_Pipeline:
+         ).to(DEVICE, WEIGHT_DTYPE)
+         
+         if hasattr(pipe, 'enable_xformers_memory_efficient_attention') and not force_disable_xformers:
+-            pipe.enable_xformers_memory_efficient_attention()
++            try:
++                pipe.enable_xformers_memory_efficient_attention()
++            except Exception:
++                pass
+         
+         return (pipe, )
+     
+diff --git a/shared_utils/image_utils.py b/shared_utils/image_utils.py b/shared_utils/image_utils.py
 index fcb23b3..d5756ec 100644
 --- a/shared_utils/image_utils.py
 +++ b/shared_utils/image_utils.py
@@ -433,3 +445,65 @@ index dfa98fd..579b58c 100644
 +        server.PromptServer.instance.routes.get("/viewfile")(view_file)
 +except Exception:
 +    pass
+
+diff --git a/Gen_3D_Modules/Unique3D/scripts/utils.py b/Gen_3D_Modules/Unique3D/scripts/utils.py
+index 4a18a56..c30978f 100644
+--- a/Gen_3D_Modules/Unique3D/scripts/utils.py
++++ b/Gen_3D_Modules/Unique3D/scripts/utils.py
+@@ -4,8 +4,12 @@ from PIL import Image
+ import pymeshlab
+ import pymeshlab as ml
+ from pymeshlab import PercentageValue
+-from pytorch3d.renderer import TexturesVertex
+-from pytorch3d.structures import Meshes
++try:
++    from pytorch3d.renderer import TexturesVertex
++    from pytorch3d.structures import Meshes
++except Exception:
++    TexturesVertex = None
++    Meshes = None
+ from rembg import new_session, remove
+ import torch
+ import torch.nn.functional as F
+@@ -246,7 +250,7 @@ def srgb_to_linear(c_srgb):
+     return c_linear.clip(0, 1.)
+ 
+ 
+-def save_py3dmesh_with_trimesh_fast(meshes: Meshes, save_glb_path, apply_sRGB_to_LinearRGB=True):
++def save_py3dmesh_with_trimesh_fast(meshes, save_glb_path, apply_sRGB_to_LinearRGB=True):
+     # convert from pytorch3d meshes to trimesh mesh
+     vertices = meshes.verts_packed().cpu().float().numpy()
+     triangles = meshes.faces_packed().cpu().long().numpy()
+
+diff --git a/Configs/Unique3D_configs/image2mvimage.yaml b/Configs/Unique3D_configs/image2mvimage.yaml
+index 15eec9b..c5ff5be 100644
+--- a/Configs/Unique3D_configs/image2mvimage.yaml
++++ b/Configs/Unique3D_configs/image2mvimage.yaml
+@@ -24,7 +24,7 @@ init_config:
+   # for self attention ref
+   init_self_attn_ref: False
+   self_attn_ref_position: "attn1"
+-  self_attn_ref_other_model_name: "lambdalabs/sd-image-variations-diffusers"
++  self_attn_ref_other_model_name: "lambda/sd-image-variations-diffusers"
+   self_attn_ref_pixel_wise_crosspond: False
+   self_attn_ref_effect_on: "all"
+   
+diff --git a/Configs/Unique3D_configs/image2normal.yaml b/Configs/Unique3D_configs/image2normal.yaml
+index 4cc353e..cc39055 100644
+--- a/Configs/Unique3D_configs/image2normal.yaml
++++ b/Configs/Unique3D_configs/image2normal.yaml
+@@ -1,4 +1,4 @@
+-pretrained_model_name_or_path: "lambdalabs/sd-image-variations-diffusers"
++pretrained_model_name_or_path: "lambda/sd-image-variations-diffusers"
+ 
+ init_config: 
+   # enable controls
+@@ -26,7 +26,7 @@ init_config:
+   # for self attention ref
+   init_self_attn_ref: True
+   self_attn_ref_position: "attn1"
+-  self_attn_ref_other_model_name: "lambdalabs/sd-image-variations-diffusers"
++  self_attn_ref_other_model_name: "lambda/sd-image-variations-diffusers"
+   self_attn_ref_pixel_wise_crosspond: True
+   self_attn_ref_effect_on: "all"
+   
