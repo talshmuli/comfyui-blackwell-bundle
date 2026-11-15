@@ -7,6 +7,7 @@ instance, and optionally executes workflows end-to-end to verify zero runtime er
 """
 
 import argparse
+import copy
 import json
 import os
 import sys
@@ -53,9 +54,152 @@ def is_widget_type(spec: Any) -> bool:
     itype = spec[0] if isinstance(spec, (list, tuple)) else spec
     if isinstance(itype, list):
         return True
-    if itype in ("INT", "FLOAT", "STRING", "BOOLEAN", "COMBO"):
+    if itype in (
+        "INT",
+        "FLOAT",
+        "STRING",
+        "BOOLEAN",
+        "COMBO",
+        "INT:seed",
+        "NUMBER",
+        "COMFY_DYNAMICCOMBO_V3",
+    ):
         return True
     return False
+
+
+def flatten_subgraphs(wf: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(wf, dict) or "definitions" not in wf or "subgraphs" not in wf.get("definitions", {}):
+        return wf
+
+    wf = copy.deepcopy(wf)
+    subgraph_map = {
+        sg["id"]: sg
+        for sg in wf["definitions"]["subgraphs"]
+        if isinstance(sg, dict) and "id" in sg
+    }
+
+    links_dict = {}
+    for l in wf.get("links", []):
+        if not l:
+            continue
+        if isinstance(l, (list, tuple)) and len(l) >= 6:
+            links_dict[l[0]] = {
+                "id": l[0],
+                "origin_id": l[1],
+                "origin_slot": l[2],
+                "target_id": l[3],
+                "target_slot": l[4],
+                "type": l[5],
+            }
+        elif isinstance(l, dict):
+            lid = l.get("id", l.get(0, l.get("0")))
+            if lid is not None:
+                links_dict[lid] = {
+                    "id": lid,
+                    "origin_id": l.get("origin_id", l.get(1, l.get("1"))),
+                    "origin_slot": l.get("origin_slot", l.get(2, l.get("2"))),
+                    "target_id": l.get("target_id", l.get(3, l.get("3"))),
+                    "target_slot": l.get("target_slot", l.get(4, l.get("4"))),
+                    "type": l.get("type", l.get(5, l.get("5"))),
+                }
+
+    next_link_id = max((k for k in links_dict.keys() if isinstance(k, int)), default=100000) + 1
+
+    changed = True
+    iterations = 0
+    while changed and iterations < 20:
+        iterations += 1
+        changed = False
+        nodes = wf.get("nodes", [])
+        new_nodes = []
+        for n in nodes:
+            ntype = n.get("type")
+            if ntype not in subgraph_map:
+                new_nodes.append(n)
+                continue
+
+            changed = True
+            inst_id = n.get("id")
+            sg = subgraph_map[ntype]
+            in_node_id = sg.get("inputNode", {}).get("id", -10)
+            out_node_id = sg.get("outputNode", {}).get("id", -20)
+
+            inst_inputs_by_name = {
+                inp.get("name"): inp for inp in n.get("inputs", []) if inp.get("name")
+            }
+            sg_inputs = sg.get("inputs", [])
+            sg_outputs = sg.get("outputs", [])
+
+            inst_inner_nodes = []
+            for inner in sg.get("nodes", []):
+                inner_copy = copy.deepcopy(inner)
+                inner_copy["id"] = f"{inst_id}:{inner['id']}"
+                inst_inner_nodes.append(inner_copy)
+
+            inner_nodes_by_id = {inner["id"]: inner for inner in inst_inner_nodes}
+
+            for sl in sg.get("links", []):
+                if not isinstance(sl, dict):
+                    continue
+                orig_id = sl.get("origin_id")
+                orig_slot = sl.get("origin_slot")
+                tgt_id = sl.get("target_id")
+                tgt_slot = sl.get("target_slot")
+                ltype = sl.get("type")
+
+                if orig_id == in_node_id:
+                    sg_inp = sg_inputs[orig_slot] if orig_slot < len(sg_inputs) else None
+                    if sg_inp:
+                        inst_inp = inst_inputs_by_name.get(sg_inp.get("name"))
+                        if inst_inp and inst_inp.get("link") is not None:
+                            ext_link = links_dict.get(inst_inp["link"])
+                            if ext_link:
+                                nl_id = next_link_id
+                                next_link_id += 1
+                                links_dict[nl_id] = {
+                                    "id": nl_id,
+                                    "origin_id": ext_link["origin_id"],
+                                    "origin_slot": ext_link["origin_slot"],
+                                    "target_id": f"{inst_id}:{tgt_id}",
+                                    "target_slot": tgt_slot,
+                                    "type": ltype,
+                                }
+                                tgt_node = inner_nodes_by_id.get(f"{inst_id}:{tgt_id}")
+                                if tgt_node and "inputs" in tgt_node:
+                                    for t_inp in tgt_node["inputs"]:
+                                        if t_inp.get("link") == sl.get("id"):
+                                            t_inp["link"] = nl_id
+                                            break
+                elif tgt_id == out_node_id:
+                    outp_slot_idx = tgt_slot
+                    for olid, ol in list(links_dict.items()):
+                        if str(ol["origin_id"]) == str(inst_id) and ol["origin_slot"] == outp_slot_idx:
+                            ol["origin_id"] = f"{inst_id}:{orig_id}"
+                            ol["origin_slot"] = orig_slot
+                else:
+                    nl_id = next_link_id
+                    next_link_id += 1
+                    links_dict[nl_id] = {
+                        "id": nl_id,
+                        "origin_id": f"{inst_id}:{orig_id}",
+                        "origin_slot": orig_slot,
+                        "target_id": f"{inst_id}:{tgt_id}",
+                        "target_slot": tgt_slot,
+                        "type": ltype,
+                    }
+                    tgt_node = inner_nodes_by_id.get(f"{inst_id}:{tgt_id}")
+                    if tgt_node and "inputs" in tgt_node:
+                        for t_inp in tgt_node["inputs"]:
+                            if t_inp.get("link") == sl.get("id"):
+                                t_inp["link"] = nl_id
+                                break
+
+            new_nodes.extend(inst_inner_nodes)
+        wf["nodes"] = new_nodes
+        wf["links"] = list(links_dict.values())
+
+    return wf
 
 
 def workflow_graph_to_prompt(wf: Dict[str, Any], obj_info: Dict[str, Any]) -> Tuple[Dict[str, Any], List[str]]:
@@ -67,6 +211,10 @@ def workflow_graph_to_prompt(wf: Dict[str, Any], obj_info: Dict[str, Any]) -> Tu
         is_prompt = any(isinstance(v, dict) and "class_type" in v for v in wf.values())
         if is_prompt:
             return wf, warnings
+
+    if isinstance(wf, dict) and "definitions" in wf and "subgraphs" in wf.get("definitions", {}):
+        wf = flatten_subgraphs(wf)
+        nodes = wf.get("nodes", [])
 
     links_by_id = {}
     for link in wf.get("links", []):

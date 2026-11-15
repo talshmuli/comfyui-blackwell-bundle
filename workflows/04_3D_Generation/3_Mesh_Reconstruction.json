@@ -260,7 +260,7 @@
       },
       "widgets_values": [
         "output/Unique3D/Normals",
-        0,
+        4,
         0,
         1
       ],
@@ -448,7 +448,7 @@
       },
       "widgets_values": [
         "output/Unique3D/Normal_Inputs",
-        0,
+        4,
         0,
         1
       ],
