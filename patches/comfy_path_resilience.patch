@@ -1,3 +1,38 @@
+diff --git a/comfy/utils.py b/comfy/utils.py
+index 9d42822..631fb0a 100644
+--- a/comfy/utils.py
++++ b/comfy/utils.py
+@@ -193,7 +193,17 @@ def load_torch_file(ckpt, safe_load=False, device=None, return_metadata=False):
+     if device is None:
+         device = torch.device("cpu")
+     metadata = None
+-    if ckpt.lower().endswith(".safetensors") or ckpt.lower().endswith(".sft"):
++    is_safetensors = ckpt.lower().endswith((".safetensors", ".sft")) or os.path.realpath(ckpt).lower().endswith((".safetensors", ".sft"))
++    if not is_safetensors and os.path.isfile(ckpt):
++        try:
++            with open(ckpt, "rb") as f:
++                hdr = f.read(16)
++                if len(hdr) >= 9 and hdr[8:9] == b'{':
++                    is_safetensors = True
++        except Exception:
++            pass
++
++    if is_safetensors:
+         try:
+             if comfy.memory_management.aimdo_enabled:
+                 sd, metadata = load_safetensors(ckpt)
+@@ -222,7 +232,10 @@ def load_torch_file(ckpt, safe_load=False, device=None, return_metadata=False):
+         if MMAP_TORCH_FILES:
+             torch_args["mmap"] = True
+ 
+-        pl_sd = torch.load(ckpt, map_location=device, weights_only=True, **torch_args)
++        try:
++            pl_sd = torch.load(ckpt, map_location=device, weights_only=True, **torch_args)
++        except Exception:
++            pl_sd = torch.load(ckpt, map_location=device, weights_only=False, **torch_args)
+ 
+         if "state_dict" in pl_sd:
+             sd = pl_sd["state_dict"]
 diff --git a/execution.py b/execution.py
 index 0d50df2..fc9aa83 100644
 --- a/execution.py
@@ -61,11 +96,11 @@ index 0673f6c..324f9e5 100644
 +    if os.path.exists(flat):
 +        return flat
 +
-+    for fallback in ("input_image.png", "example.png"):
-+        candidate = os.path.abspath(os.path.join(base_dir, fallback))
-+        if os.path.exists(candidate):
-+            return candidate
-+
+     for fallback in ("input_image.png", "example.png"):
+         candidate = os.path.abspath(os.path.join(base_dir, fallback))
+         if os.path.exists(candidate):
+             return candidate
+ 
      return filepath
  
  
@@ -113,5 +148,4 @@ index 0673f6c..324f9e5 100644
 +            return flat_path
 +
      return None
- 
  

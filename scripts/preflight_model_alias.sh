@@ -16,16 +16,24 @@ if [ "$TARGET" != "none" ] && [ -d "$CKPT_DIR" ]; then
     fi
 fi
 
-# 2. Checkpoint Subfolder Mirroring (e.g. sd15/ -> root models)
+# 2. Checkpoint Subfolder Mirroring (sd15/ and sdxl/ -> root models)
 if [ -d "$CKPT_DIR" ]; then
-    mkdir -p "$CKPT_DIR/sd15"
+    mkdir -p "$CKPT_DIR/sd15" "$CKPT_DIR/sdxl"
+    # Clean up any legacy .ckpt symlinks that pointed to .safetensors files
+    for ck in "$CKPT_DIR/sd15"/*.ckpt "$CKPT_DIR/sdxl"/*.ckpt "$CKPT_DIR"/*.ckpt; do
+        if [ -L "$ck" ]; then
+            target=$(readlink "$ck")
+            if [[ "$target" == *.safetensors* ]]; then
+                rm -f "$ck"
+            fi
+        fi
+    done
+
     for f in "$CKPT_DIR"/*.safetensors "$CKPT_DIR"/*.ckpt; do
         [ -f "$f" ] || continue
         base=$(basename "$f")
         [ -e "$CKPT_DIR/sd15/$base" ] || ln -sf "../$base" "$CKPT_DIR/sd15/$base"
-        # Also alias .ckpt to .safetensors if requested by legacy workflows
-        stem="${base%.*}"
-        [ -e "$CKPT_DIR/sd15/${stem}.ckpt" ] || ln -sf "../$base" "$CKPT_DIR/sd15/${stem}.ckpt"
+        [ -e "$CKPT_DIR/sdxl/$base" ] || ln -sf "../$base" "$CKPT_DIR/sdxl/$base"
     done
 fi
 
@@ -86,5 +94,13 @@ with wave.open('$INPUT_DIR/example.wav', 'w') as f:
     if [ -f "$INPUT_DIR/example.wav" ] && [ ! -f "$INPUT_DIR/yue2_pairs/source/sample.wav" ]; then
         cp "$INPUT_DIR/example.wav" "$INPUT_DIR/yue2_pairs/source/sample.wav"
         cp "$INPUT_DIR/example.wav" "$INPUT_DIR/yue2_pairs/target/sample.wav"
+    fi
+fi
+
+# 7. CLIP Vision Aliasing
+CV_DIR="/opt/ComfyUI/models/clip_vision"
+if [ -d "$CV_DIR" ]; then
+    if [ -f "$CV_DIR/OpenCLIP-ViT-H-14.safetensors" ] && [ ! -e "$CV_DIR/IPAdapter_image_encoder_sd15.safetensors" ]; then
+        ln -sf "OpenCLIP-ViT-H-14.safetensors" "$CV_DIR/IPAdapter_image_encoder_sd15.safetensors"
     fi
 fi

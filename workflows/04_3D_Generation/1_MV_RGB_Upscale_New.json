@@ -1015,7 +1015,7 @@
         "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
-        "sd15/v1-5-pruned-emaonly.ckpt"
+        "sd15/v1-5-pruned-emaonly.safetensors"
       ]
     },
     {
