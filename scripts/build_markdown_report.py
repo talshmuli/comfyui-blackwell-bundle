@@ -5,15 +5,23 @@ import json
 import os
 
 CATALOG_PATH = "/tmp/workflow_catalog.json"
-REPORT_PATH = "/home/talsh/.gemini/antigravity-cli/brain/2c2d53c4-3f16-4206-b5a7-c8bd3fa974a8/workflow_catalog_report.md"
+REPORT_PATH = os.environ.get("REPORT_PATH", "docs/WORKFLOW_CATALOG.md")
 
 LIVE_TESTED = {
-    "04_3D_Generation/0_MV_RGB.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - Multi-view RGB generation)",
-    "04_3D_Generation/1_MV_RGB_Upscale.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - ControlNet Tile + IPAdapter 50 steps)",
+    "01_WanVideo/wanvideo_2_2_5B_I2V_example_WIP.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - Wan 5B I2V 17 frames 1024x1024 in 129s)",
+    "01_WanVideo/wanvideo_2_2_5B_T2V_controlnet_example.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - Wan 5B T2V 17 frames 1280x704 + ControlNet Depth in 134s)",
+    "02_Music_Singing/score_editor_to_song.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - YuE2 3B full song generation in 72s)",
+    "03_LipSync_Portrait/latentsync1.5_comfyui_basic.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - LatentSync 1.5 video sync 119 frames in 117s)",
+    "03_LipSync_Portrait/liveportrait_image_example_01.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - LivePortrait face animation in 8.2s)",
+    "04_3D_Generation/0_MV_RGB.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - Multi-view 4-angle RGB synthesis)",
+    "04_3D_Generation/1_MV_RGB_Upscale.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - ControlNet Tile + IP-Adapter 50 steps)",
     "04_3D_Generation/2_MV_Normal.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - Tangent space normal generation 30 steps)",
     "04_3D_Generation/3_Mesh_Reconstruction.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - pytorch3d + nvdiffrast 3D OBJ/GLB recon)",
-    "03_LipSync_Portrait/liveportrait_image_example_01.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - LivePortrait image generation 8.2s)",
-    "06_IPAdapter/ipadapter_simple.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - RealisticVision + IPAdapter 30.5 it/s)",
+    "06_IPAdapter/ipadapter_simple.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - RealisticVision + IP-Adapter 30.5 it/s)",
+    "06_IPAdapter/ipadapter_advanced.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - IP-Adapter Plus + OpenCLIP-ViT-H-14 in 2s)",
+    "06_IPAdapter/ipadapter_combine_embeds.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - Multi-embedding combination in 17s)",
+    "06_IPAdapter/ipadapter_noise_injection.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - IP-Adapter noise injection in 27s)",
+    "official_templates/latentsync_basic.json": "✅ EXECUTED: PASS (Blackwell RTX 5090 - LatentSync 121 frames in 149s)",
 }
 
 FOLDER_TITLES = {

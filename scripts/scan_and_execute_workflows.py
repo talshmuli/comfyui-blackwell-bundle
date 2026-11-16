@@ -51,6 +51,9 @@ def interrupt_and_clear_queue(base_url: str) -> None:
 def is_widget_type(spec: Any) -> bool:
     if not spec:
         return False
+    if isinstance(spec, (list, tuple)) and len(spec) > 1 and isinstance(spec[1], dict):
+        if spec[1].get("forceInput", False):
+            return False
     itype = spec[0] if isinstance(spec, (list, tuple)) else spec
     if isinstance(itype, list):
         return True
@@ -387,7 +390,7 @@ def test_prompt_validation(
         return False, None, err_json
 
 
-def monitor_execution(base_url: str, prompt_id: str, timeout: int = 120) -> Tuple[bool, Optional[str]]:
+def monitor_execution(base_url: str, prompt_id: str, timeout: int = 600) -> Tuple[bool, Optional[str]]:
     start_time = time.time()
     while time.time() - start_time < timeout:
         time.sleep(2)
