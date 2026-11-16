@@ -230,16 +230,31 @@
       "properties": {
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": [
-        "d6.mp4",
-        0.0,
-        512,
-        512,
-        128,
-        0,
-        1,
-        "video/h264-mp4"
-      ]
+      "widgets_values": {
+        "video": "d6.mp4",
+        "force_rate": 0,
+        "force_size": "Disabled",
+        "custom_width": 512,
+        "custom_height": 512,
+        "frame_load_cap": 128,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "frame_load_cap": 128,
+            "skip_first_frames": 0,
+            "force_rate": 0,
+            "filename": "d6.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 165,
@@ -837,14 +852,29 @@
       "properties": {
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "LivePortrait",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "LivePortrait",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "LivePortrait_00002.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 196,

@@ -410,14 +410,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "WanVideoWrapper_I2V",
-        "video/h264-mp4",
-        false,
-        true
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "WanVideoWrapper_I2V",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideoWrapper_I2V_00709.mp4",
+            "subfolder": "",
+            "type": "output",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "workflow": "WanVideoWrapper_I2V_00709.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 28,
@@ -1321,7 +1338,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       52,

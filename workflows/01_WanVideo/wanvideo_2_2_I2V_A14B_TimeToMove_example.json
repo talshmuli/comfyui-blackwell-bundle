@@ -1020,16 +1020,33 @@
         "ver": "8550981384301e9bc5bfea83e5c2c75258102593",
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": [
-        "mask.mp4",
-        0.0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        "AnimateDiff"
-      ]
+      "widgets_values": {
+        "video": "mask.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "AnimateDiff",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "mask.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 101,
@@ -1371,16 +1388,33 @@
         "ver": "8550981384301e9bc5bfea83e5c2c75258102593",
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": [
-        "motion_signal.mp4",
-        0.0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        "AnimateDiff"
-      ]
+      "widgets_values": {
+        "video": "motion_signal.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "AnimateDiff",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "motion_signal.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 38,
@@ -1925,14 +1959,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "WanVideo2_2_I2V",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "WanVideo2_2_I2V",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideo2_2_I2V_00027.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "workflow": "WanVideo2_2_I2V_00027.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 27,
@@ -2355,14 +2406,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "WanVideo2_2_I2V",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "WanVideo2_2_I2V",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideo2_2_I2V_00028.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "workflow": "WanVideo2_2_I2V_00028.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 108,
@@ -2834,7 +2902,7 @@
       0,
       107,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       191,

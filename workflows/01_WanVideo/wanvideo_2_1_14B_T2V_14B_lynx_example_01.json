@@ -1116,14 +1116,31 @@
         "ver": "0edce8ef7ce173ac97a3ed3d6f4636029d1a4530",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        24.0,
-        0,
-        "Wanlynx",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "Wanlynx",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "Wanlynx_00041.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "Wanlynx_00041.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 26,
@@ -1552,7 +1569,7 @@
       0,
       61,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       121,

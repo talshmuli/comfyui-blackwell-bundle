@@ -401,14 +401,31 @@
         "ver": "330bce6c3c0d47ebdedcc0348d9ab355707b7523",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "NLFtest",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "NLFtest",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "NLFtest_00010.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "workflow": "NLFtest_00010.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 169,
@@ -832,9 +849,9 @@
         "ver": "8e4d79471bf1952154768e8435a9300077b534fa",
         "Node name for S&R": "VHS_SplitImages"
       },
-      "widgets_values": [
-        -1
-      ]
+      "widgets_values": {
+        "split_index": -1
+      }
     },
     {
       "id": 157,
@@ -1232,16 +1249,33 @@
         "ver": "330bce6c3c0d47ebdedcc0348d9ab355707b7523",
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": [
-        "MTV_crafter_example_pose_00001.mp4",
-        0.0,
-        0,
-        0,
-        49,
-        0,
-        1,
-        "AnimateDiff"
-      ]
+      "widgets_values": {
+        "video": "MTV_crafter_example_pose_00001.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 49,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "AnimateDiff",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "MTV_crafter_example_pose_00001.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 49,
+            "skip_first_frames": 0,
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 144,
@@ -1384,14 +1418,31 @@
         "ver": "330bce6c3c0d47ebdedcc0348d9ab355707b7523",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "WanVideo_MTV_Crafter",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "WanVideo_MTV_Crafter",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideo_MTV_Crafter_00012.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "workflow": "WanVideo_MTV_Crafter_00012.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 154,

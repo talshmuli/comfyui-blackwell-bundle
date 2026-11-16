@@ -1339,16 +1339,33 @@
         "ver": "8e4d79471bf1952154768e8435a9300077b534fa",
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": [
-        "10.mp4",
-        0.0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        "Wan"
-      ]
+      "widgets_values": {
+        "video": "10.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "Wan",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "10.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": null,
+            "custom_height": 480,
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 272,
@@ -1743,14 +1760,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        25.0,
-        0,
-        "WanVideo2_1_InfiniteTalk",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 25,
+        "loop_count": 0,
+        "filename_prefix": "WanVideo2_1_InfiniteTalk",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideo2_1_InfiniteTalk_00007-audio.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 25,
+            "workflow": "WanVideo2_1_InfiniteTalk_00007.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 299,
@@ -2566,7 +2600,7 @@
       0,
       240,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       437,
@@ -2606,7 +2640,7 @@
       0,
       247,
       0,
-      "*"
+      "INT"
     ],
     [
       442,
@@ -2614,7 +2648,7 @@
       0,
       248,
       0,
-      "*"
+      "INT"
     ],
     [
       443,
@@ -2646,7 +2680,7 @@
       0,
       260,
       0,
-      "*"
+      "WANVIDEOMODEL"
     ],
     [
       464,
@@ -2662,7 +2696,7 @@
       0,
       264,
       0,
-      "*"
+      "CLIP_VISION"
     ],
     [
       467,
@@ -2678,7 +2712,7 @@
       0,
       271,
       0,
-      "*"
+      "INT"
     ],
     [
       510,
@@ -2718,7 +2752,7 @@
       2,
       294,
       0,
-      "*"
+      "INT"
     ],
     [
       520,

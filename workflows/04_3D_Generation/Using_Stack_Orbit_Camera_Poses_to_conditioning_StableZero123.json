@@ -352,14 +352,28 @@
       "properties": {
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        8.0,
-        0,
-        "StableZero123/Test/Cammy",
-        "video/h265-mp4",
-        false,
-        true
-      ]
+      "widgets_values": {
+        "frame_rate": 8,
+        "loop_count": 0,
+        "filename_prefix": "StableZero123/Test/Cammy",
+        "format": "video/h265-mp4",
+        "pix_fmt": "yuv420p10le",
+        "crf": 22,
+        "save_metadata": true,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "Cammy_00492.mp4",
+            "subfolder": "StableZero123/Test",
+            "type": "output",
+            "format": "video/h265-mp4",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 25,

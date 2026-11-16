@@ -2582,14 +2582,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        24.0,
-        0,
-        "SkyreelsDiffusionForcing_02",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "SkyreelsDiffusionForcing_02",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "SkyreelsDiffusionForcing_02_00010.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "SkyreelsDiffusionForcing_02_00010.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 157,
@@ -2642,14 +2659,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        24.0,
-        0,
-        "SkyreelsDiffusionForcing_02",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "SkyreelsDiffusionForcing_02",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "SkyreelsDiffusionForcing_02_00011.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "SkyreelsDiffusionForcing_02_00011.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 172,
@@ -3016,14 +3050,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        24.0,
-        0,
-        "SkyreelsDiffusionForcing",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "SkyreelsDiffusionForcing",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "SkyreelsDiffusionForcing_00026.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "SkyreelsDiffusionForcing_00026.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 28,
@@ -3127,14 +3178,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        24.0,
-        0,
-        "SkyreelsDiffusionForcing_01",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "SkyreelsDiffusionForcing_01",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "SkyreelsDiffusionForcing_01_00011.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "SkyreelsDiffusionForcing_01_00011.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 35,
@@ -3764,16 +3832,33 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": [
-        "fyemediapipefacetest_00002.mp4",
-        0.0,
-        0,
-        0,
-        17,
-        0,
-        1,
-        "AnimateDiff"
-      ]
+      "widgets_values": {
+        "video": "fyemediapipefacetest_00002.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 17,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "AnimateDiff",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "fyemediapipefacetest_00002.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 17,
+            "skip_first_frames": 0,
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 66,
@@ -4671,7 +4756,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       54,
@@ -4759,7 +4844,7 @@
       0,
       107,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       187,
@@ -4783,7 +4868,7 @@
       0,
       110,
       0,
-      "*"
+      "WANVIDEOMODEL"
     ],
     [
       190,
@@ -4799,7 +4884,7 @@
       0,
       112,
       0,
-      "*"
+      "WANVIDEOTEXTEMBEDS"
     ],
     [
       192,
@@ -4815,7 +4900,7 @@
       0,
       114,
       0,
-      "*"
+      "CACHEARGS"
     ],
     [
       197,
@@ -4823,7 +4908,7 @@
       0,
       116,
       0,
-      "*"
+      "EXPERIMENTALARGS"
     ],
     [
       198,
@@ -4855,7 +4940,7 @@
       1,
       120,
       0,
-      "*"
+      "INT"
     ],
     [
       202,
@@ -4863,7 +4948,7 @@
       2,
       121,
       0,
-      "*"
+      "INT"
     ],
     [
       203,
@@ -4911,7 +4996,7 @@
       0,
       128,
       0,
-      "*"
+      "INT"
     ],
     [
       211,
@@ -4935,7 +5020,7 @@
       0,
       134,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       219,
@@ -4959,7 +5044,7 @@
       0,
       136,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       226,
@@ -5023,7 +5108,7 @@
       0,
       143,
       0,
-      "*"
+      "SLGARGS"
     ],
     [
       239,
@@ -5103,7 +5188,7 @@
       0,
       161,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       256,
@@ -5175,7 +5260,7 @@
       0,
       169,
       0,
-      "*"
+      "CLIP"
     ],
     [
       269,

@@ -1654,14 +1654,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        23.0,
-        0,
-        "WanVideoWrapper_I2V_FantasyTalking",
-        "video/h264-mp4",
-        false,
-        true
-      ],
+      "widgets_values": {
+        "frame_rate": 23,
+        "loop_count": 0,
+        "filename_prefix": "WanVideoWrapper_I2V_FantasyTalking",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideoWrapper_I2V_FantasyTalking_00002-audio.mp4",
+            "subfolder": "",
+            "type": "output",
+            "format": "video/h264-mp4",
+            "frame_rate": 23,
+            "workflow": "WanVideoWrapper_I2V_FantasyTalking_00002.png",
+            "fullpath": ""
+          }
+        }
+      },
       "color": "#2a363b",
       "bgcolor": "#3f5159"
     },
@@ -1885,7 +1902,7 @@
       0,
       69,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       90,
@@ -2021,7 +2038,7 @@
       0,
       81,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       118,
@@ -2045,7 +2062,7 @@
       0,
       84,
       0,
-      "*"
+      "AUDIO"
     ],
     [
       121,

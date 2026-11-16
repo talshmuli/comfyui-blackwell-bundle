@@ -89,10 +89,11 @@ def test_workflow(file_path: str, live_classes: dict) -> Tuple[bool, List[str], 
 
         stats["node_types"].add(ntype)
 
-        # Check for legacy dict widgets_values
+        # Check for legacy dict widgets_values (supported natively by VHS nodes via useKVState)
         if isinstance(node.get("widgets_values"), dict):
             stats["dict_widgets"] += 1
-            errors.append(f"Node #{node.get('id')} ({ntype}) has un-normalized dictionary widgets_values")
+            if not ntype.startswith("VHS_"):
+                errors.append(f"Node #{node.get('id')} ({ntype}) has un-normalized dictionary widgets_values")
 
         # Check against registered classes
         if live_classes:

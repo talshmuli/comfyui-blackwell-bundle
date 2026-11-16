@@ -3713,14 +3713,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "WanVideoWrapper_Skyreels-A2",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "WanVideoWrapper_Skyreels-A2",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideoWrapper_Skyreels-A2_00012.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "workflow": "WanVideoWrapper_Skyreels-A2_00012.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 27,
@@ -4003,7 +4020,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       52,
@@ -4043,7 +4060,7 @@
       0,
       27,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       66,
@@ -4387,7 +4404,7 @@
       0,
       149,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       273,
@@ -4427,7 +4444,7 @@
       0,
       156,
       0,
-      "*"
+      "INT"
     ],
     [
       279,
@@ -4435,7 +4452,7 @@
       0,
       157,
       0,
-      "*"
+      "INT"
     ],
     [
       280,
@@ -4579,7 +4596,7 @@
       3,
       165,
       0,
-      "*"
+      "INT"
     ],
     [
       299,

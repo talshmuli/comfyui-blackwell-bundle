@@ -55,90 +55,41 @@ def sanitize_path_value(val: str) -> str:
     return val
 
 def normalize_vhs_node(n: dict) -> bool:
-    """Normalize legacy dict-based widgets_values in VHS nodes to standard LiteGraph arrays."""
-    ntype = n.get("type")
-    wv = n.get("widgets_values")
-    if not isinstance(wv, dict):
+    """Ensure VHS nodes have valid inputs array and cleanly sanitized widgets_values."""
+    ntype = n.get("type", "")
+    if not ntype.startswith("VHS_"):
         return False
 
-    if ntype == "VHS_LoadImagesPath":
-        n["widgets_values"] = [
-            wv.get("directory", "output/Unique3D/RGB"),
-            int(wv.get("image_load_cap", 0)),
-            int(wv.get("skip_first_images", 0)),
-            int(wv.get("select_every_nth", 1))
-        ]
-        if n.get("inputs") is None:
-            n["inputs"] = [{"name": "meta_batch", "type": "VHS_BatchManager", "link": None, "shape": 7}]
-        return True
+    modified = False
 
-    elif ntype == "VHS_LoadImages":
-        n["widgets_values"] = [
-            wv.get("directory", "input"),
-            int(wv.get("image_load_cap", 0)),
-            int(wv.get("skip_first_images", 0)),
-            int(wv.get("select_every_nth", 1))
-        ]
-        if n.get("inputs") is None:
-            n["inputs"] = [{"name": "meta_batch", "type": "VHS_BatchManager", "link": None, "shape": 7}]
-        return True
+    # Ensure inputs array exists for batch loaders
+    if ntype in ("VHS_LoadImagesPath", "VHS_LoadImages") and n.get("inputs") is None:
+        n["inputs"] = [{"name": "meta_batch", "type": "VHS_BatchManager", "link": None, "shape": 7}]
+        modified = True
 
-    elif ntype in ("VHS_LoadVideo", "VHS_LoadVideoPath"):
-        custom_w = int(wv.get("custom_width", 0))
-        custom_h = int(wv.get("custom_height", 0))
-        force_size = wv.get("force_size", "Disabled")
-        if force_size and "x" in str(force_size):
-            parts = str(force_size).split("x")
-            try:
-                if parts[0] != "?":
-                    custom_w = int(parts[0])
-                if parts[1] != "?":
-                    custom_h = int(parts[1])
-            except Exception:
-                pass
-        n["widgets_values"] = [
-            wv.get("video", "input_video.mp4"),
-            float(wv.get("force_rate", 0)),
-            custom_w,
-            custom_h,
-            int(wv.get("frame_load_cap", 0)),
-            int(wv.get("skip_first_frames", 0)),
-            int(wv.get("select_every_nth", 1)),
-            wv.get("format", "video/h264-mp4")
-        ]
-        return True
+    wv = n.get("widgets_values")
+    # VideoHelperSuite nodes use native KV dictionaries via useKVState (VHS.core.js)
+    # Sanitize path values and clean ephemeral UI preview cache while preserving all functional settings
+    if isinstance(wv, dict):
+        for k, v in list(wv.items()):
+            if isinstance(v, str):
+                s_v = sanitize_path_value(v)
+                if s_v != v:
+                    wv[k] = s_v
+                    modified = True
+        if "videopreview" in wv and isinstance(wv["videopreview"], dict):
+            params = wv["videopreview"].get("params")
+            if isinstance(params, dict):
+                if params.get("fullpath"):
+                    params["fullpath"] = ""
+                    modified = True
+                if "filename" in params and isinstance(params["filename"], str):
+                    s_fn = sanitize_path_value(params["filename"])
+                    if s_fn != params["filename"]:
+                        params["filename"] = s_fn
+                        modified = True
 
-    elif ntype == "VHS_VideoCombine":
-        save_out = wv.get("save_output", wv.get("save_image", True))
-        n["widgets_values"] = [
-            float(wv.get("frame_rate", 16)),
-            int(wv.get("loop_count", 0)),
-            str(wv.get("filename_prefix", "ComfyUI")),
-            str(wv.get("format", "video/h264-mp4")),
-            bool(wv.get("pingpong", False)),
-            bool(save_out)
-        ]
-        return True
-
-    elif ntype == "VHS_MergeImages":
-        n["widgets_values"] = [
-            str(wv.get("merge_strategy", "match_A")),
-            str(wv.get("scale_method", "lanczos")),
-            str(wv.get("crop", "center"))
-        ]
-        return True
-
-    elif ntype == "VHS_SplitImages":
-        n["widgets_values"] = [
-            int(wv.get("split_index", 0))
-        ]
-        return True
-
-    elif ntype == "VHS_VideoInfo":
-        n["widgets_values"] = []
-        return True
-
-    return False
+    return modified
 
 
 def sanitize_workflow_data(obj: Any) -> Tuple[Any, int]:

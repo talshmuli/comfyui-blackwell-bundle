@@ -258,12 +258,26 @@
       "properties": {
         "Node name for S&R": "VHS_LoadImagesPath"
       },
-      "widgets_values": [
-        "output/Unique3D/Normals",
-        4,
-        0,
-        1
-      ],
+      "widgets_values": {
+        "directory": "output/Unique3D/Normals",
+        "image_load_cap": 0,
+        "skip_first_images": 0,
+        "select_every_nth": 1,
+        "choose folder to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "frame_load_cap": 0,
+            "skip_first_images": 0,
+            "filename": "output/Unique3D/Normals",
+            "type": "path",
+            "format": "folder",
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      },
       "inputs": [
         {
           "name": "meta_batch",
@@ -320,11 +334,11 @@
       "properties": {
         "Node name for S&R": "VHS_MergeImages"
       },
-      "widgets_values": [
-        "match B",
-        "bilinear",
-        "disabled"
-      ]
+      "widgets_values": {
+        "merge_strategy": "match B",
+        "scale_method": "bilinear",
+        "crop": "disabled"
+      }
     },
     {
       "id": 23,
@@ -446,12 +460,26 @@
       "properties": {
         "Node name for S&R": "VHS_LoadImagesPath"
       },
-      "widgets_values": [
-        "output/Unique3D/Normal_Inputs",
-        4,
-        0,
-        1
-      ],
+      "widgets_values": {
+        "directory": "output/Unique3D/Normal_Inputs",
+        "image_load_cap": 0,
+        "skip_first_images": 0,
+        "select_every_nth": 1,
+        "choose folder to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "frame_load_cap": 0,
+            "skip_first_images": 0,
+            "filename": "output/Unique3D/Normal_Inputs",
+            "type": "path",
+            "format": "folder",
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      },
       "inputs": [
         {
           "name": "meta_batch",
@@ -1105,11 +1133,11 @@
       "properties": {
         "Node name for S&R": "VHS_MergeImages"
       },
-      "widgets_values": [
-        "match B",
-        "bilinear",
-        "disabled"
-      ]
+      "widgets_values": {
+        "merge_strategy": "match B",
+        "scale_method": "bilinear",
+        "crop": "disabled"
+      }
     },
     {
       "id": 30,

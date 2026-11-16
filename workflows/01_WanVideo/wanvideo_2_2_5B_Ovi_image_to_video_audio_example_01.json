@@ -1274,14 +1274,31 @@
         "cnr_id": "comfyui-videohelpersuite",
         "ver": "0edce8ef7ce173ac97a3ed3d6f4636029d1a4530"
       },
-      "widgets_values": [
-        24.0,
-        0,
-        "WanVideo_Ovi",
-        "video/h264-mp4",
-        false,
-        true
-      ]
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "WanVideo_Ovi",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 20,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideo_Ovi_00027-audio.webm",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/webm",
+            "frame_rate": 24,
+            "workflow": "WanVideo_Ovi_00027.png",
+            "fullpath": ""
+          }
+        }
+      }
     }
   ],
   "links": [

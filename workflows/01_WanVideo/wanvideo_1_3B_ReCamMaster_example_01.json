@@ -1194,16 +1194,33 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_LoadVideo"
       },
-      "widgets_values": [
-        "9.mp4",
-        0.0,
-        0,
-        0,
-        81,
-        0,
-        1,
-        "AnimateDiff"
-      ]
+      "widgets_values": {
+        "video": "9.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 81,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "AnimateDiff",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "9.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 81,
+            "skip_first_frames": 0,
+            "select_every_nth": 1,
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 122,
@@ -1724,14 +1741,31 @@
         "ver": "0a75c7958fe320efcb052f1d9f8451fd20c730a8",
         "Node name for S&R": "VHS_VideoCombine"
       },
-      "widgets_values": [
-        16.0,
-        0,
-        "WanVideo2_1_ReCamMaster",
-        "video/h264-mp4",
-        false,
-        false
-      ]
+      "widgets_values": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "WanVideo2_1_ReCamMaster",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": false,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "WanVideo2_1_T2V_00013.mp4",
+            "subfolder": "",
+            "type": "temp",
+            "format": "video/h264-mp4",
+            "frame_rate": 16,
+            "workflow": "WanVideo2_1_T2V_00013.png",
+            "fullpath": ""
+          }
+        }
+      }
     },
     {
       "id": 22,
@@ -2190,7 +2224,7 @@
       0,
       140,
       0,
-      "*"
+      "WANVIDEOMODEL"
     ],
     [
       248,
@@ -2198,7 +2232,7 @@
       0,
       142,
       0,
-      "*"
+      "WANVIDEOTEXTEMBEDS"
     ],
     [
       250,
@@ -2206,7 +2240,7 @@
       0,
       144,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       251,
@@ -2270,7 +2304,7 @@
       0,
       156,
       0,
-      "*"
+      "LATENT"
     ],
     [
       274,
@@ -2310,7 +2344,7 @@
       0,
       155,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       338,
