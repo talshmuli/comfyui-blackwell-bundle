@@ -96,11 +96,11 @@ index 0673f6c..324f9e5 100644
 +    if os.path.exists(flat):
 +        return flat
 +
-     for fallback in ("input_image.png", "example.png"):
-         candidate = os.path.abspath(os.path.join(base_dir, fallback))
-         if os.path.exists(candidate):
-             return candidate
- 
++    for fallback in ("input_image.png", "example.png"):
++        candidate = os.path.abspath(os.path.join(base_dir, fallback))
++        if os.path.exists(candidate):
++            return candidate
++
      return filepath
  
  
@@ -148,4 +148,5 @@ index 0673f6c..324f9e5 100644
 +            return flat_path
 +
      return None
+ 
  
