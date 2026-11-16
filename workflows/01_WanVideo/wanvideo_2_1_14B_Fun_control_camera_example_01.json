@@ -1590,7 +1590,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_FunControl_00318.png",
-            "fullpath": "output/WanVideoWrapper_FunControl_00318.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -1667,7 +1667,7 @@
       0,
       27,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       79,
@@ -1691,7 +1691,7 @@
       0,
       83,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       106,
@@ -1731,7 +1731,7 @@
       0,
       98,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       135,

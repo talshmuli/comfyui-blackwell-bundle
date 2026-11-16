@@ -321,10 +321,19 @@
             "filename": "output/Unique3D/RGB",
             "type": "path",
             "format": "folder",
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
-      }
+      },
+      "inputs": [
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        }
+      ]
     },
     {
       "id": 248,
@@ -647,7 +656,7 @@
         "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
-        "sd15/v1-5-pruned-emaonly.ckpt"
+        "sd15/v1-5-pruned-emaonly.safetensors"
       ]
     },
     {
@@ -813,7 +822,7 @@
         "Node name for S&R": "ControlNetLoader"
       },
       "widgets_values": [
-        "control_unique3d_sd15_tile.safetensors"
+        "control_v11f1e_sd15_tile.pth"
       ]
     },
     {

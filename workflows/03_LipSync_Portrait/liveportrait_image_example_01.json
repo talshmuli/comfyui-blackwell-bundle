@@ -250,7 +250,8 @@
             "filename": "d6.mp4",
             "type": "input",
             "format": "video/mp4",
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -869,7 +870,8 @@
             "subfolder": "",
             "type": "temp",
             "format": "video/h264-mp4",
-            "frame_rate": 16
+            "frame_rate": 16,
+            "fullpath": ""
           }
         }
       }
@@ -1230,7 +1232,7 @@
         1,
         "constant",
         "relative",
-        0.000003,
+        3e-06,
         true,
         1
       ]

@@ -1121,7 +1121,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 15,
             "workflow": "LongCatVideo_00015.png",
-            "fullpath": "temp/LongCatVideo_00015.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2819,7 +2819,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 15,
             "workflow": "LongCatVideo_00017.png",
-            "fullpath": "temp/LongCatVideo_00017.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2894,7 +2894,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 15,
             "workflow": "LongCatVideo_00016.png",
-            "fullpath": "temp/LongCatVideo_00016.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3768,7 +3768,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 15,
             "workflow": "LongCatVideo_00018.png",
-            "fullpath": "temp/LongCatVideo_00018.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -4636,7 +4636,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 15,
             "workflow": "LongCatVideo_00019.png",
-            "fullpath": "temp/LongCatVideo_00019.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -5588,7 +5588,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 15,
             "workflow": "LongCatVideo_00020.png",
-            "fullpath": "temp/LongCatVideo_00020.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -6647,7 +6647,7 @@
       0,
       181,
       0,
-      "*"
+      "INT"
     ],
     [
       347,
@@ -6655,7 +6655,7 @@
       0,
       182,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       447,
@@ -6663,7 +6663,7 @@
       0,
       246,
       0,
-      "*"
+      "INT"
     ],
     [
       451,
@@ -6671,7 +6671,7 @@
       0,
       251,
       0,
-      "*"
+      "FLOAT"
     ],
     [
       467,
@@ -6679,7 +6679,7 @@
       0,
       258,
       0,
-      "*"
+      "FLOAT"
     ],
     [
       506,
@@ -7559,7 +7559,7 @@
       0,
       472,
       0,
-      "*"
+      "INT"
     ],
     [
       753,

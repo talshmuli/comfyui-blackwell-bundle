@@ -384,7 +384,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_I2V_00159.png",
-            "fullpath": "output/WanVideoWrapper_I2V_00159.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -503,7 +503,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -986,7 +987,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       103,
@@ -994,7 +995,7 @@
       0,
       27,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       132,

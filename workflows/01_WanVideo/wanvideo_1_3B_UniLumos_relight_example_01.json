@@ -845,7 +845,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1520,7 +1521,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1597,7 +1599,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_UniLumos_00023.png",
-            "fullpath": "temp/WanVideoWrapper_UniLumos_00023.mp4"
+            "fullpath": ""
           }
         }
       }

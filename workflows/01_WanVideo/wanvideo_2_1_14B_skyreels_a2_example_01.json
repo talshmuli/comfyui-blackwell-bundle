@@ -3734,7 +3734,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_Skyreels-A2_00012.png",
-            "fullpath": "temp/WanVideoWrapper_Skyreels-A2_00012.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -4020,7 +4020,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       52,
@@ -4060,7 +4060,7 @@
       0,
       27,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       66,
@@ -4404,7 +4404,7 @@
       0,
       149,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       273,
@@ -4444,7 +4444,7 @@
       0,
       156,
       0,
-      "*"
+      "INT"
     ],
     [
       279,
@@ -4452,7 +4452,7 @@
       0,
       157,
       0,
-      "*"
+      "INT"
     ],
     [
       280,
@@ -4596,7 +4596,7 @@
       3,
       165,
       0,
-      "*"
+      "INT"
     ],
     [
       299,

@@ -1101,7 +1101,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 25,
             "workflow": "WanVideo21_HuMo_00005.png",
-            "fullpath": "temp/WanVideo21_HuMo_00005-audio.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -1553,7 +1553,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       126,
@@ -1737,7 +1737,7 @@
       0,
       117,
       0,
-      "*"
+      "AUDIO"
     ],
     [
       219,

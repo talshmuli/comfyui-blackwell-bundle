@@ -532,7 +532,8 @@
             "custom_height": 544,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1636,7 +1637,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_1_T2V_00055.png",
-            "fullpath": "temp/WanVideo2_1_T2V_00055.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2396,7 +2397,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "Wanimate_00015.png",
-            "fullpath": "temp/Wanimate_00015-audio.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2531,7 +2532,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_1_T2V_00054.png",
-            "fullpath": "temp/WanVideo2_1_T2V_00054.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3372,7 +3373,7 @@
       0,
       128,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       233,
@@ -3380,7 +3381,7 @@
       0,
       130,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       234,
@@ -3412,7 +3413,7 @@
       0,
       135,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       238,
@@ -3468,7 +3469,7 @@
       0,
       142,
       0,
-      "*"
+      "MASK"
     ],
     [
       246,
@@ -3492,7 +3493,7 @@
       0,
       144,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       249,
@@ -3548,7 +3549,7 @@
       2,
       148,
       0,
-      "*"
+      "AUDIO"
     ],
     [
       256,
@@ -3604,7 +3605,7 @@
       0,
       153,
       0,
-      "*"
+      "INT"
     ],
     [
       264,
@@ -3612,7 +3613,7 @@
       0,
       154,
       0,
-      "*"
+      "INT"
     ],
     [
       265,
@@ -3636,7 +3637,7 @@
       1,
       157,
       0,
-      "*"
+      "INT"
     ],
     [
       268,
@@ -3676,7 +3677,7 @@
       0,
       161,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       279,

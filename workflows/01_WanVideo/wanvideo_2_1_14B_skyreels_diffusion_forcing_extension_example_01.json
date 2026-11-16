@@ -2603,7 +2603,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_02_00010.png",
-            "fullpath": "temp/SkyreelsDiffusionForcing_02_00010.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2680,7 +2680,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_02_00011.png",
-            "fullpath": "temp/SkyreelsDiffusionForcing_02_00011.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3071,7 +3071,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_00026.png",
-            "fullpath": "temp/SkyreelsDiffusionForcing_00026.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3199,7 +3199,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "SkyreelsDiffusionForcing_01_00011.png",
-            "fullpath": "temp/SkyreelsDiffusionForcing_01_00011.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3854,7 +3854,8 @@
             "custom_height": 0,
             "frame_load_cap": 17,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -4755,7 +4756,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       54,
@@ -4843,7 +4844,7 @@
       0,
       107,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       187,
@@ -4867,7 +4868,7 @@
       0,
       110,
       0,
-      "*"
+      "WANVIDEOMODEL"
     ],
     [
       190,
@@ -4883,7 +4884,7 @@
       0,
       112,
       0,
-      "*"
+      "WANVIDEOTEXTEMBEDS"
     ],
     [
       192,
@@ -4899,7 +4900,7 @@
       0,
       114,
       0,
-      "*"
+      "CACHEARGS"
     ],
     [
       197,
@@ -4907,7 +4908,7 @@
       0,
       116,
       0,
-      "*"
+      "EXPERIMENTALARGS"
     ],
     [
       198,
@@ -4939,7 +4940,7 @@
       1,
       120,
       0,
-      "*"
+      "INT"
     ],
     [
       202,
@@ -4947,7 +4948,7 @@
       2,
       121,
       0,
-      "*"
+      "INT"
     ],
     [
       203,
@@ -4995,7 +4996,7 @@
       0,
       128,
       0,
-      "*"
+      "INT"
     ],
     [
       211,
@@ -5019,7 +5020,7 @@
       0,
       134,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       219,
@@ -5043,7 +5044,7 @@
       0,
       136,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       226,
@@ -5107,7 +5108,7 @@
       0,
       143,
       0,
-      "*"
+      "SLGARGS"
     ],
     [
       239,
@@ -5187,7 +5188,7 @@
       0,
       161,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       256,
@@ -5259,7 +5260,7 @@
       0,
       169,
       0,
-      "*"
+      "CLIP"
     ],
     [
       269,

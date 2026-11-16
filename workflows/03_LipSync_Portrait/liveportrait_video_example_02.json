@@ -421,7 +421,8 @@
             "filename": "d6.mp4",
             "type": "input",
             "format": "video/mp4",
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -648,7 +649,7 @@
         1,
         "constant",
         "source_video_smoothed",
-        0.000003
+        3e-06
       ]
     },
     {
@@ -836,7 +837,8 @@
             "subfolder": "",
             "type": "temp",
             "format": "video/h264-mp4",
-            "frame_rate": 24.087404244631422
+            "frame_rate": 24.087404244631422,
+            "fullpath": ""
           }
         }
       }
@@ -934,7 +936,8 @@
             "filename": "Kung_Fu_Neo_vs_Morpheus_Trim_1.mp4",
             "type": "input",
             "format": "video/mp4",
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }

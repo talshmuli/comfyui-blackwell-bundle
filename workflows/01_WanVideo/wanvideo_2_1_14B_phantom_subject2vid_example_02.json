@@ -1526,7 +1526,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideo21_Phantom_00012.png",
-            "fullpath": "temp/WanVideo21_Phantom_00012.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -1782,7 +1782,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       52,

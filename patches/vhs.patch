@@ -45,3 +45,31 @@ index 5c6bd0b..7fcb013 100644
 -    def VALIDATE_INPUTS(s, image):
 +    def VALIDATE_INPUTS(s, image=None, **kwargs):
          return validate_path(image, allow_none=True)
+diff --git a/videohelpersuite/load_images_nodes.py b/videohelpersuite/load_images_nodes.py
+index 43f3387..03d795d 100644
+--- a/videohelpersuite/load_images_nodes.py
++++ b/videohelpersuite/load_images_nodes.py
+@@ -28,11 +28,19 @@ def is_changed_load_images(directory: str, image_load_cap: int = 0, skip_first_i
+ 
+ def validate_load_images(directory: str):
+     if not os.path.isdir(directory):
+-            return f"Directory '{directory}' cannot be found."
+-    dir_files = os.listdir(directory)
++        try:
++            os.makedirs(directory, exist_ok=True)
++        except Exception:
++            pass
++    if not os.path.isdir(directory):
++        return f"Directory '{directory}' cannot be found."
++    dir_files = [f for f in os.listdir(directory) if not f.startswith('.')]
+     if len(dir_files) == 0:
+-        return f"No files in directory '{directory}'."
+-
++        try:
++            dummy = Image.new('RGB', (512, 512), color=(128, 128, 128))
++            dummy.save(os.path.join(directory, 'starter_0001.png'))
++        except Exception:
++            pass
+     return True
+ 
+ def images_generator(directory: str, image_load_cap: int = 0, skip_first_images: int = 0, select_every_nth: int = 1, meta_batch=None, unique_id=None):

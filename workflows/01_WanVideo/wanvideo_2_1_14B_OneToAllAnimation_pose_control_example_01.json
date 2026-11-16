@@ -1595,7 +1595,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "onetotall_pose_00019.png",
-            "fullpath": "temp/onetotall_pose_00019.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2174,7 +2174,8 @@
             "custom_height": 0,
             "frame_load_cap": 300,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -2343,7 +2344,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00047.png",
-            "fullpath": "temp/WanVideo_OneToAllAnimation_00047.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3861,7 +3862,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00056.png",
-            "fullpath": "temp/WanVideo_OneToAllAnimation_00056.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -4125,7 +4126,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00055.png",
-            "fullpath": "temp/WanVideo_OneToAllAnimation_00055.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -5286,7 +5287,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00057.png",
-            "fullpath": "temp/WanVideo_OneToAllAnimation_00057.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -5363,7 +5364,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo_OneToAllAnimation_00053.png",
-            "fullpath": "temp/WanVideo_OneToAllAnimation_00053.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -5528,7 +5529,7 @@
       0,
       173,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       325,
@@ -5576,7 +5577,7 @@
       0,
       178,
       0,
-      "*"
+      "WANVIDIMAGE_EMBEDS"
     ],
     [
       332,
@@ -5632,7 +5633,7 @@
       1,
       184,
       0,
-      "*"
+      "INT"
     ],
     [
       340,
@@ -5640,7 +5641,7 @@
       2,
       185,
       0,
-      "*"
+      "INT"
     ],
     [
       341,
@@ -5664,7 +5665,7 @@
       0,
       188,
       0,
-      "*"
+      "INT"
     ],
     [
       345,
@@ -5688,7 +5689,7 @@
       0,
       192,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       351,
@@ -5720,7 +5721,7 @@
       0,
       196,
       0,
-      "*"
+      "WANVIDEOMODEL"
     ],
     [
       355,
@@ -5736,7 +5737,7 @@
       0,
       198,
       0,
-      "*"
+      "WANVIDEOTEXTEMBEDS"
     ],
     [
       357,
@@ -5768,7 +5769,7 @@
       0,
       206,
       0,
-      "*"
+      "INT"
     ],
     [
       362,
@@ -5776,7 +5777,7 @@
       0,
       207,
       0,
-      "*"
+      "INT"
     ],
     [
       363,
@@ -5904,7 +5905,7 @@
       3,
       234,
       0,
-      "*"
+      "COMBO"
     ],
     [
       411,

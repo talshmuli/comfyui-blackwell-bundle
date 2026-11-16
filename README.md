@@ -117,13 +117,15 @@ This repository provides an automated, production-tested container suite that co
 
 ## 3. Pre-Installed Custom Node Suite
 
-The `nodes` and `full` images ship with over 2,106+ pre-verified, registered node types across the entire generative AI spectrum.
+The `nodes` and `full` images ship with over 2,106+ (now 3,500+) pre-verified, registered node types across the entire generative AI spectrum.
 
 ### Video Generation & Temporal Diffusion
 
 | Custom Node Repository | Key Features & Capabilities |
 | :--- | :--- |
 | **[ComfyUI-WanVideoWrapper](https://github.com/kijai/ComfyUI-WanVideoWrapper)** *(by kijai)* | High-performance implementation of Wan 2.1 (1.3B & 14B) Text-to-Video and Image-to-Video. Native Blackwell sm_120 support, auto text-encoder offloading, dynamic memory scaling, and tiled VAE decode. |
+| **[ComfyUI-WanAnimatePreprocess](https://github.com/kijai/ComfyUI-WanAnimatePreprocess)** *(by kijai)* | High-speed pose detection, face extraction, and skeleton rendering (ViTPose, YOLO) tailored for WanAnimate and Wan2.1. |
+| **[ComfyUI-SCAIL-Pose](https://github.com/kijai/ComfyUI-SCAIL-Pose)** *(by kijai)* | Character animation pose pipeline: ViTPose-to-DWPose keypoint schema mapping and 3D NLF pose rendering. |
 | **[ComfyUI-LTXVideo](https://github.com/Lightricks/ComfyUI-LTXVideo)** *(by Lightricks)* | Ultra-fast DiT video synthesis (LTX-2, 2.3, 2.5). Features single-stage and two-stage distillation, IC-LoRA camera/motion control, inpaint/outpaint, and HDR pipelines. |
 | **[ComfyUI-AnimateDiff-Evolved](https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved)** *(by Kosinkadink)* | Temporal motion modules, sliding context window, motion LoRAs, and prompt travel for continuous character and camera animation. |
 | **[ComfyUI-LivePortraitKJ](https://github.com/kijai/ComfyUI-LivePortraitKJ)** *(by kijai)* | High-speed expressive facial reenactment, driving video, head pose, eye blink, and lip motion retargeting. |
@@ -136,6 +138,7 @@ The `nodes` and `full` images ship with over 2,106+ pre-verified, registered nod
 | Custom Node Repository | Key Features & Capabilities |
 | :--- | :--- |
 | **[ComfyUI-3D-Pack](https://github.com/MrForExample/ComfyUI-3D-Pack)** *(by MrForExample)* | Comprehensive 3D generative suite supporting: <br>• Single-image to 3D mesh (InstantMesh, TripoSR, CRM, Stable3DGen Trellis).<br>• 3D Gaussian Splatting (3DGS) and Neural Radiance Fields (NeRF) rendering.<br>• Geometric operators: Decimate Mesh, Remesh, Normal extraction, UV unwrapping, and KiUI / TBB integration. |
+| **[eden_comfy_pipelines](https://github.com/edenartlab/eden_comfy_pipelines)** *(by edenartlab)* | Eden 3D mesh preprocessing, bounding-box image padding (`Eden_IMG_padder`), and grayscale tensor normalization. |
 | **[ComfyUI-BlenderAI-node](https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node)** *(by AIGODLIKE)* | Direct integration bridge with Blender 4.4 LTS for automated scene loading, procedural camera animation, and AOV pass rendering (Depth, Normal, OpenPose, Mist). |
 
 ### Audio, Voice & Music Production
@@ -156,6 +159,12 @@ The `nodes` and `full` images ship with over 2,106+ pre-verified, registered nod
 | **[comfyui_controlnet_aux](https://github.com/Fannovel16/comfyui_controlnet_aux)** *(by Fannovel16)* | Complete suite of ControlNet annotators: DWPose, OpenPose, Depth Anything (v1/v2), MiDaS, Canny, LineArt, and NormalBae. |
 | **[ComfyUI_IPAdapter_plus](https://github.com/cubiq/ComfyUI_IPAdapter_plus)** *(by cubiq)* | Image Prompt Adapter for style reference, FaceID consistency, regional conditioning, and cross-frame character identity persistence. |
 | **[ComfyUI-Step1X-Edit](https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit)** *(by Yuan-ManX)* | Next-generation multi-modal image editing and instruction-guided visual manipulation with precise localized control. |
+| **[ComfyUI_UltimateSDUpscale](https://github.com/ssitu/ComfyUI_UltimateSDUpscale)** *(by ssitu)* | Tile-based high-resolution image upscaling with seam-blending and modular upscaler algorithm integration. |
+| **[ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)** *(by ltdrdata)* | Comprehensive image enhancement suite featuring SAM detector/segmenter, face/hand detailer, latent manipulation, and workflow logic routing. |
+| **[ComfyUI-DepthAnythingV2](https://github.com/kijai/ComfyUI-DepthAnythingV2)** *(by kijai)* | High-resolution monocular depth estimation pipeline leveraging Depth-Anything-V2 models for precise geometric conditioning. |
+| **[ComfyUI-Video-Depth-Anything](https://github.com/yuvraj108c/ComfyUI-Video-Depth-Anything)** *(by yuvraj108c)* | Temporal-consistent Video Depth Anything estimation and processing for seamless video depth map generation. |
+| **[ComfyUI-Florence2](https://github.com/kijai/ComfyUI-Florence2)** *(by kijai)* | Microsoft Florence-2 multi-modal vision-language foundation model for detailed captioning, object detection, and spatial grounding. |
+| **[ComfyUI-segment-anything-2](https://github.com/kijai/ComfyUI-segment-anything-2)** *(by kijai)* | Meta Segment Anything 2 (SAM2) image and video segmentation wrapper for prompt-guided mask tracking. |
 
 ### Hardware Observability & Monitoring
 
@@ -169,6 +178,12 @@ The `nodes` and `full` images ship with over 2,106+ pre-verified, registered nod
 | :--- | :--- |
 | **[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)** *(by kijai)* | Indispensable workflow utilities: color correction, image batching, condition averaging, latent masking, and VAE optimization. |
 | **[ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF)** *(by city96)* | Quantized inference engine supporting 4-bit, 5-bit, and 8-bit precision (Q4_K_M, Q5_K_M, Q8_0) for massive 12B+ models (FLUX.1, SD 3.5, Wan 2.1, HunyuanVideo). |
+| **[ComfyUI-Custom-Scripts](https://github.com/pythongosssss/ComfyUI-Custom-Scripts)** *(by pythongosssss)* | Essential workflow UI enhancements: text observation (`ShowText`), Markdown notes, math expressions, and preset selectors. |
+| **[ComfyUI-Inspire-Pack](https://github.com/ltdrdata/ComfyUI-Inspire-Pack)** *(by ltdrdata)* | Extensive modular sampling toolkit: directory image loaders, LoRA block weight modifiers, and automated SEGS conditioning pipelines. |
+| **[ComfyMath](https://github.com/evanspearman/ComfyMath)** *(by evanspearman)* | Mathematical expression evaluation and numeric conversion nodes (`CM_FloatToInt`, math arithmetic). |
+| **[RES4LYF](https://github.com/ClownsharkBatwing/RES4LYF)** *(by ClownsharkBatwing)* | Advanced Runge-Kutta diffusion solvers and experimental samplers (`ClownSampler_Beta`) for high-order flow matching. |
+| **[ComfyUI-Kolors-MZ](https://github.com/MinusZoneAI/ComfyUI-Kolors-MZ)** *(by MinusZoneAI)* | MinusZone integration suite for Kolors UNet loaders, ChatGLM text encoding, and IP-Adapter FaceID. |
+| **[was-node-suite-comfyui](https://github.com/WASasquatch/was-node-suite-comfyui)** *(by WASasquatch)* | Comprehensive image processing, background removal (`Image Rembg (Remove Background)`), and workflow utility suite. |
 
 ---
 
@@ -508,6 +523,21 @@ Production studios and homelabs require dependable security and predictable upda
 * **[ComfyUI_FL-HeartMuLa](https://github.com/filliptm/ComfyUI_FL-HeartMuLa)** by filliptm — HeartMuLa music generation.
 * **[ACE-Step-ComfyUI](https://github.com/ace-step/ACE-Step-ComfyUI)** by ace-step — Advanced step-based music and audio synthesis.
 * **[ComfyUI-Step1X-Edit](https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit)** by Yuan-ManX — Multi-modal instruction-guided image editing.
+* **[ComfyUI_UltimateSDUpscale](https://github.com/ssitu/ComfyUI_UltimateSDUpscale)** by ssitu — Tile-based upscaling and seam blending.
+* **[ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)** by ltdrdata — Modular detection, face detailing, and image enhancement.
+* **[ComfyUI-Custom-Scripts](https://github.com/pythongosssss/ComfyUI-Custom-Scripts)** by pythongosssss — Workflow utilities and custom scripts.
+* **[ComfyUI-Inspire-Pack](https://github.com/ltdrdata/ComfyUI-Inspire-Pack)** by ltdrdata — Modular generation and SEGS execution extensions.
+* **[ComfyUI-DepthAnythingV2](https://github.com/kijai/ComfyUI-DepthAnythingV2)** by Kijai — Depth-Anything-V2 estimation pipeline.
+* **[ComfyUI-Florence2](https://github.com/kijai/ComfyUI-Florence2)** by Kijai — Florence-2 vision-language foundation model.
+* **[ComfyUI-segment-anything-2](https://github.com/kijai/ComfyUI-segment-anything-2)** by Kijai — Meta SAM2 segmentation and tracking.
+* **[ComfyMath](https://github.com/evanspearman/ComfyMath)** by evanspearman — Mathematical expression evaluation and numeric conversion.
+* **[ComfyUI-WanAnimatePreprocess](https://github.com/kijai/ComfyUI-WanAnimatePreprocess)** by Kijai — Pose detection and skeleton rendering for Wan.
+* **[ComfyUI-SCAIL-Pose](https://github.com/kijai/ComfyUI-SCAIL-Pose)** by Kijai — SCAIL character animation and 3D pose mapping.
+* **[ComfyUI-Video-Depth-Anything](https://github.com/yuvraj108c/ComfyUI-Video-Depth-Anything)** by yuvraj108c — Temporally consistent Video Depth Anything.
+* **[ComfyUI-Kolors-MZ](https://github.com/MinusZoneAI/ComfyUI-Kolors-MZ)** by MinusZoneAI — Kolors UNet and text encoder integration.
+* **[RES4LYF](https://github.com/ClownsharkBatwing/RES4LYF)** by ClownsharkBatwing — Advanced high-order diffusion samplers.
+* **[eden_comfy_pipelines](https://github.com/edenartlab/eden_comfy_pipelines)** by edenartlab — 3D mesh preprocessing and image manipulation.
+* **[was-node-suite-comfyui](https://github.com/WASasquatch/was-node-suite-comfyui)** by WASasquatch — Comprehensive image and workflow utilities.
 
 ---
 

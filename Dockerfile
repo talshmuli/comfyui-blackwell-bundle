@@ -191,6 +191,21 @@ RUN clone_node() { \
     clone_node https://github.com/filliptm/ComfyUI_FL-HeartMuLa.git && \
     clone_node https://github.com/ace-step/ACE-Step-ComfyUI.git && \
     clone_node https://github.com/Yuan-ManX/ComfyUI-Step1X-Edit.git && \
+    clone_node https://github.com/ssitu/ComfyUI_UltimateSDUpscale.git && \
+    clone_node https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
+    clone_node https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git && \
+    clone_node https://github.com/ltdrdata/ComfyUI-Inspire-Pack.git && \
+    clone_node https://github.com/kijai/ComfyUI-DepthAnythingV2.git && \
+    clone_node https://github.com/kijai/ComfyUI-Florence2.git && \
+    clone_node https://github.com/kijai/ComfyUI-segment-anything-2.git && \
+    clone_node https://github.com/evanspearman/ComfyMath.git && \
+    clone_node https://github.com/kijai/ComfyUI-WanAnimatePreprocess.git && \
+    clone_node https://github.com/kijai/ComfyUI-SCAIL-Pose.git && \
+    clone_node https://github.com/yuvraj108c/ComfyUI-Video-Depth-Anything.git && \
+    clone_node https://github.com/MinusZoneAI/ComfyUI-Kolors-MZ.git && \
+    clone_node https://github.com/ClownsharkBatwing/RES4LYF.git && \
+    clone_node https://github.com/edenartlab/eden_comfy_pipelines.git && \
+    clone_node https://github.com/WASasquatch/was-node-suite-comfyui.git && \
     sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py
 
 # Apply upstream compatibility patches for Blackwell sm_120 runtime and headless environments
@@ -253,7 +268,12 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         deepdiff \
         soundfile \
         librosa \
-        piexif && \
+        piexif \
+        segment-anything \
+        dill \
+        cachetools \
+        webcolors \
+        pywavelets && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
         "diffusers==0.35.2" \
         "local-attention<=1.8.6" \
@@ -302,7 +322,8 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         /opt/wheels/pillow-13.0.0-*.whl && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
-        "jinja2>=3.1.5"
+        "jinja2>=3.1.5" && \
+    chmod -R 777 /opt/ComfyUI/custom_nodes
 
 WORKDIR /workspace
 
@@ -349,7 +370,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /opt/blender
 RUN for attempt in 1 2 3 4 5; do \
         echo "Attempt $attempt: downloading Blender 4.4 LTS..." && \
-        if curl -fsSL --retry 3 --retry-delay 2 "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" -o /tmp/blender.tar.xz; then \
+        if curl -fsSL --retry 3 --retry-delay 2 -A "Mozilla/5.0" "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" -o /tmp/blender.tar.xz || \
+           curl -fsSL --retry 3 --retry-delay 2 -A "Mozilla/5.0" "https://mirrors.dotsrc.org/blender/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" -o /tmp/blender.tar.xz; then \
             tar -xJ -f /tmp/blender.tar.xz -C /opt/blender --strip-components=1 && \
             rm -f /tmp/blender.tar.xz && break; \
         fi; \
@@ -406,20 +428,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libdbus-1-3 && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/blender
-RUN for attempt in 1 2 3 4 5; do \
-        echo "Attempt $attempt: downloading Blender 4.4 LTS..." && \
-        if curl -fsSL --retry 3 --retry-delay 2 "https://download.blender.org/release/Blender4.4/blender-4.4.3-linux-x64.tar.xz" -o /tmp/blender.tar.xz; then \
-            tar -xJ -f /tmp/blender.tar.xz -C /opt/blender --strip-components=1 && \
-            rm -f /tmp/blender.tar.xz && break; \
-        fi; \
-        echo "Attempt $attempt failed. Retrying in 5 seconds..." >&2; \
-        sleep 5; \
-    done && test -x /opt/blender/blender && \
-    ln -s /opt/blender/blender /usr/local/bin/blender && \
-    mkdir -p /opt/blender/4.4/scripts/addons && \
-    git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node && \
-    /opt/blender/4.4/python/bin/python3.11 -m pip install --no-cache-dir --upgrade certifi urllib3 requests setuptools pip
+COPY --from=blender-worker /opt/blender /opt/blender
+RUN ln -s /opt/blender/blender /usr/local/bin/blender
 
 WORKDIR /workspace
 

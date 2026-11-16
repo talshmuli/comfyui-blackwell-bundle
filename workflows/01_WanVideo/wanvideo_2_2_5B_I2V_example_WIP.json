@@ -319,48 +319,6 @@
       "bgcolor": "#533"
     },
     {
-      "id": 35,
-      "type": "WanVideoTorchCompileSettings",
-      "pos": [
-        -303.0111999511719,
-        -842.4323120117188
-      ],
-      "size": [
-        390.5999755859375,
-        202
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "torch_compile_args",
-          "type": "WANCOMPILEARGS",
-          "slot_index": 0,
-          "links": [
-            121
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "ComfyUI-WanVideoWrapper",
-        "ver": "d9b1f4d1a5aea91d101ae97a54714a5861af3f50",
-        "Node name for S&R": "WanVideoTorchCompileSettings"
-      },
-      "widgets_values": [
-        "inductor",
-        false,
-        "default",
-        false,
-        64,
-        true,
-        128
-      ],
-      "color": "#223",
-      "bgcolor": "#335"
-    },
-    {
       "id": 22,
       "type": "WanVideoModelLoader",
       "pos": [
@@ -379,7 +337,7 @@
           "name": "compile_args",
           "shape": 7,
           "type": "WANCOMPILEARGS",
-          "link": 121
+          "link": null
         },
         {
           "name": "block_swap_args",
@@ -439,7 +397,7 @@
         "fp16_fast",
         "disabled",
         "offload_device",
-        "sageattn"
+        "sdpa"
       ],
       "color": "#223",
       "bgcolor": "#335"
@@ -505,7 +463,7 @@
       "widgets_values": [
         832,
         480,
-        121
+        17
       ]
     },
     {
@@ -591,7 +549,7 @@
         "Node name for S&R": "WanVideoDecode"
       },
       "widgets_values": [
-        false,
+        true,
         272,
         272,
         144,
@@ -986,7 +944,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideoWrapper_5BI2V_00004.png",
-            "fullpath": "temp/WanVideoWrapper_5BI2V_00004.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -1095,7 +1053,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       52,
@@ -1184,14 +1142,6 @@
       28,
       1,
       "LATENT"
-    ],
-    [
-      121,
-      35,
-      0,
-      22,
-      0,
-      "WANCOMPILEARGS"
     ],
     [
       133,

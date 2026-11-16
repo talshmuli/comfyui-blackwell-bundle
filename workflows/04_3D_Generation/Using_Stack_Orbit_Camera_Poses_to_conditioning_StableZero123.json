@@ -369,7 +369,8 @@
             "filename": "Cammy_00492.mp4",
             "subfolder": "StableZero123/Test",
             "type": "output",
-            "format": "video/h265-mp4"
+            "format": "video/h265-mp4",
+            "fullpath": ""
           }
         }
       }

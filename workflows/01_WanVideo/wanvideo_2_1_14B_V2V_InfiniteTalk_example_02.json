@@ -1361,7 +1361,8 @@
             "custom_height": 480,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1780,7 +1781,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 25,
             "workflow": "WanVideo2_1_InfiniteTalk_00007.png",
-            "fullpath": "temp/WanVideo2_1_InfiniteTalk_00007-audio.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2599,7 +2600,7 @@
       0,
       240,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       437,
@@ -2639,7 +2640,7 @@
       0,
       247,
       0,
-      "*"
+      "INT"
     ],
     [
       442,
@@ -2647,7 +2648,7 @@
       0,
       248,
       0,
-      "*"
+      "INT"
     ],
     [
       443,
@@ -2679,7 +2680,7 @@
       0,
       260,
       0,
-      "*"
+      "WANVIDEOMODEL"
     ],
     [
       464,
@@ -2695,7 +2696,7 @@
       0,
       264,
       0,
-      "*"
+      "CLIP_VISION"
     ],
     [
       467,
@@ -2711,7 +2712,7 @@
       0,
       271,
       0,
-      "*"
+      "INT"
     ],
     [
       510,
@@ -2751,7 +2752,7 @@
       2,
       294,
       0,
-      "*"
+      "INT"
     ],
     [
       520,

@@ -54,6 +54,44 @@ def sanitize_path_value(val: str) -> str:
 
     return val
 
+def normalize_vhs_node(n: dict) -> bool:
+    """Ensure VHS nodes have valid inputs array and cleanly sanitized widgets_values."""
+    ntype = n.get("type", "")
+    if not ntype.startswith("VHS_"):
+        return False
+
+    modified = False
+
+    # Ensure inputs array exists for batch loaders
+    if ntype in ("VHS_LoadImagesPath", "VHS_LoadImages") and n.get("inputs") is None:
+        n["inputs"] = [{"name": "meta_batch", "type": "VHS_BatchManager", "link": None, "shape": 7}]
+        modified = True
+
+    wv = n.get("widgets_values")
+    # VideoHelperSuite nodes use native KV dictionaries via useKVState (VHS.core.js)
+    # Sanitize path values and clean ephemeral UI preview cache while preserving all functional settings
+    if isinstance(wv, dict):
+        for k, v in list(wv.items()):
+            if isinstance(v, str):
+                s_v = sanitize_path_value(v)
+                if s_v != v:
+                    wv[k] = s_v
+                    modified = True
+        if "videopreview" in wv and isinstance(wv["videopreview"], dict):
+            params = wv["videopreview"].get("params")
+            if isinstance(params, dict):
+                if params.get("fullpath"):
+                    params["fullpath"] = ""
+                    modified = True
+                if "filename" in params and isinstance(params["filename"], str):
+                    s_fn = sanitize_path_value(params["filename"])
+                    if s_fn != params["filename"]:
+                        params["filename"] = s_fn
+                        modified = True
+
+    return modified
+
+
 def sanitize_workflow_data(obj: Any) -> Tuple[Any, int]:
     """Recursively traverse a JSON object and sanitize string path values."""
     replacements = 0
@@ -88,15 +126,22 @@ def scan_workflow_file(file_path: str, fix: bool = False) -> int:
         return 0
 
     cleaned_data, count = sanitize_workflow_data(data)
-    if count > 0 and fix:
+    node_fixes = 0
+    if isinstance(cleaned_data, dict) and "nodes" in cleaned_data:
+        for node in cleaned_data.get("nodes", []):
+            if isinstance(node, dict) and normalize_vhs_node(node):
+                node_fixes += 1
+
+    total_changes = count + node_fixes
+    if total_changes > 0 and fix:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(cleaned_data, f, indent=2, ensure_ascii=False)
             f.write('\n')
-        print(f"Fixed {count} Windows paths in {file_path}")
-    elif count > 0 and not fix:
-        print(f"Found {count} Windows paths in {file_path}")
+        print(f"Fixed {total_changes} items ({count} paths, {node_fixes} node schemas) in {file_path}")
+    elif total_changes > 0 and not fix:
+        print(f"Found {total_changes} items ({count} paths, {node_fixes} node schemas) in {file_path}")
 
-    return count
+    return total_changes
 
 def main():
     parser = argparse.ArgumentParser(description="Sanitize workflow JSON files")

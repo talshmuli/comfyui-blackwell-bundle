@@ -139,112 +139,6 @@
       ]
     },
     {
-      "id": 35,
-      "type": "WanVideoTorchCompileSettings",
-      "pos": [
-        -299.6842956542969,
-        -839.0896606445312
-      ],
-      "size": [
-        390.5999755859375,
-        202
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 2,
-      "inputs": [
-        {
-          "localized_name": "backend",
-          "name": "backend",
-          "type": "COMBO",
-          "widget": {
-            "name": "backend"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "fullgraph",
-          "name": "fullgraph",
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "fullgraph"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "mode",
-          "name": "mode",
-          "type": "COMBO",
-          "widget": {
-            "name": "mode"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "dynamic",
-          "name": "dynamic",
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "dynamic"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "dynamo_cache_size_limit",
-          "name": "dynamo_cache_size_limit",
-          "type": "INT",
-          "widget": {
-            "name": "dynamo_cache_size_limit"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "compile_transformer_blocks_only",
-          "name": "compile_transformer_blocks_only",
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "compile_transformer_blocks_only"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "dynamo_recompile_limit",
-          "name": "dynamo_recompile_limit",
-          "shape": 7,
-          "type": "INT",
-          "widget": {
-            "name": "dynamo_recompile_limit"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "torch_compile_args",
-          "name": "torch_compile_args",
-          "type": "WANCOMPILEARGS",
-          "slot_index": 0,
-          "links": []
-        }
-      ],
-      "properties": {
-        "cnr_id": "ComfyUI-WanVideoWrapper",
-        "ver": "d9b1f4d1a5aea91d101ae97a54714a5861af3f50",
-        "Node name for S&R": "WanVideoTorchCompileSettings"
-      },
-      "widgets_values": [
-        "inductor",
-        false,
-        "default",
-        false,
-        64,
-        true,
-        128
-      ],
-      "color": "#223",
-      "bgcolor": "#335"
-    },
-    {
       "id": 22,
       "type": "WanVideoModelLoader",
       "pos": [
@@ -1297,7 +1191,7 @@
         "Node name for S&R": "WanVideoDecode"
       },
       "widgets_values": [
-        false,
+        true,
         272,
         272,
         144,
@@ -1538,7 +1432,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideoWrapper_5BI2V_00004.png",
-            "fullpath": "temp/WanVideoWrapper_5BI2V_00004.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -1804,7 +1698,8 @@
             "filename": "bubble.mp4",
             "type": "input",
             "format": "video/mp4",
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           },
           "muted": false
         }
@@ -2081,7 +1976,7 @@
       "widgets_values": [
         1280,
         704,
-        81
+        17
       ]
     },
     {
@@ -2273,7 +2168,7 @@
         "Node name for S&R": "INTConstant"
       },
       "widgets_values": [
-        81
+        17
       ],
       "color": "#1b4669",
       "bgcolor": "#29699c"
@@ -2400,7 +2295,7 @@
       0,
       28,
       0,
-      "VAE"
+      "WANVAE"
     ],
     [
       117,

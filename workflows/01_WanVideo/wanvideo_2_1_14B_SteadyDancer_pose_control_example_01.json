@@ -134,7 +134,8 @@
             "custom_height": 832,
             "frame_load_cap": 176,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1628,7 +1629,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "WanVideoWrapper_SteadyDancer_00001.png",
-            "fullpath": "output/WanVideoWrapper_SteadyDancer_00001.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2618,7 +2619,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "vitpose_00001.png",
-            "fullpath": "temp/vitpose_00001.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2984,7 +2985,7 @@
       0,
       96,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       154,
@@ -3008,7 +3009,7 @@
       1,
       98,
       0,
-      "*"
+      "INT"
     ],
     [
       157,
@@ -3024,7 +3025,7 @@
       2,
       99,
       0,
-      "*"
+      "INT"
     ],
     [
       159,
@@ -3104,7 +3105,7 @@
       0,
       106,
       0,
-      "*"
+      "CLIP_VISION"
     ],
     [
       171,
@@ -3120,7 +3121,7 @@
       0,
       108,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       174,
@@ -3144,7 +3145,7 @@
       0,
       113,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       177,

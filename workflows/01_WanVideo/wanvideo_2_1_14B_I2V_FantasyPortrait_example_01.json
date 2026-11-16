@@ -767,7 +767,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1825,7 +1826,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoFantasyPortrait_00009.png",
-            "fullpath": "temp/WanVideoFantasyPortrait_00009.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2081,7 +2082,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoFantasyPortrait_00019.png",
-            "fullpath": "temp/WanVideoFantasyPortrait_00019.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2230,7 +2231,7 @@
       0,
       166,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       298,
@@ -2254,7 +2255,7 @@
       0,
       172,
       0,
-      "*"
+      "INT"
     ],
     [
       302,
@@ -2262,7 +2263,7 @@
       0,
       173,
       0,
-      "*"
+      "INT"
     ],
     [
       303,
@@ -2270,7 +2271,7 @@
       0,
       175,
       0,
-      "*"
+      "INT"
     ],
     [
       308,

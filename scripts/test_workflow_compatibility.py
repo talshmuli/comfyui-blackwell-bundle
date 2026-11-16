@@ -16,6 +16,8 @@ UI_VIRTUAL_NODES = {
     "MarkdownNote",
     "PrimitiveNode",
     "Reroute",
+    "SetNode",
+    "GetNode",
     "f9337bd7-ca7a-4a59-99f1-65b664bed7e7",  # UI Group Node UUID
     "bee43e38-9234-4e41-86ff-63874164f482",
 }

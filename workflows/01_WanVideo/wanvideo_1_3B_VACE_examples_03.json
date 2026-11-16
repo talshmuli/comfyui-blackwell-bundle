@@ -745,7 +745,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_startendframe_00005.png",
-            "fullpath": "temp/WanVideoWrapper_VACE_startendframe_00005.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2731,7 +2731,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_outpaint_00002.png",
-            "fullpath": "temp/WanVideoWrapper_VACE_outpaint_00002.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3411,7 +3411,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -4185,7 +4186,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_startendframe_00011.png",
-            "fullpath": "temp/WanVideoWrapper_VACE_startendframe_00011.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -4655,7 +4656,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_VACE_startendframe_00001.png",
-            "fullpath": "temp/WanVideoWrapper_VACE_startendframe_00001.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -4965,7 +4966,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -5497,7 +5499,7 @@
       0,
       121,
       0,
-      "*"
+      "WANVIDEOMODEL"
     ],
     [
       247,
@@ -5505,7 +5507,7 @@
       0,
       122,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       249,
@@ -5521,7 +5523,7 @@
       0,
       125,
       0,
-      "*"
+      "WANTEXTENCODER"
     ],
     [
       251,
@@ -5865,7 +5867,7 @@
       0,
       180,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       322,
@@ -5881,7 +5883,7 @@
       0,
       172,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       335,
@@ -5889,7 +5891,7 @@
       0,
       70,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       336,
@@ -5977,7 +5979,7 @@
       0,
       197,
       6,
-      "TEACACHEARGS"
+      "CACHEARGS"
     ],
     [
       351,
@@ -6097,7 +6099,7 @@
       0,
       221,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       386,

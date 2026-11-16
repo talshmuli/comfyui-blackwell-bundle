@@ -605,7 +605,8 @@
             "custom_height": 0,
             "frame_load_cap": 81,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1980,7 +1981,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "AnimateDiff_00008.png",
-            "fullpath": "output/AnimateDiff_00008.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2177,7 +2178,7 @@
       0,
       331,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       601,
@@ -2185,7 +2186,7 @@
       0,
       332,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       602,

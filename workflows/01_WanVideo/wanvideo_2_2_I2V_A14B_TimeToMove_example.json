@@ -1042,7 +1042,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1409,7 +1410,8 @@
             "custom_height": 0,
             "frame_load_cap": 0,
             "skip_first_frames": 0,
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
       }
@@ -1978,7 +1980,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_2_I2V_00027.png",
-            "fullpath": "temp/WanVideo2_2_I2V_00027.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2425,7 +2427,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideo2_2_I2V_00028.png",
-            "fullpath": "temp/WanVideo2_2_I2V_00028.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2900,7 +2902,7 @@
       0,
       107,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       191,

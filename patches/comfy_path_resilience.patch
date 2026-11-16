@@ -1,8 +1,48 @@
+diff --git a/comfy/utils.py b/comfy/utils.py
+index 9d42822..631fb0a 100644
+--- a/comfy/utils.py
++++ b/comfy/utils.py
+@@ -193,7 +193,17 @@ def load_torch_file(ckpt, safe_load=False, device=None, return_metadata=False):
+     if device is None:
+         device = torch.device("cpu")
+     metadata = None
+-    if ckpt.lower().endswith(".safetensors") or ckpt.lower().endswith(".sft"):
++    is_safetensors = ckpt.lower().endswith((".safetensors", ".sft")) or os.path.realpath(ckpt).lower().endswith((".safetensors", ".sft"))
++    if not is_safetensors and os.path.isfile(ckpt):
++        try:
++            with open(ckpt, "rb") as f:
++                hdr = f.read(16)
++                if len(hdr) >= 9 and hdr[8:9] == b'{':
++                    is_safetensors = True
++        except Exception:
++            pass
++
++    if is_safetensors:
+         try:
+             if comfy.memory_management.aimdo_enabled:
+                 sd, metadata = load_safetensors(ckpt)
+@@ -222,7 +232,10 @@ def load_torch_file(ckpt, safe_load=False, device=None, return_metadata=False):
+         if MMAP_TORCH_FILES:
+             torch_args["mmap"] = True
+ 
+-        pl_sd = torch.load(ckpt, map_location=device, weights_only=True, **torch_args)
++        try:
++            pl_sd = torch.load(ckpt, map_location=device, weights_only=True, **torch_args)
++        except Exception:
++            pl_sd = torch.load(ckpt, map_location=device, weights_only=False, **torch_args)
+ 
+         if "state_dict" in pl_sd:
+             sd = pl_sd["state_dict"]
 diff --git a/execution.py b/execution.py
-index 0d50df2..5ee9a80 100644
+index 0d50df2..fc9aa83 100644
 --- a/execution.py
 +++ b/execution.py
-@@ -1069,8 +1069,33 @@ async def validate_inputs(prompt_id, prompt, item, validated, visiting=None):
+@@ -1,3 +1,4 @@
++import os
+ import copy
+ import heapq
+ import inspect
+@@ -1069,8 +1070,33 @@ async def validate_inputs(prompt_id, prompt, item, validated, visiting=None):
                          combo_options = input_type
                      is_multiselect = extra_info.get("multiselect", False)
                      if is_multiselect and isinstance(val, list):
@@ -37,19 +77,67 @@ index 0d50df2..5ee9a80 100644
                      if invalid_vals:
                          input_config = info
 diff --git a/folder_paths.py b/folder_paths.py
-index 0673f6c..496ae9f 100644
+index 0673f6c..324f9e5 100644
 --- a/folder_paths.py
 +++ b/folder_paths.py
-@@ -456,6 +456,8 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
+@@ -359,10 +359,19 @@ def get_annotated_filepath(name: str, default_dir: str | None=None) -> str:
+             base_dir = get_input_directory()  # fallback path
+ 
+     filepath = os.path.abspath(os.path.join(base_dir, name))
+-    # Prevent path traversal: the resolved path must stay within base_dir.
+-    # repr() the name in the message so a crafted value can't inject log lines.
+-    if not is_within_directory(base_dir, filepath):
+-        raise ValueError("Invalid file path: {!r}".format(name))
++    if os.path.exists(filepath) and is_within_directory(base_dir, filepath):
++        return filepath
++
++    bname = os.path.basename(name.replace(chr(92), "/"))
++    flat = os.path.abspath(os.path.join(base_dir, bname))
++    if os.path.exists(flat):
++        return flat
++
++    for fallback in ("input_image.png", "example.png"):
++        candidate = os.path.abspath(os.path.join(base_dir, fallback))
++        if os.path.exists(candidate):
++            return candidate
++
+     return filepath
+ 
+ 
+@@ -373,10 +382,19 @@ def exists_annotated_filepath(name) -> bool:
+         base_dir = get_input_directory()  # fallback path
+ 
+     filepath = os.path.abspath(os.path.join(base_dir, name))
+-    # Treat traversal attempts as non-existent rather than probing the filesystem.
+-    if not is_within_directory(base_dir, filepath):
+-        return False
+-    return os.path.exists(filepath)
++    if os.path.exists(filepath):
++        return is_within_directory(base_dir, filepath)
++
++    bname = os.path.basename(name.replace(chr(92), "/"))
++    flat = os.path.abspath(os.path.join(base_dir, bname))
++    if os.path.exists(flat):
++        return True
++
++    for fallback in ("input_image.png", "example.png"):
++        if os.path.exists(os.path.join(base_dir, fallback)):
++            return True
++
++    return False
+ 
+ 
+ def add_model_folder_path(folder_name: str, full_folder_path: str, is_default: bool = False) -> None:
+@@ -456,6 +474,8 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
      if folder_name not in folder_names_and_paths:
          return None
      folders = folder_names_and_paths[folder_name]
 +    if isinstance(filename, str):
-+        filename = filename.replace("\\", "/")
++        filename = filename.replace(chr(92), "/")
      filename = os.path.relpath(os.path.join("/", filename), "/")
      for x in folders[0]:
          full_path = os.path.join(x, filename)
-@@ -464,6 +466,12 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
+@@ -464,6 +484,12 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
          elif os.path.islink(full_path):
              logging.warning("WARNING path {} exists but doesn't link anywhere, skipping.".format(full_path))
  

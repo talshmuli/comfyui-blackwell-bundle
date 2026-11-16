@@ -3070,7 +3070,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 25,
             "workflow": "WanVideo2_1_InfiniteTalk_00004.png",
-            "fullpath": "temp/WanVideo2_1_InfiniteTalk_00004.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3147,7 +3147,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 25,
             "workflow": "WanVideo2_1_InfiniteTalk_00005.png",
-            "fullpath": "temp/WanVideo2_1_InfiniteTalk_00005-audio.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3191,7 +3191,7 @@
       0,
       240,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       441,
@@ -3199,7 +3199,7 @@
       0,
       247,
       0,
-      "*"
+      "INT"
     ],
     [
       442,
@@ -3207,7 +3207,7 @@
       0,
       248,
       0,
-      "*"
+      "INT"
     ],
     [
       449,
@@ -3223,7 +3223,7 @@
       0,
       264,
       0,
-      "*"
+      "CLIP_VISION"
     ],
     [
       467,
@@ -3239,7 +3239,7 @@
       0,
       271,
       0,
-      "*"
+      "INT"
     ],
     [
       494,
@@ -3271,7 +3271,7 @@
       2,
       294,
       0,
-      "*"
+      "INT"
     ],
     [
       520,

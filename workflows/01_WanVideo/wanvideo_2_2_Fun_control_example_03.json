@@ -902,7 +902,8 @@
             "custom_height": 0,
             "frame_load_cap": 81,
             "skip_first_frames": 0,
-            "select_every_nth": 2
+            "select_every_nth": 2,
+            "fullpath": ""
           }
         }
       }
@@ -2166,7 +2167,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "control_00001.png",
-            "fullpath": "temp/control_00001.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -2302,7 +2303,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "control_00018.png",
-            "fullpath": "temp/control_00018.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3285,7 +3286,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 16,
             "workflow": "WanVideoWrapper_22FunControl_00070.png",
-            "fullpath": "output/WanVideoWrapper_22FunControl_00070.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -3455,7 +3456,7 @@
       0,
       83,
       0,
-      "*"
+      "WANVAE"
     ],
     [
       106,
@@ -3719,7 +3720,7 @@
       0,
       128,
       0,
-      "*"
+      "INT"
     ],
     [
       222,
@@ -3743,7 +3744,7 @@
       0,
       131,
       0,
-      "*"
+      "INT"
     ],
     [
       225,
@@ -3767,7 +3768,7 @@
       0,
       134,
       0,
-      "*"
+      "SIGMAS"
     ],
     [
       233,

@@ -1137,7 +1137,7 @@
             "format": "video/h264-mp4",
             "frame_rate": 24,
             "workflow": "Wanlynx_00041.png",
-            "fullpath": "temp/Wanlynx_00041.mp4"
+            "fullpath": ""
           }
         }
       }
@@ -1569,7 +1569,7 @@
       0,
       61,
       0,
-      "*"
+      "IMAGE"
     ],
     [
       121,

@@ -391,7 +391,8 @@
         "MrForExample/Unique3D",
         "",
         false,
-        "image2normal"
+        "image2normal",
+        true
       ]
     },
     {
@@ -450,10 +451,19 @@
             "filename": "output/Unique3D/Normal_Inputs",
             "type": "path",
             "format": "folder",
-            "select_every_nth": 1
+            "select_every_nth": 1,
+            "fullpath": ""
           }
         }
-      }
+      },
+      "inputs": [
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        }
+      ]
     }
   ],
   "links": [
