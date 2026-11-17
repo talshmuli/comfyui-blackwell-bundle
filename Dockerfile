@@ -244,10 +244,10 @@ RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch 
 RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "numpy<2.0.0,>=1.24.0" \
         "protobuf<5,>=4.25.3" \
-        "onnx<1.16" \
+        "onnx>=1.16.2,<1.18.0" \
         insightface \
         "huggingface-hub<1.0" \
-        "transformers<4.50,>=4.47" \
+        "transformers<4.54.0,>=4.49.0" \
         pykalman \
         "mediapipe<0.10.15" \
         moviepy \
@@ -270,7 +270,9 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         python-multipart \
         "packaging>=24.2" \
         "gguf>=0.13.0" \
-        sentencepiece \
+        "sentencepiece>=0.2.1" \
+        "rembg>=2.0.82" \
+        "opencv-python-headless>=4.8.1.78" \
         ftfy \
         comfy_angle \
         PyOpenGL \
@@ -294,7 +296,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         webcolors \
         pywavelets && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
-        "diffusers==0.35.2" \
+        "diffusers>=0.38.0" \
         "local-attention<=1.8.6" \
         importlib-metadata \
         tensorboardX \
