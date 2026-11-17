@@ -42,7 +42,7 @@ RUN apt-get update && apt-get upgrade -y && \
            /opt/environments/python/api \
            /opt/environments/python/python_310 && \
     export PATH="/opt/nvm/versions/node/v22.2.0/bin:$PATH" && \
-    npm install -g npm@latest && \
+    npm install -g npm@10 && \
     npm cache clean --force && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/local/bin/python && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/bin/python
@@ -271,7 +271,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "packaging>=24.2" \
         "gguf>=0.13.0" \
         "sentencepiece>=0.2.1" \
-        "rembg>=2.0.82" \
+        "rembg<=2.0.69" \
         "opencv-python-headless>=4.8.1.78" \
         ftfy \
         comfy_angle \
