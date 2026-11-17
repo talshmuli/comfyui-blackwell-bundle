@@ -1,0 +1,31 @@
+diff --git a/nodes.py b/nodes.py
+index a535091..cb82914 100644
+--- a/nodes.py
++++ b/nodes.py
+@@ -244,9 +244,7 @@ def check_and_install_dependencies():
+     def install_package(package):
+         python_exe = sys.executable
+         try:
+-            subprocess.check_call([python_exe, '-m', 'pip', 'install', package],
+-                                    stdout=subprocess.PIPE,
+-                                    stderr=subprocess.PIPE)
++            subprocess.check_call([python_exe, '-m', 'pip', 'install', package])
+             print(f"Successfully installed {package}")
+         except subprocess.CalledProcessError as e:
+             print(f"Error installing {package}: {str(e)}")
+@@ -567,7 +565,14 @@ class LatentSyncNode:
+             
+             # Move waveform to CPU for saving
+             waveform_cpu = waveform.cpu()
+-            torchaudio.save(audio_path, waveform_cpu, sample_rate)
++            try:
++                torchaudio.save(audio_path, waveform_cpu, sample_rate)
++            except Exception:
++                import soundfile
++                arr = waveform_cpu.squeeze().numpy()
++                if arr.ndim > 1 and arr.shape[0] < arr.shape[1]:
++                    arr = arr.T
++                soundfile.write(audio_path, arr, sample_rate)
+
+             # Move frames to CPU for saving to video
+             frames_cpu = frames.cpu()

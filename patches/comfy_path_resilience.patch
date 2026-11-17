@@ -1,3 +1,65 @@
+diff --git a/comfy/model_management.py b/comfy/model_management.py
+index f0699b6..b768bb8 100644
+--- a/comfy/model_management.py
++++ b/comfy/model_management.py
+@@ -421,7 +421,9 @@ def cuda_version_warning():
+     cuda_version = torch.version.cuda
+     if device.type == "cuda" and int(cuda_version.split(".")[0]) < 13:
+         capability = torch.cuda.get_device_capability(device)
+-        if capability >= (7, 5):
++        if capability >= (12, 0) and cuda_version.startswith("12.8"):
++            pass
++        elif capability >= (7, 5):
+             logging.warning(
+                 "\n========================================================================\n"
+                 "WARNING: PYTORCH CUDA VERSION BELOW 13.0\n"
+diff --git a/comfy/options.py b/comfy/options.py
+index f7f8af4..f8ae90d 100644
+--- a/comfy/options.py
++++ b/comfy/options.py
+@@ -1,6 +1,28 @@
++import warnings
++import logging
+ 
+ args_parsing = False
+ 
+ def enable_args_parsing(enable=True):
+     global args_parsing
+     args_parsing = enable
++
++# Global warning suppression for third-party libraries and framework deprecations
++warnings.filterwarnings("ignore", message=".*Field .* has conflict with protected namespace.*", category=UserWarning)
++warnings.filterwarnings("ignore", message=".*The pynvml package is deprecated.*", category=FutureWarning)
++warnings.filterwarnings("ignore", message=".*torch.cuda.amp.custom_fwd.* is deprecated.*", category=FutureWarning)
++warnings.filterwarnings("ignore", message=".*register_new_resolver is deprecated.*", category=UserWarning)
++warnings.filterwarnings("ignore", message=".*The TBB threading layer requires TBB version.*")
++warnings.filterwarnings("ignore", message=".*xFormers is not available.*")
++
++# Silence noisy third-party loggers
++logging.getLogger("OpenGL.acceleratesupport").setLevel(logging.WARNING)
++logging.getLogger("faiss.loader").setLevel(logging.WARNING)
++
++# OmegaConf resolver alias to prevent deprecation spam
++try:
++    import omegaconf
++    if hasattr(omegaconf.OmegaConf, "register_resolver") and hasattr(omegaconf.OmegaConf, "register_new_resolver"):
++        omegaconf.OmegaConf.register_new_resolver = omegaconf.OmegaConf.register_resolver
++except Exception:
++    pass
+diff --git a/comfy/quant_ops.py b/comfy/quant_ops.py
+index 0b0f4f8..8f608f1 100644
+--- a/comfy/quant_ops.py
++++ b/comfy/quant_ops.py
+@@ -25,7 +25,8 @@ try:
+         cuda_version = tuple(map(int, str(torch.version.cuda).split('.')))
+         if cuda_version < (13,):
+             ck.registry.disable("cuda")
+-            logging.warning("WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\nWARNING WARNING WARNING\nIf you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n")
++            if not str(torch.version.cuda).startswith("12.8"):
++                logging.warning("WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\nWARNING WARNING WARNING\nIf you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n")
+ 
+     # comfy-kitchen picks its accelerated backend on import: the HIP backend registers
+     # itself on a supported AMD device and takes dispatch priority there, CUDA on NVIDIA.
 diff --git a/comfy/utils.py b/comfy/utils.py
 index 9d42822..631fb0a 100644
 --- a/comfy/utils.py
@@ -34,7 +96,7 @@ index 9d42822..631fb0a 100644
          if "state_dict" in pl_sd:
              sd = pl_sd["state_dict"]
 diff --git a/execution.py b/execution.py
-index 0d50df2..fc9aa83 100644
+index 0d50df2..41365c5 100644
 --- a/execution.py
 +++ b/execution.py
 @@ -1,3 +1,4 @@
@@ -77,7 +139,7 @@ index 0d50df2..fc9aa83 100644
                      if invalid_vals:
                          input_config = info
 diff --git a/folder_paths.py b/folder_paths.py
-index 0673f6c..324f9e5 100644
+index 0673f6c..5df24f2 100644
 --- a/folder_paths.py
 +++ b/folder_paths.py
 @@ -359,10 +359,19 @@ def get_annotated_filepath(name: str, default_dir: str | None=None) -> str:
@@ -128,16 +190,17 @@ index 0673f6c..324f9e5 100644
  
  
  def add_model_folder_path(folder_name: str, full_folder_path: str, is_default: bool = False) -> None:
-@@ -456,6 +474,8 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
-     if folder_name not in folder_names_and_paths:
+@@ -457,6 +475,9 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
          return None
      folders = folder_names_and_paths[folder_name]
+     filename = os.path.relpath(os.path.join("/", filename), "/")
 +    if isinstance(filename, str):
 +        filename = filename.replace(chr(92), "/")
-     filename = os.path.relpath(os.path.join("/", filename), "/")
++    filename = os.path.relpath(os.path.join("/", filename), "/")
      for x in folders[0]:
          full_path = os.path.join(x, filename)
-@@ -464,6 +484,12 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
+         if os.path.isfile(full_path):
+@@ -464,6 +485,12 @@ def get_full_path(folder_name: str, filename: str) -> str | None:
          elif os.path.islink(full_path):
              logging.warning("WARNING path {} exists but doesn't link anywhere, skipping.".format(full_path))
  
@@ -150,3 +213,44 @@ index 0673f6c..324f9e5 100644
      return None
  
  
+diff --git a/main.py b/main.py
+index 7e7c1c3..c4180d2 100644
+--- a/main.py
++++ b/main.py
+@@ -268,6 +268,27 @@ import comfy.utils
+ import execution
+ import server
+ from app.assets.manager import AssetManager, default_asset_manager  # imports torch, so not before the check above
++
++try:
++    import torchaudio
++    _orig_save = torchaudio.save
++    def _safe_save(uri, src, sample_rate, *args, **kwargs):
++        try:
++            return _orig_save(uri, src, sample_rate, *args, **kwargs)
++        except Exception as e:
++            if "TorchCodec" in str(e) or "torchcodec" in str(e) or "backend" in str(e):
++                import soundfile
++                import torch
++                wf = src.detach().cpu() if isinstance(src, torch.Tensor) else src
++                arr = wf.squeeze().numpy()
++                if arr.ndim > 1 and arr.shape[0] < arr.shape[1]:
++                    arr = arr.T
++                soundfile.write(uri, arr, sample_rate)
++            else:
++                raise
++    torchaudio.save = _safe_save
++except Exception:
++    pass
+ from protocol import BinaryEventTypes
+ import nodes
+ import comfy.model_management
+@@ -673,8 +694,6 @@ if __name__ == "__main__":
+ 
+     if sys.version_info.major == 3 and sys.version_info.minor < 10:
+         logging.warning("WARNING: You are using a python version older than 3.10, please upgrade to a newer one. 3.12 and above is recommended.")
+-    if sys.version_info.major == 3 and sys.version_info.minor == 10:
+-        logging.warning("WARNING: Python 3.10 will be EOL on October 31 2026, please consider upgrading to a newer version.")
+ 
+     if args.disable_dynamic_vram:
+         logging.warning(

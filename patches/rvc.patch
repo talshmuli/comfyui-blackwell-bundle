@@ -1,8 +1,8 @@
 diff --git a/__init__.py b/__init__.py
-index a8fcc26..00bdf6a 100644
+index a8fcc26..3249ffc 100644
 --- a/__init__.py
 +++ b/__init__.py
-@@ -4,28 +4,10 @@ from subprocess import Popen
+@@ -4,34 +4,19 @@ from subprocess import Popen
  from server import PromptServer
  now_dir = os.path.dirname(os.path.abspath(__file__))
  
@@ -35,7 +35,19 @@ index a8fcc26..00bdf6a 100644
  model_path = os.path.join(now_dir,"rvc", "assets")
  
  if not os.path.exists(os.path.join(model_path, "pretrained_v2")):
-@@ -61,11 +43,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
+-    cmd = "python %s/download_models.py" % (now_dir)
+-    p = Popen(cmd, shell=True, cwd=now_dir)
+-    p.wait()
++    cmd = [sys.executable, os.path.join(now_dir, "download_models.py")]
++    try:
++        p = Popen(cmd, cwd=now_dir)
++        p.wait()
++    except Exception:
++        pass
+ else:
+     print("!!!RVC use cache models,make sure your 'assets' complete")
+ 
+@@ -61,11 +46,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
      "CombineAudio": "CombineAudio"
  }
  
@@ -61,7 +73,7 @@ index a8fcc26..00bdf6a 100644
 +    pass
 \ No newline at end of file
 diff --git a/nodes.py b/nodes.py
-index 0538837..47db971 100644
+index 0538837..4f853ee 100644
 --- a/nodes.py
 +++ b/nodes.py
 @@ -6,7 +6,11 @@ import numpy as np
