@@ -42,7 +42,9 @@ RUN apt-get update && apt-get upgrade -y && \
            /opt/environments/python/api \
            /opt/environments/python/python_310 && \
     export PATH="/opt/nvm/versions/node/v22.2.0/bin:$PATH" && \
-    npm install -g npm@10.9.9
+    npm install -g npm@10.9.9 && \
+    ln -sf /opt/environments/python/comfyui/bin/python /usr/local/bin/python && \
+    ln -sf /opt/environments/python/comfyui/bin/python /usr/bin/python
 
 # Install official PyTorch, torchvision, and torchaudio nightly builds compiled
 # with native CUDA 12.8 and Blackwell sm_120 compute capability kernels.
@@ -64,7 +66,11 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "nvidia-cuda-nvrtc-cu12>=12.8" \
         "nvidia-nccl-cu12>=2.29" \
         "pip>=24.0" \
-        "setuptools>=70.0.0" \
+        "setuptools>=78.1.1" \
+        "soupsieve>=2.8.4" \
+        "fsspec>=2025.2.0" \
+        "jupyter_core>=5.8.1" \
+        "oauthlib>=4.0.0" \
         wheel \
         pybind11 && \
     mkdir -p /opt/wheels /tmp/pillow-build && \
@@ -206,7 +212,13 @@ RUN clone_node() { \
     clone_node https://github.com/ClownsharkBatwing/RES4LYF.git && \
     clone_node https://github.com/edenartlab/eden_comfy_pipelines.git && \
     clone_node https://github.com/WASasquatch/was-node-suite-comfyui.git && \
-    sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py
+    sed -i '1s/^/import os, sys\nglob_path = os.path.join(os.path.dirname(__file__), "glob")\nif glob_path not in sys.path:\n    sys.path.append(glob_path)\n/' ComfyUI-Manager/__init__.py && \
+    git clone --depth 1 https://github.com/Coyote-A/ultimate-upscale-for-automatic1111.git /tmp/usdu && \
+    cp -r /tmp/usdu/* ComfyUI_UltimateSDUpscale/repositories/ultimate_sd_upscale/ && \
+    rm -rf /tmp/usdu && \
+    printf '[default]\nsam_editor_cpu = False\nsam_editor_model = sam_vit_b_01ec64.pth\ncustom_wildcards = \ndisable_gpu_opencv = True\ngpu_gaussian_blur = False\nwildcard_cache_limit_mb = 50\n' > ComfyUI-Impact-Pack/impact-pack.ini && \
+    find ComfyUI-LatentSyncWrapper -type f -exec sed -i 's/\r$//' {} + && \
+    touch /root/.latentsync16_dependencies_installed
 
 # Apply upstream compatibility patches for Blackwell sm_120 runtime and headless environments
 COPY patches /opt/patches
@@ -217,8 +229,9 @@ RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch 
     git -C ComfyUI-VideoHelperSuite apply --ignore-whitespace /opt/patches/vhs.patch && \
     git -C ComfyUI-FL-YuE2 apply --ignore-whitespace /opt/patches/yue2.patch && \
     git -C ComfyUI-Step1X-Edit apply --ignore-whitespace /opt/patches/step1x.patch && \
+    git -C ComfyUI-LatentSyncWrapper apply --ignore-whitespace /opt/patches/latentsync.patch && \
     rm -rf /opt/patches && \
-    mkdir -p ComfyUI-RVC/rvc/assets/weights && \
+    mkdir -p ComfyUI-RVC/rvc/assets/pretrained_v2 ComfyUI-RVC/rvc/assets/weights && \
     chmod -R 777 ComfyUI-RVC
 
 # Install Python dependencies for video generation, portrait animation, 3D, and music production,
@@ -264,7 +277,8 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         comfyui-workflow-templates-media-other \
         comfyui-workflow-templates-media-assets-01 \
         comfyui-workflow-templates-media-assets-02 \
-        pynvml \
+        nvidia-ml-py \
+        tbb \
         deepdiff \
         soundfile \
         librosa \
@@ -317,12 +331,18 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         tomli \
         mako \
         "sympy>=1.13.3" && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
+        pytorch-lightning && \
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --force-reinstall --no-deps \
         /opt/wheels/pillow-13.0.0-*.whl && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
         "jinja2>=3.1.5" && \
+    find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logger\.warning("xFormers not available")/logger.debug("xFormers not available")/g' {} + && \
+    find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/print("xFormers not available")/# print("xFormers not available")/g' {} + && \
+    find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logging\.warn("xFormers is not available/logging.debug("xFormers is not available/g' {} + && \
+    sed -i 's/logger\.error(f"No motion models found/logger.info(f"No motion models found/' /opt/ComfyUI/custom_nodes/ComfyUI-AnimateDiff-Evolved/__init__.py && \
     chmod -R 777 /opt/ComfyUI/custom_nodes
 
 WORKDIR /workspace
@@ -347,7 +367,8 @@ LABEL maintainer="Tal Shmuli" \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,DL3015
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
         xz-utils \
