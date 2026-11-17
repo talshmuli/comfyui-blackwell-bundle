@@ -89,7 +89,11 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "pyjwt>=2.9.0" \
         "certifi>=2024.8.30" \
         "h11>=0.14.0" \
-        "anyio>=4.6.0" && \
+        "anyio>=4.6.0" \
+        "tornado>=6.4.2" \
+        "cryptography>=46.0.5" \
+        "starlette>=0.40.0" \
+        "urllib3>=2.3.0" && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
 
 # Enforce pip constraints globally to prevent runtime custom node installs from downgrading PyTorch
