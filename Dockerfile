@@ -42,7 +42,8 @@ RUN apt-get update && apt-get upgrade -y && \
            /opt/environments/python/api \
            /opt/environments/python/python_310 && \
     export PATH="/opt/nvm/versions/node/v22.2.0/bin:$PATH" && \
-    npm install -g npm@10.9.9 && \
+    npm install -g npm@latest && \
+    npm cache clean --force && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/local/bin/python && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/bin/python
 
