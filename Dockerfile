@@ -296,7 +296,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         webcolors \
         pywavelets && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
-        "diffusers>=0.38.0" \
+        "diffusers==0.38.0" \
         "local-attention<=1.8.6" \
         importlib-metadata \
         tensorboardX \
