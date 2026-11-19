@@ -348,7 +348,10 @@ RUN /opt/environments/python/comfyui/bin/pip uninstall -y opencv-python opencv-c
         /opt/wheels/pillow-13.0.0-*.whl && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
-        "jinja2>=3.1.5" && \
+        "jinja2>=3.1.5" \
+        "httpcore>=1.0.7" \
+        "h11>=0.16.0" && \
+    find /opt/environments/python -name "*bom.cdx.json" -delete 2>/dev/null || true && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logger\.warning("xFormers not available")/logger.debug("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/print("xFormers not available")/# print("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logging\.warn("xFormers is not available/logging.debug("xFormers is not available/g' {} + && \
