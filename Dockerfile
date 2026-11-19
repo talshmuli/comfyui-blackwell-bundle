@@ -30,7 +30,7 @@ USER root
 # Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Apply official Ubuntu security updates, patch npm/tar, install libjpeg-dev for Pillow, and eliminate dormant daemons
+# Apply official Ubuntu security updates, install libjpeg-dev for Pillow, and eliminate dormant daemons and unused bundles
 # hadolint ignore=DL3008,DL3015,DL3016
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends libjpeg-dev && \
@@ -40,10 +40,12 @@ RUN apt-get update && apt-get upgrade -y && \
            /opt/environments/python/jupyter \
            /opt/environments/python/serviceportal \
            /opt/environments/python/api \
-           /opt/environments/python/python_310 && \
-    export PATH="/opt/nvm/versions/node/v22.2.0/bin:$PATH" && \
-    npm install -g npm@10 && \
-    npm cache clean --force && \
+           /opt/environments/python/python_310 \
+           /usr/lib/python3.10/ensurepip/_bundled \
+           /opt/nvm /root/.nvm && \
+    mkdir -p /opt/nvm && \
+    echo 'nvm() { :; }' > /opt/nvm/nvm.sh && \
+    touch /opt/nvm/bash_completion && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/local/bin/python && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/bin/python
 
@@ -241,13 +243,14 @@ RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch 
 
 # Install Python dependencies for video generation, portrait animation, 3D, and music production,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
-RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+RUN /opt/environments/python/comfyui/bin/pip uninstall -y opencv-python opencv-contrib-python 2>/dev/null || true && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "numpy<2.0.0,>=1.24.0" \
         "protobuf<5,>=4.25.3" \
-        "onnx>=1.16.2,<1.18.0" \
+        "onnx==1.21.0" \
         insightface \
-        "huggingface-hub<1.0" \
-        "transformers<4.54.0,>=4.49.0" \
+        "huggingface-hub<2.0,>=1.31.0" \
+        "transformers<5.21.0,>=5.10.0" \
         pykalman \
         "mediapipe<0.10.15" \
         moviepy \
@@ -272,7 +275,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "gguf>=0.13.0" \
         "sentencepiece>=0.2.1" \
         "rembg<=2.0.69" \
-        "opencv-python-headless>=4.8.1.78" \
+        "opencv-python-headless>=4.8.1.78,<4.11.0" \
         ftfy \
         comfy_angle \
         PyOpenGL \
