@@ -85,17 +85,30 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps /opt/wheels/pillow-13.0.0-*.whl && \
     rm -rf /tmp/pillow-build && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
+        "huggingface-hub<2.0,>=1.31.0" \
+        "transformers>=5.20.2" \
+        "onnx==1.21.0" \
+        "opencv-python==4.11.0.86" \
+        "opencv-python-headless>=4.10.0.84,<4.11.0" \
+        "requests>=2.33.0" \
+        "filelock>=3.20.3,<4.0.0" \
+        "tornado>=6.6.1" \
+        "idna>=3.15" \
+        "python-dotenv>=1.2.2" \
+        "gdown>=5.2.2" \
+        "PyNaCl>=1.6.2" \
+        "Pygments>=2.20.0" \
         "aiohttp>=3.13.4" \
         "jinja2>=3.1.5" \
+        "httpcore>=1.0.7" \
+        "h11>=0.16.0" \
         "gitpython>=3.1.44" \
         "pyjwt>=2.9.0" \
         "certifi>=2024.8.30" \
-        "h11>=0.14.0" \
-        "anyio>=4.6.0" \
-        "tornado>=6.4.2" \
         "cryptography>=46.0.5" \
         "starlette>=0.40.0" \
         "urllib3>=2.3.0" && \
+    find /opt/environments/python -name "*bom.cdx.json" -delete 2>/dev/null || true && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
 
 # Enforce pip constraints globally to prevent runtime custom node installs from downgrading PyTorch
