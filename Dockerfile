@@ -108,7 +108,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "cryptography>=46.0.5" \
         "starlette>=0.40.0" \
         "urllib3>=2.3.0" && \
-    find /opt/environments/python -name "*bom.cdx.json" -delete 2>/dev/null || true && \
+    find /opt/environments/python -name "*bom.cdx.json" -delete && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
 
 # Enforce pip constraints globally to prevent runtime custom node installs from downgrading PyTorch
@@ -359,7 +359,7 @@ RUN /opt/environments/python/comfyui/bin/pip uninstall -y opencv-python opencv-c
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --force-reinstall --no-deps \
         /opt/wheels/pillow-13.0.0-*.whl && \
-    find /opt/environments/python -name "*bom.cdx.json" -delete 2>/dev/null || true && \
+    find /opt/environments/python -name "*bom.cdx.json" -delete && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logger\.warning("xFormers not available")/logger.debug("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/print("xFormers not available")/# print("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logging\.warn("xFormers is not available/logging.debug("xFormers is not available/g' {} + && \
@@ -430,7 +430,7 @@ RUN for attempt in 1 2 3 4 5; do \
         "setuptools>=84.2.1" \
         "idna>=3.15" \
         pip && \
-    find /opt/blender -name "*bom.cdx.json" -delete 2>/dev/null || true
+    find /opt/blender -name "*bom.cdx.json" -delete
 
 WORKDIR /workspace
 RUN mkdir -p /workspace/scenes /workspace/passes /opt/scripts
@@ -479,7 +479,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=blender-worker /opt/blender /opt/blender
 RUN ln -s /opt/blender/blender /usr/local/bin/blender && \
-    find /opt/blender -name "*bom.cdx.json" -delete 2>/dev/null || true
+    find /opt/blender -name "*bom.cdx.json" -delete
 
 WORKDIR /workspace
 
