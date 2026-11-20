@@ -423,7 +423,14 @@ RUN for attempt in 1 2 3 4 5; do \
     ln -s /opt/blender/blender /usr/local/bin/blender && \
     mkdir -p /opt/blender/4.4/scripts/addons && \
     git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node && \
-    /opt/blender/4.4/python/bin/python3.11 -m pip install --no-cache-dir --upgrade certifi urllib3 requests setuptools pip
+    /opt/blender/4.4/python/bin/python3.11 -m pip install --no-cache-dir --upgrade \
+        certifi \
+        urllib3 \
+        "requests>=2.33.0" \
+        "setuptools>=84.2.1" \
+        "idna>=3.15" \
+        pip && \
+    find /opt/blender -name "*bom.cdx.json" -delete 2>/dev/null || true
 
 WORKDIR /workspace
 RUN mkdir -p /workspace/scenes /workspace/passes /opt/scripts
@@ -471,7 +478,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=blender-worker /opt/blender /opt/blender
-RUN ln -s /opt/blender/blender /usr/local/bin/blender
+RUN ln -s /opt/blender/blender /usr/local/bin/blender && \
+    find /opt/blender -name "*bom.cdx.json" -delete 2>/dev/null || true
 
 WORKDIR /workspace
 
