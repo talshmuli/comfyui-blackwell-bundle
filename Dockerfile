@@ -30,7 +30,7 @@ USER root
 # Fix Hadolint DL4006: Set the SHELL option -o pipefail before RUN with pipes
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Apply official Ubuntu security updates, patch npm/tar, install libjpeg-dev for Pillow, and eliminate dormant daemons
+# Apply official Ubuntu security updates, install libjpeg-dev for Pillow, and eliminate dormant daemons and unused bundles
 # hadolint ignore=DL3008,DL3015,DL3016
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends libjpeg-dev && \
@@ -40,9 +40,12 @@ RUN apt-get update && apt-get upgrade -y && \
            /opt/environments/python/jupyter \
            /opt/environments/python/serviceportal \
            /opt/environments/python/api \
-           /opt/environments/python/python_310 && \
-    export PATH="/opt/nvm/versions/node/v22.2.0/bin:$PATH" && \
-    npm install -g npm@10.9.9 && \
+           /opt/environments/python/python_310 \
+           /usr/lib/python3.10/ensurepip/_bundled \
+           /opt/nvm /root/.nvm && \
+    mkdir -p /opt/nvm && \
+    echo 'nvm() { :; }' > /opt/nvm/nvm.sh && \
+    touch /opt/nvm/bash_completion && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/local/bin/python && \
     ln -sf /opt/environments/python/comfyui/bin/python /usr/bin/python
 
@@ -88,7 +91,11 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "pyjwt>=2.9.0" \
         "certifi>=2024.8.30" \
         "h11>=0.14.0" \
-        "anyio>=4.6.0" && \
+        "anyio>=4.6.0" \
+        "tornado>=6.4.2" \
+        "cryptography>=46.0.5" \
+        "starlette>=0.40.0" \
+        "urllib3>=2.3.0" && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
 
 # Enforce pip constraints globally to prevent runtime custom node installs from downgrading PyTorch
@@ -236,13 +243,14 @@ RUN git -C ComfyUI-3D-Pack apply --ignore-whitespace /opt/patches/3d_pack.patch 
 
 # Install Python dependencies for video generation, portrait animation, 3D, and music production,
 # strictly protecting PyTorch nightly CUDA 12.8 Blackwell kernels from overwrite
-RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
+RUN /opt/environments/python/comfyui/bin/pip uninstall -y opencv-python opencv-contrib-python 2>/dev/null || true && \
+    /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "numpy<2.0.0,>=1.24.0" \
         "protobuf<5,>=4.25.3" \
-        "onnx<1.16" \
+        "onnx==1.21.0" \
         insightface \
-        "huggingface-hub<1.0" \
-        "transformers<4.50,>=4.47" \
+        "huggingface-hub<2.0,>=1.31.0" \
+        "transformers<5.21.0,>=5.10.0" \
         pykalman \
         "mediapipe<0.10.15" \
         moviepy \
@@ -265,7 +273,9 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         python-multipart \
         "packaging>=24.2" \
         "gguf>=0.13.0" \
-        sentencepiece \
+        "sentencepiece>=0.2.1" \
+        "rembg<=2.0.69" \
+        "opencv-python-headless>=4.8.1.78,<4.11.0" \
         ftfy \
         comfy_angle \
         PyOpenGL \
@@ -289,7 +299,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         webcolors \
         pywavelets && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps \
-        "diffusers==0.35.2" \
+        "diffusers==0.38.0" \
         "local-attention<=1.8.6" \
         importlib-metadata \
         tensorboardX \
@@ -338,7 +348,10 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         /opt/wheels/pillow-13.0.0-*.whl && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
         "aiohttp>=3.13.4" \
-        "jinja2>=3.1.5" && \
+        "jinja2>=3.1.5" \
+        "httpcore>=1.0.7" \
+        "h11>=0.16.0" && \
+    find /opt/environments/python -name "*bom.cdx.json" -delete 2>/dev/null || true && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logger\.warning("xFormers not available")/logger.debug("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/print("xFormers not available")/# print("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logging\.warn("xFormers is not available/logging.debug("xFormers is not available/g' {} + && \
