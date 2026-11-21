@@ -85,17 +85,34 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps /opt/wheels/pillow-13.0.0-*.whl && \
     rm -rf /tmp/pillow-build && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
+        "numpy<2.0.0,>=1.24.0" \
+        "huggingface-hub<2.0,>=1.31.0" \
+        "transformers>=5.20.2" \
+        "onnx==1.21.0" \
+        "opencv-python==4.11.0.86" \
+        "opencv-python-headless>=4.10.0.84,<4.11.0" \
+        "requests>=2.33.0" \
+        "filelock>=3.20.3,<4.0.0" \
+        "tornado>=6.5.10" \
+        "idna>=3.15" \
+        "python-dotenv>=1.2.2" \
+        "gdown>=5.2.2" \
+        "PyNaCl>=1.6.2" \
+        "Pygments>=2.20.0" \
         "aiohttp>=3.13.4" \
         "jinja2>=3.1.5" \
+        "httpcore>=1.0.7" \
+        "h11>=0.16.0" \
+        "anyio>=4.14.2" \
+        "sentencepiece>=0.2.1" \
+        "protobuf==4.25.9" \
         "gitpython>=3.1.44" \
         "pyjwt>=2.9.0" \
         "certifi>=2024.8.30" \
-        "h11>=0.14.0" \
-        "anyio>=4.6.0" \
-        "tornado>=6.4.2" \
         "cryptography>=46.0.5" \
         "starlette>=0.40.0" \
         "urllib3>=2.3.0" && \
+    find /opt/environments/python -name "*bom.cdx.json" -delete && \
     /opt/environments/python/comfyui/bin/pip uninstall -y xformers
 
 # Enforce pip constraints globally to prevent runtime custom node installs from downgrading PyTorch
@@ -346,12 +363,7 @@ RUN /opt/environments/python/comfyui/bin/pip uninstall -y opencv-python opencv-c
     /opt/environments/python/comfyui/bin/python -c "import kiui, pathlib; (pathlib.Path(kiui.__file__).parent / 'typing.py').write_text('from typing import *\nimport torch\nimport numpy as np\n\nTensor = torch.Tensor\nndarray = np.ndarray\n')" && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --force-reinstall --no-deps \
         /opt/wheels/pillow-13.0.0-*.whl && \
-    /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
-        "aiohttp>=3.13.4" \
-        "jinja2>=3.1.5" \
-        "httpcore>=1.0.7" \
-        "h11>=0.16.0" && \
-    find /opt/environments/python -name "*bom.cdx.json" -delete 2>/dev/null || true && \
+    find /opt/environments/python -name "*bom.cdx.json" -delete && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logger\.warning("xFormers not available")/logger.debug("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/print("xFormers not available")/# print("xFormers not available")/g' {} + && \
     find /opt/ComfyUI/custom_nodes -name "*.py" -exec sed -i 's/logging\.warn("xFormers is not available/logging.debug("xFormers is not available/g' {} + && \
@@ -415,7 +427,14 @@ RUN for attempt in 1 2 3 4 5; do \
     ln -s /opt/blender/blender /usr/local/bin/blender && \
     mkdir -p /opt/blender/4.4/scripts/addons && \
     git clone --depth=1 https://github.com/AIGODLIKE/ComfyUI-BlenderAI-node.git /opt/blender/4.4/scripts/addons/ComfyUI-BlenderAI-node && \
-    /opt/blender/4.4/python/bin/python3.11 -m pip install --no-cache-dir --upgrade certifi urllib3 requests setuptools pip
+    /opt/blender/4.4/python/bin/python3.11 -m pip install --no-cache-dir --upgrade \
+        certifi \
+        urllib3 \
+        "requests>=2.33.0" \
+        "setuptools>=84.2.1" \
+        "idna>=3.15" \
+        pip && \
+    find /opt/blender -name "*bom.cdx.json" -delete
 
 WORKDIR /workspace
 RUN mkdir -p /workspace/scenes /workspace/passes /opt/scripts
@@ -463,7 +482,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=blender-worker /opt/blender /opt/blender
-RUN ln -s /opt/blender/blender /usr/local/bin/blender
+RUN ln -s /opt/blender/blender /usr/local/bin/blender && \
+    find /opt/blender -name "*bom.cdx.json" -delete
 
 WORKDIR /workspace
 
