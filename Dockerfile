@@ -85,6 +85,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --no-deps /opt/wheels/pillow-13.0.0-*.whl && \
     rm -rf /tmp/pillow-build && \
     /opt/environments/python/comfyui/bin/pip install --no-cache-dir --upgrade \
+        "numpy<2.0.0,>=1.24.0" \
         "huggingface-hub<2.0,>=1.31.0" \
         "transformers>=5.20.2" \
         "onnx==1.21.0" \
@@ -92,7 +93,7 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "opencv-python-headless>=4.10.0.84,<4.11.0" \
         "requests>=2.33.0" \
         "filelock>=3.20.3,<4.0.0" \
-        "tornado>=6.6.1" \
+        "tornado>=6.5.10" \
         "idna>=3.15" \
         "python-dotenv>=1.2.2" \
         "gdown>=5.2.2" \

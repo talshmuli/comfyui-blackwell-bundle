@@ -8,7 +8,7 @@ def test_stage1_has_cascaded_security_packages():
     # Assert upgraded packages exist in Stage 1
     assert 'requests>=2.33.0' in stage1
     assert 'filelock>=3.20.3' in stage1
-    assert 'tornado>=6.6.1' in stage1
+    assert 'tornado>=6.5.10' in stage1
     assert 'idna>=3.15' in stage1
     assert 'python-dotenv>=1.2.2' in stage1
     assert 'gdown>=5.2.2' in stage1
