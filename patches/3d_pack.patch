@@ -49,11 +49,34 @@ index f2602fc..b486252 100644
  from typing import *
  import importlib
  from trellis.backend_config import get_sparse_backend, get_attention_backend, get_debug_mode
+diff --git a/Gen_3D_Modules/Stable3DGen/stablex/controlnetvae.py b/Gen_3D_Modules/Stable3DGen/stablex/controlnetvae.py
+index 137eb10..aa800ed 100644
+--- a/Gen_3D_Modules/Stable3DGen/stablex/controlnetvae.py
++++ b/Gen_3D_Modules/Stable3DGen/stablex/controlnetvae.py
+@@ -16,7 +16,10 @@ from typing import Any, Dict, List, Optional, Tuple, Union
+ 
+ import torch
+ 
+-from diffusers.models.controlnet import ControlNetOutput
++try:
++    from diffusers.models.controlnets.controlnet import ControlNetOutput
++except ImportError:
++    from diffusers.models.controlnet import ControlNetOutput
+ from diffusers.models import ControlNetModel
+ 
+ 
 diff --git a/__init__.py b/__init__.py
 index cc8c101..1823208 100644
 --- a/__init__.py
 +++ b/__init__.py
-@@ -66,7 +66,10 @@ WEB_DIRECTORY = "./web"
+@@ -62,11 +62,17 @@ for name, cls in inspect.getmembers(module, inspect.isclass):
+         NODE_CLASS_MAPPINGS[node] = cls
+         NODE_DISPLAY_NAME_MAPPINGS[node] = disp
+         
++NODE_CLASS_MAPPINGS.pop("[Comfy3D] StableGenPipelineBuilder", None)
++NODE_DISPLAY_NAME_MAPPINGS.pop("[Comfy3D] StableGenPipelineBuilder", None)
++
+ WEB_DIRECTORY = "./web"
  __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS', 'WEB_DIRECTORY']
  
  # # Cleanup old extension folder
@@ -63,7 +86,7 @@ index cc8c101..1823208 100644
 +else:
 +    folder_web = "/opt/ComfyUI/web"
  extensions_folder = os.path.join(folder_web, 'extensions', 'ComfyUI-3D-Pack')
- 
+
  def cleanup():
 diff --git a/nodes.py b/nodes.py
 index e4b01fc..098494d 100644

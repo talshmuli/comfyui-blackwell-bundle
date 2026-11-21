@@ -24,6 +24,7 @@ services:
       - DEFAULT_CHECKPOINT_NAME=${DEFAULT_CHECKPOINT_NAME:-v1-5-pruned-emaonly.safetensors}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
+      - SUPERVISOR_NO_AUTOSTART=${SUPERVISOR_NO_AUTOSTART:-caddy,cloudflared,jupyter,quicktunnel,serviceportal,sshd,syncthing,comfyui_api_wrapper}
     deploy:
       resources:
         reservations:
@@ -69,6 +70,7 @@ services:
       - DEFAULT_CHECKPOINT_NAME=${DEFAULT_CHECKPOINT_NAME:-v1-5-pruned-emaonly.safetensors}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
+      - SUPERVISOR_NO_AUTOSTART=${SUPERVISOR_NO_AUTOSTART:-caddy,cloudflared,jupyter,quicktunnel,serviceportal,sshd,syncthing,comfyui_api_wrapper}
     deploy:
       resources:
         reservations:
@@ -140,6 +142,7 @@ services:
       - DEFAULT_CHECKPOINT_NAME=${DEFAULT_CHECKPOINT_NAME:-v1-5-pruned-emaonly.safetensors}
       - WEB_ENABLE_AUTH=false
       - CF_QUICK_TUNNELS=false
+      - SUPERVISOR_NO_AUTOSTART=${SUPERVISOR_NO_AUTOSTART:-caddy,cloudflared,jupyter,quicktunnel,serviceportal,sshd,syncthing,comfyui_api_wrapper}
     deploy:
       resources:
         reservations:
