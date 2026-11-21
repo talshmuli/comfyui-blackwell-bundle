@@ -103,6 +103,9 @@ RUN /opt/environments/python/comfyui/bin/pip install --no-cache-dir \
         "jinja2>=3.1.5" \
         "httpcore>=1.0.7" \
         "h11>=0.16.0" \
+        "anyio>=4.14.2" \
+        "sentencepiece>=0.2.1" \
+        "protobuf==4.25.9" \
         "gitpython>=3.1.44" \
         "pyjwt>=2.9.0" \
         "certifi>=2024.8.30" \

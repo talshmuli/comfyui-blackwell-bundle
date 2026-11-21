@@ -16,6 +16,9 @@ def test_stage1_has_cascaded_security_packages():
     assert 'Pygments>=2.20.0' in stage1
     assert 'h11>=0.16.0' in stage1
     assert 'httpcore>=1.0.7' in stage1
+    assert 'anyio>=4.14.2' in stage1
+    assert 'sentencepiece>=0.2.1' in stage1
+    assert 'protobuf==4.25.9' in stage1
     assert 'transformers>=5.20.2' in stage1
     assert 'onnx==1.21.0' in stage1
     assert '*bom.cdx.json' in stage1
