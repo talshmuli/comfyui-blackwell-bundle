@@ -4,11 +4,9 @@ Verifies complete neural inference, Blackwell RTX 5090 acceleration, VRAM alloca
 """
 
 import json
-import os
 import sys
 import time
 import urllib.request
-import urllib.error
 
 COMFYUI_URL = "http://localhost:8190"
 
@@ -143,8 +141,11 @@ def run_workflow():
                 if prompt_id in hist:
                     status = hist[prompt_id].get("status", {})
                     completed = status.get("completed", False)
-                    print(f"Execution completed! Total duration: {elapsed:.2f}s")
                     outputs = hist[prompt_id].get("outputs", {})
+                    if not completed or not outputs:
+                        print(f"Execution failed or produced no output: {status}")
+                        return False
+                    print(f"Execution completed! Total duration: {elapsed:.2f}s")
                     print(f"Outputs generated: {json.dumps(outputs, indent=2)}")
                     return True
         except Exception as e:
